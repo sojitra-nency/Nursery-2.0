@@ -1,0 +1,29 @@
+{
+  "nav": {
+    "catalog": "કેટેલોગ",
+    "about": "અમારા વિશે",
+    "visit": "મળો અમને"
+  },
+  "common": {
+    "inStock": "ઉપલબ્ધ",
+    "limited": "મર્યાદિત સ્ટોક",
+    "outOfStock": "સ્ટોક ખતમ",
+    "comingSoon": "જલ્દ આવે છે",
+    "learnMore": "વધુ જાણો",
+    "viewAll": "બધા જુઓ",
+    "search": "છોડ શોધો…",
+    "filter": "ફિલ્ટર",
+    "sort": "ક્રમ"
+  },
+  "home": {
+    "heroTitleFallback": "દરેક ઘર માટે સ્વસ્થ છોડ",
+    "heroSubtitle": "ઇન્ડોર અને આઉટડોર છોડનો અમારો સંગ્રહ જુઓ",
+    "featuredCategories": "શ્રેણી પ્રમાણે ખરીદો",
+    "featuredPlants": "વિશેષ છોડ",
+    "visitUs": "અમારી નર્સરી આવો",
+    "whatsappCta": "WhatsApp પર વાત કરો"
+  },
+  "footer": {
+    "rights": "સર્વ હક્કો સુરક્ષિત."
+  }
+}

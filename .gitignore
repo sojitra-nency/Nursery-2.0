@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+
+# Build output
+.next/
+out/
+build/
+dist/
+
+# Cloudflare / OpenNext
+.open-next/
+.wrangler/
+
+# Env
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Sanity
+.sanity/
+
+# Test / coverage
+coverage/
+test-results/
+playwright-report/
+
+# Misc
+*.log
+.DS_Store
+tsconfig.tsbuildinfo
+next-env.d.ts
+
+# Design docs (gitignored — live in plan/ locally)
+/plan/

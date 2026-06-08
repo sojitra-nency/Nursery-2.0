@@ -1,0 +1,29 @@
+{
+  "nav": {
+    "catalog": "कैटलॉग",
+    "about": "हमारे बारे में",
+    "visit": "हमसे मिलें"
+  },
+  "common": {
+    "inStock": "उपलब्ध",
+    "limited": "सीमित स्टॉक",
+    "outOfStock": "स्टॉक खत्म",
+    "comingSoon": "जल्द आ रहा है",
+    "learnMore": "और जानें",
+    "viewAll": "सभी देखें",
+    "search": "पौधे खोजें…",
+    "filter": "फ़िल्टर",
+    "sort": "क्रमबद्ध करें"
+  },
+  "home": {
+    "heroTitleFallback": "हर घर के लिए स्वस्थ पौधे",
+    "heroSubtitle": "इनडोर और आउटडोर पौधों का हमारा संग्रह देखें",
+    "featuredCategories": "श्रेणी के अनुसार खरीदें",
+    "featuredPlants": "विशेष पौधे",
+    "visitUs": "हमारी नर्सरी आएं",
+    "whatsappCta": "WhatsApp पर चैट करें"
+  },
+  "footer": {
+    "rights": "सर्वाधिकार सुरक्षित।"
+  }
+}

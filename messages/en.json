@@ -1,0 +1,29 @@
+{
+  "nav": {
+    "catalog": "Catalog",
+    "about": "About",
+    "visit": "Visit Us"
+  },
+  "common": {
+    "inStock": "In Stock",
+    "limited": "Limited Stock",
+    "outOfStock": "Out of Stock",
+    "comingSoon": "Coming Soon",
+    "learnMore": "Learn More",
+    "viewAll": "View All",
+    "search": "Search plants…",
+    "filter": "Filter",
+    "sort": "Sort"
+  },
+  "home": {
+    "heroTitleFallback": "Healthy Plants for Every Home",
+    "heroSubtitle": "Browse our curated collection of indoor and outdoor plants",
+    "featuredCategories": "Shop by Category",
+    "featuredPlants": "Featured Plants",
+    "visitUs": "Visit Our Nursery",
+    "whatsappCta": "Chat on WhatsApp"
+  },
+  "footer": {
+    "rights": "All rights reserved."
+  }
+}

@@ -1,0 +1,8 @@
+allowBuilds:
+  esbuild: true
+  workerd: true
+  unrs-resolver: true
+onlyBuiltDependencies:
+  - esbuild
+  - workerd
+  - unrs-resolver
