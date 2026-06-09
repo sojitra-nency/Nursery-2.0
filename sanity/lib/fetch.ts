@@ -1,3 +1,4 @@
+import { unstable_noStore as noStore } from "next/cache";
 import { client } from "./client";
 import { isSanityConfigured } from "../env";
 
@@ -8,7 +9,10 @@ export async function sanityFetch<T>(
 ): Promise<T | null> {
   if (!isSanityConfigured) return null;
 
-  return client.fetch<T>(query, params, {
-    next: { tags },
-  });
+  if (process.env.NODE_ENV !== "production") {
+    noStore();
+    return client.fetch<T>(query, params, { cache: "no-store" });
+  }
+
+  return client.fetch<T>(query, params, { next: { tags } });
 }

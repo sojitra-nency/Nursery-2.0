@@ -1,0 +1,40 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Greenskill Landscape" [ref=e4] [cursor=pointer]:
+        - /url: /en
+      - navigation [ref=e5]:
+        - link "Catalog" [ref=e6] [cursor=pointer]:
+          - /url: /en/catalog
+        - link "About" [ref=e7] [cursor=pointer]:
+          - /url: /en/about
+        - link "Visit Us" [ref=e8] [cursor=pointer]:
+          - /url: /en/visit
+      - generic [ref=e9]:
+        - link "English" [ref=e10] [cursor=pointer]:
+          - /url: /en
+        - link "हिन्दी" [ref=e11] [cursor=pointer]:
+          - /url: /hi
+        - link "ગુજરાતી" [ref=e12] [cursor=pointer]:
+          - /url: /gu
+  - main [ref=e13]:
+    - generic [ref=e15]:
+      - paragraph [ref=e16]: Greenskill Landscape
+      - heading "Healthy Plants for Every Home" [level=1] [ref=e17]
+      - paragraph [ref=e18]: Browse our curated collection of indoor and outdoor plants
+      - generic [ref=e19]:
+        - link "Browse Catalog" [ref=e20] [cursor=pointer]:
+          - /url: /en/catalog
+          - button "Browse Catalog" [ref=e21]
+        - link "💬 Chat on WhatsApp" [ref=e22] [cursor=pointer]:
+          - /url: https://wa.me/919876543210?text=Hi%2C%20I'm%20interested%20in%20plants%20from%20Greenskill%20Landscape
+          - button "💬 Chat on WhatsApp" [ref=e23]
+    - generic [ref=e25]:
+      - heading "Visit Our Nursery" [level=2] [ref=e26]
+      - paragraph [ref=e27]: Opening Hours
+      - link "Get Directions →" [ref=e28] [cursor=pointer]:
+        - /url: /en/visit
+  - contentinfo [ref=e29]:
+    - generic [ref=e30]: © 2026 Greenskill Landscape. All rights reserved.
+  - button "Open Next.js Dev Tools" [ref=e36] [cursor=pointer]:
+    - img [ref=e37]

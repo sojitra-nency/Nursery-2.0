@@ -20,8 +20,55 @@
     "heroSubtitle": "Browse our curated collection of indoor and outdoor plants",
     "featuredCategories": "Shop by Category",
     "featuredPlants": "Featured Plants",
-    "visitUs": "Visit Our Nursery",
-    "whatsappCta": "Chat on WhatsApp"
+    "aboutTeaser": "About Us",
+    "visitTeaser": "Visit Our Nursery",
+    "whatsappCta": "Chat on WhatsApp",
+    "browseCatalog": "Browse Catalog"
+  },
+  "catalog": {
+    "title": "Our Plants",
+    "noResults": "No plants found",
+    "noResultsHint": "Try adjusting your search or filters.",
+    "clearFilters": "Clear Filters",
+    "sortBy": "Sort by",
+    "sortNameAsc": "Name (A–Z)",
+    "sortNameDesc": "Name (Z–A)",
+    "sortNewest": "Newest",
+    "allCategories": "All Categories",
+    "allAvailability": "All Availability",
+    "searchPlaceholder": "Search plants…"
+  },
+  "plant": {
+    "careGuide": "Care Guide",
+    "sunlight": "Sunlight",
+    "watering": "Watering",
+    "growthRate": "Growth Rate",
+    "size": "Size",
+    "season": "Flowering Season",
+    "whatsappCta": "Ask on WhatsApp",
+    "relatedPlants": "You May Also Like",
+    "fullSun": "Full Sun",
+    "partialShade": "Partial Shade",
+    "shade": "Shade",
+    "brightIndirect": "Bright Indirect",
+    "wateringLow": "Low",
+    "wateringMedium": "Medium",
+    "wateringHigh": "High",
+    "growthSlow": "Slow",
+    "growthMedium": "Medium",
+    "growthFast": "Fast"
+  },
+  "contact": {
+    "callUs": "Call Us",
+    "whatsapp": "WhatsApp",
+    "getDirections": "Get Directions",
+    "openingHours": "Opening Hours",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address"
+  },
+  "seo": {
+    "defaultDescription": "Greenskill Landscape — quality plants for homes, gardens and offices. Browse our collection of indoor, outdoor and rare plants."
   },
   "footer": {
     "rights": "All rights reserved."

@@ -20,8 +20,55 @@
     "heroSubtitle": "ઇન્ડોર અને આઉટડોર છોડનો અમારો સંગ્રહ જુઓ",
     "featuredCategories": "શ્રેણી પ્રમાણે ખરીદો",
     "featuredPlants": "વિશેષ છોડ",
-    "visitUs": "અમારી નર્સરી આવો",
-    "whatsappCta": "WhatsApp પર વાત કરો"
+    "aboutTeaser": "અમારા વિશે",
+    "visitTeaser": "અમારી નર્સરી આવો",
+    "whatsappCta": "WhatsApp પર વાત કરો",
+    "browseCatalog": "કેટેલોગ જુઓ"
+  },
+  "catalog": {
+    "title": "અમારા છોડ",
+    "noResults": "કોઈ છોડ મળ્યો નહીં",
+    "noResultsHint": "તમારી શોધ અથવા ફિલ્ટર બદલીને જુઓ.",
+    "clearFilters": "ફિલ્ટર સાફ કરો",
+    "sortBy": "ક્રમ",
+    "sortNameAsc": "નામ (અ–ૅ)",
+    "sortNameDesc": "નામ (ૅ–અ)",
+    "sortNewest": "નવું",
+    "allCategories": "બધી શ્રેણીઓ",
+    "allAvailability": "બધી ઉપલબ્ધતા",
+    "searchPlaceholder": "છોડ શોધો…"
+  },
+  "plant": {
+    "careGuide": "સંભાળ માર્ગદર્શિકા",
+    "sunlight": "સૂર્યપ્રકાશ",
+    "watering": "પાણી",
+    "growthRate": "વૃદ્ધિ દર",
+    "size": "કદ",
+    "season": "ફૂલ આવવાની ઋતુ",
+    "whatsappCta": "WhatsApp પર પૂછો",
+    "relatedPlants": "તમને આ પણ ગમશે",
+    "fullSun": "પૂર્ણ સૂર્ય",
+    "partialShade": "આંશિક છાયા",
+    "shade": "છાયા",
+    "brightIndirect": "આડકતરો પ્રકાશ",
+    "wateringLow": "ઓછું",
+    "wateringMedium": "મધ્યમ",
+    "wateringHigh": "વધારે",
+    "growthSlow": "ધીમો",
+    "growthMedium": "મધ્યમ",
+    "growthFast": "ઝડપી"
+  },
+  "contact": {
+    "callUs": "ફોન કરો",
+    "whatsapp": "WhatsApp",
+    "getDirections": "રસ્તો મેળવો",
+    "openingHours": "ખુલ્લા રહેવાનો સમય",
+    "email": "ઈમેઈલ",
+    "phone": "ફોન",
+    "address": "સરનામું"
+  },
+  "seo": {
+    "defaultDescription": "ગ્રીનસ્કિલ લેન્ડસ્કેપ — ઘર, બગીચા અને ઓફિસ માટે ગુણવત્તાયુક્ત છોડ. અમારા ઇન્ડોર, આઉટડોર અને દુર્લભ છોડનો સંગ્રહ જુઓ."
   },
   "footer": {
     "rights": "સર્વ હક્કો સુરક્ષિત."

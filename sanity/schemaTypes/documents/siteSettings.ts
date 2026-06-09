@@ -26,6 +26,8 @@ export const siteSettings = defineType({
           fields: [
             { name: "days", title: "Days", type: "string" },
             { name: "hours", title: "Hours", type: "string" },
+            { name: "opens", title: "Opens (24h)", type: "string" },
+            { name: "closes", title: "Closes (24h)", type: "string" },
           ],
         },
       ],

@@ -1,0 +1,43 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Greenskill Landscape" [ref=e4] [cursor=pointer]:
+        - /url: /gu
+      - navigation [ref=e5]:
+        - link "કેટેલોગ" [ref=e6] [cursor=pointer]:
+          - /url: /gu/catalog
+        - link "અમારા વિશે" [ref=e7] [cursor=pointer]:
+          - /url: /gu/about
+        - link "મળો અમને" [ref=e8] [cursor=pointer]:
+          - /url: /gu/visit
+      - generic [ref=e9]:
+        - link "English" [ref=e10] [cursor=pointer]:
+          - /url: /en/catalog
+        - link "हिन्दी" [ref=e11] [cursor=pointer]:
+          - /url: /hi/catalog
+        - link "ગુજરાતી" [ref=e12] [cursor=pointer]:
+          - /url: /gu/catalog
+  - main [ref=e13]:
+    - generic [ref=e14]:
+      - heading "અમારા છોડ" [level=2] [ref=e16]
+      - generic [ref=e17]:
+        - searchbox "છોડ શોધો…" [ref=e18]
+        - generic [ref=e19]:
+          - button "બધી શ્રેણીઓ" [ref=e20]
+          - button "In Stock" [ref=e21]
+          - button "Limited" [ref=e22]
+          - button "Out of Stock" [ref=e23]
+          - button "Coming Soon" [ref=e24]
+          - combobox [ref=e25]:
+            - option "ક્રમ" [selected]
+            - option "નામ (અ–ૅ)"
+            - option "નામ (ૅ–અ)"
+            - option "નવું"
+      - generic [ref=e26]:
+        - generic [ref=e27]: 🌱
+        - heading "કોઈ છોડ મળ્યો નહીં" [level=3] [ref=e28]
+        - paragraph [ref=e29]: તમારી શોધ અથવા ફિલ્ટર બદલીને જુઓ.
+  - contentinfo [ref=e30]:
+    - generic [ref=e31]: © 2026 Greenskill Landscape. સર્વ હક્કો સુરક્ષિત.
+  - button "Open Next.js Dev Tools" [ref=e37] [cursor=pointer]:
+    - img [ref=e38]

@@ -20,8 +20,55 @@
     "heroSubtitle": "इनडोर और आउटडोर पौधों का हमारा संग्रह देखें",
     "featuredCategories": "श्रेणी के अनुसार खरीदें",
     "featuredPlants": "विशेष पौधे",
-    "visitUs": "हमारी नर्सरी आएं",
-    "whatsappCta": "WhatsApp पर चैट करें"
+    "aboutTeaser": "हमारे बारे में",
+    "visitTeaser": "हमारी नर्सरी आएं",
+    "whatsappCta": "WhatsApp पर चैट करें",
+    "browseCatalog": "कैटलॉग देखें"
+  },
+  "catalog": {
+    "title": "हमारे पौधे",
+    "noResults": "कोई पौधा नहीं मिला",
+    "noResultsHint": "अपनी खोज या फ़िल्टर बदलकर देखें।",
+    "clearFilters": "फ़िल्टर हटाएं",
+    "sortBy": "क्रमबद्ध करें",
+    "sortNameAsc": "नाम (अ–ज़)",
+    "sortNameDesc": "नाम (ज़–अ)",
+    "sortNewest": "नवीनतम",
+    "allCategories": "सभी श्रेणियां",
+    "allAvailability": "सभी उपलब्धता",
+    "searchPlaceholder": "पौधे खोजें…"
+  },
+  "plant": {
+    "careGuide": "देखभाल गाइड",
+    "sunlight": "धूप",
+    "watering": "पानी",
+    "growthRate": "विकास दर",
+    "size": "आकार",
+    "season": "फूलने का मौसम",
+    "whatsappCta": "WhatsApp पर पूछें",
+    "relatedPlants": "आपको यह भी पसंद आ सकता है",
+    "fullSun": "पूरी धूप",
+    "partialShade": "आंशिक छाया",
+    "shade": "छाया",
+    "brightIndirect": "अप्रत्यक्ष रोशनी",
+    "wateringLow": "कम",
+    "wateringMedium": "मध्यम",
+    "wateringHigh": "अधिक",
+    "growthSlow": "धीमा",
+    "growthMedium": "मध्यम",
+    "growthFast": "तेज़"
+  },
+  "contact": {
+    "callUs": "हमें कॉल करें",
+    "whatsapp": "WhatsApp",
+    "getDirections": "रास्ता पाएं",
+    "openingHours": "खुलने का समय",
+    "email": "ईमेल",
+    "phone": "फोन",
+    "address": "पता"
+  },
+  "seo": {
+    "defaultDescription": "ग्रीनस्किल लैंडस्केप — घर, बगीचे और दफ्तर के लिए गुणवत्तापूर्ण पौधे। हमारे इनडोर, आउटडोर और दुर्लभ पौधों का संग्रह देखें।"
   },
   "footer": {
     "rights": "सर्वाधिकार सुरक्षित।"

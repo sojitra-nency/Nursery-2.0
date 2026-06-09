@@ -18,7 +18,8 @@
     "cf:preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "cf:deploy": "opennextjs-cloudflare build && wrangler deploy",
     "prepare": "husky",
-    "sanity": "sanity"
+    "sanity": "sanity",
+    "seed": "node scripts/seed.mjs"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [
@@ -38,7 +39,8 @@
     "next-sanity": "13.0.11",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "sanity": "5.30.0"
+    "sanity": "5.30.0",
+    "styled-components": "^6.4.2"
   },
   "devDependencies": {
     "@playwright/test": "1.60.0",
@@ -51,6 +53,7 @@
     "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^4.3.4",
     "@vitest/coverage-v8": "4.1.8",
+    "dotenv": "^17.4.2",
     "eslint": "9.39.4",
     "eslint-config-next": "16.2.7",
     "husky": "9.1.7",
