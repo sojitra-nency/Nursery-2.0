@@ -1,6 +1,7 @@
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getSettings } from "@/lib/site";
 import { getLocalized } from "@/lib/i18n/getLocalized";
+import { formatHours } from "@/lib/hours";
 import type { Locale } from "@/lib/i18n/config";
 
 export default async function VisitPage({ params }: { params: Promise<{ locale: string }> }) {
@@ -9,10 +10,12 @@ export default async function VisitPage({ params }: { params: Promise<{ locale: 
   const [dict, settings] = await Promise.all([getDictionary(locale), getSettings()]);
 
   const address = getLocalized(settings.address, typedLocale);
-  const city = settings.city ?? "";
+  const city = getLocalized(settings.city, typedLocale);
+  const region = getLocalized(settings.region, typedLocale);
   const phone = settings.phone || "9876543210";
+  const hours = formatHours(settings, typedLocale, dict.contact.openEveryDay);
   const mapsQuery = encodeURIComponent(
-    [address, city, settings.region, "Green Skill Nursery"].filter(Boolean).join(", ")
+    [address, city, region, "Green Skill Nursery"].filter(Boolean).join(", ")
   );
 
   return (
@@ -59,24 +62,12 @@ export default async function VisitPage({ params }: { params: Promise<{ locale: 
       )}
 
       {/* Opening hours */}
-      {settings.openingHours && settings.openingHours.length > 0 && (
-        <section>
-          <h2 className="text-xl font-semibold text-foreground mb-4">
-            {dict.contact.openingHours}
-          </h2>
-          <div className="rounded-xl border border-border overflow-hidden max-w-sm">
-            {settings.openingHours.map((row: { days?: string; hours?: string }, i: number) => (
-              <div
-                key={i}
-                className={`flex justify-between px-4 py-3 text-sm ${i % 2 === 0 ? "bg-surface" : "bg-background"}`}
-              >
-                <span className="text-muted">{row.days}</span>
-                <span className="font-medium text-foreground">{row.hours}</span>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
+      <section>
+        <h2 className="text-xl font-semibold text-foreground mb-4">{dict.contact.openingHours}</h2>
+        <div className="rounded-xl border border-border bg-surface px-4 py-3 max-w-sm">
+          <p className="font-medium text-foreground">{hours}</p>
+        </div>
+      </section>
     </div>
   );
 }

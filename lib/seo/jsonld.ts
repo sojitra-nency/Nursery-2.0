@@ -1,13 +1,18 @@
 import type { SiteSettings } from "@/lib/site";
 import type { Locale } from "@/lib/i18n/config";
+import { to24h } from "@/lib/hours";
 
 const DOMAIN = process.env.NEXT_PUBLIC_SITE_URL || "https://greenskilllandscape.pages.dev";
+
+const ALL_DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
 export function localBusinessJsonLd(settings: SiteSettings) {
   const name = settings.name?.en ?? "Greenskill Landscape";
   const phone = settings.phone ? `+91${settings.phone}` : undefined;
   const address = settings.address?.en;
-  const city = settings.city ?? "";
+  const city = settings.city?.en ?? "";
+  const opens = to24h(settings.openTime) || "08:00";
+  const closes = to24h(settings.closeTime) || "20:00";
 
   return {
     "@context": "https://schema.org",
@@ -27,13 +32,14 @@ export function localBusinessJsonLd(settings: SiteSettings) {
       : {}),
     currenciesAccepted: "INR",
     paymentAccepted: "Cash, UPI",
-    openingHoursSpecification:
-      settings.openingHours?.map((h) => ({
+    openingHoursSpecification: [
+      {
         "@type": "OpeningHoursSpecification",
-        dayOfWeek: h.days,
-        opens: "09:00",
-        closes: "18:00",
-      })) ?? [],
+        dayOfWeek: ALL_DAYS,
+        opens,
+        closes,
+      },
+    ],
   };
 }
 

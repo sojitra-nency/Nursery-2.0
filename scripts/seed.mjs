@@ -1,4 +1,5 @@
 import { createClient } from "next-sanity";
+import { randomUUID } from "node:crypto";
 import { config } from "dotenv";
 
 config({ path: ".env" });
@@ -11,50 +12,49 @@ const client = createClient({
   useCdn: false,
 });
 
-// ── IDs ──────────────────────────────────────────────────────────────────────
-const IDS = {
-  settings: "siteSettings",
-  // categories
-  catRose: "cat-rose",
-  catChandan: "cat-chandan",
-  catMango: "cat-mango",
-  catIndoor: "cat-indoor",
-  catSucculent: "cat-succulent",
-  // collections
-  colAirPurifying: "col-air-purifying",
-  colPetSafe: "col-pet-safe",
-  colLowMaintenance: "col-low-maintenance",
-  // plants
-  pRedRose: "plant-red-rose",
-  pPinkRose: "plant-pink-rose",
-  pWhiteChandan: "plant-white-chandan",
-  pRedChandan: "plant-red-chandan",
-  pKesarMango: "plant-kesar-mango",
-  pMiyazakiMango: "plant-miyazaki-mango",
-  pSnakePlant: "plant-snake-plant",
-  pMoneePlant: "plant-money-plant",
-  pAloeVera: "plant-aloe-vera",
-  pJadePlant: "plant-jade-plant",
-};
+const key = () => randomUUID().slice(0, 8);
 
-const ref = (id) => ({ _type: "reference", _ref: id });
+/**
+ * Build a bag-size pricing entry.
+ * tiers: array of [minQty, maxQty|null, price] tuples.
+ * Pass null for maxQty on the last tier to mean "and above".
+ */
+function bagSize(size, tiers) {
+  return {
+    _key: key(),
+    size,
+    tiers: tiers.map(([minQty, maxQty, price]) => ({
+      _key: key(),
+      minQty,
+      ...(maxQty != null ? { maxQty } : {}),
+      price,
+    })),
+  };
+}
 
-// ── Documents ─────────────────────────────────────────────────────────────────
+function variety({ name, availability = "in_stock", sunlight, watering, growthRate, sizeRange, bagSizes, maxHeight, bloomSeason } = {}) {
+  return {
+    _key: key(),
+    _type: "variety",
+    ...(name ? { name } : {}),
+    availability,
+    ...(sunlight ? { sunlight } : {}),
+    ...(watering ? { watering } : {}),
+    ...(growthRate ? { growthRate } : {}),
+    ...(sizeRange ? { sizeRange } : {}),
+    ...(bagSizes ? { bagSizes } : {}),
+    ...(maxHeight ? { maxHeight } : {}),
+    ...(bloomSeason ? { bloomSeason } : {}),
+  };
+}
+
 const documents = [
   // ── Site Settings ──────────────────────────────────────────────────────────
   {
-    _id: IDS.settings,
+    _id: "siteSettings",
     _type: "siteSettings",
-    name: {
-      en: "Greenskill Landscape",
-      hi: "ग्रीनस्किल लैंडस्केप",
-      gu: "ગ્રીનસ્કિલ લેન્ડસ્કેપ",
-    },
-    tagline: {
-      en: "Quality Plants for Every Home",
-      hi: "हर घर के लिए गुणवत्तापूर्ण पौधे",
-      gu: "દરેક ઘર માટે ગુણવત્તાસભર છોડ",
-    },
+    name: { en: "Greenskill Landscape", hi: "ग्रीनस्किल लैंडस्केप", gu: "ગ્રીનસ્કિલ લેન્ડસ્કેપ" },
+    tagline: { en: "Quality Plants for Every Home", hi: "हर घर के लिए गुणवत्तापूर्ण पौधे", gu: "દરેક ઘર માટે ગુણવત્તાસભર છોડ" },
     description: {
       en: "Greenskill Landscape is your trusted local nursery, offering a curated selection of indoor, outdoor and flowering plants. We bring nature closer to your home.",
       hi: "ग्रीनस्किल लैंडस्केप आपकी विश्वसनीय स्थानीय नर्सरी है, जो इनडोर, आउटडोर और फूल वाले पौधों का चयन प्रदान करती है।",
@@ -63,329 +63,404 @@ const documents = [
     phone: "9876543210",
     whatsapp: "9876543210",
     email: "hello@greenskilllandscape.in",
+    address: {
+      en: "123 Garden Street, Near Central Park",
+      hi: "123 गार्डन स्ट्रीट, सेंट्रल पार्क के पास",
+      gu: "123 ગાર્ડન સ્ટ્રીટ, સેન્ટ્રલ પાર્ક પાસે",
+    },
+    city: { en: "Ahmedabad", hi: "अहमदाबाद", gu: "અમદાવાદ" },
+    region: { en: "Gujarat", hi: "गुजरात", gu: "ગુજરાત" },
     currency: "INR",
-    openingHours: [
-      { _key: "oh1", days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], opens: "09:00", closes: "18:00" },
-      { _key: "oh2", days: ["Saturday", "Sunday"], opens: "10:00", closes: "17:00" },
+    openEveryday: true,
+    openTime: "8:00 AM",
+    closeTime: "8:00 PM",
+  },
+
+  // ── Rose ──────────────────────────────────────────────────────────────────
+  {
+    _id: "plant-rose",
+    _type: "plant",
+    name: { en: "Rose", hi: "गुलाब", gu: "ગુલાબ" },
+    slug: { _type: "slug", current: "rose" },
+    scientificName: "Rosa × hybrida",
+    description: {
+      en: "The timeless queen of flowers, beloved across India for its colour, fragrance and versatility. Available in multiple colours to suit every garden and occasion.",
+      hi: "फूलों की कालातीत रानी, अपने रंग, सुगंध और बहुमुखिता के लिए पूरे भारत में प्रिय।",
+      gu: "ફૂલોની ચિરંતન રાણી — રંગ, સુગંધ અને બહુ-ઉપયોગ માટે ભારતભરમાં પ્રિય.",
+    },
+    categories: ["Flowering", "Garden Plants", "Outdoor Plants"],
+    featured: true,
+    fragrant: true,
+    petSafe: false,
+    careTips: {
+      en: "Water at the base every 2 days. Apply rose fertiliser monthly during the growing season. Prune dead blooms to encourage new flowers. Watch for aphids on new growth.",
+      hi: "हर 2 दिन में आधार पर पानी दें। बढ़ते मौसम में मासिक गुलाब खाद डालें। मृत फूलों को काटें।",
+      gu: "દર 2 દિવસે ઊભ પર પાણી. ઉગવાની સિઝનમાં ગુલાબ ખાતર. ઝૂઠ ફૂલ કાઢો.",
+    },
+    tags: ["flowering", "fragrant", "garden", "gifting"],
+    varieties: [
+      variety({
+        name: { en: "Red Rose", hi: "लाल गुलाब", gu: "લાલ ગુલાબ" },
+        availability: "in_stock", sunlight: "full_sun", watering: "medium", growthRate: "medium",
+        sizeRange: "1–2 ft", bloomSeason: "October–March",
+        bagSizes: [
+          bagSize("8 × 8",   [[1, 100, 150], [101, 500, 130], [501, null, 110]]),
+          bagSize("10 × 10", [[1, 100, 190], [101, 500, 165], [501, null, 140]]),
+        ],
+      }),
+      variety({
+        name: { en: "Pink Rose", hi: "गुलाबी गुलाब", gu: "ગુલાબી ગુલાબ" },
+        availability: "in_stock", sunlight: "full_sun", watering: "medium", growthRate: "medium",
+        sizeRange: "1–2 ft", bloomSeason: "October–March",
+        bagSizes: [
+          bagSize("8 × 8",   [[1, 100, 140], [101, 500, 120], [501, null, 100]]),
+          bagSize("10 × 10", [[1, 100, 180], [101, 500, 155], [501, null, 130]]),
+        ],
+      }),
+      variety({
+        name: { en: "White Rose", hi: "सफेद गुलाब", gu: "સફેદ ગુલાબ" },
+        availability: "in_stock", sunlight: "full_sun", watering: "medium", growthRate: "medium",
+        sizeRange: "1–2 ft", bloomSeason: "October–March",
+        bagSizes: [
+          bagSize("8 × 8",   [[1, 100, 140], [101, 500, 120], [501, null, 100]]),
+          bagSize("10 × 10", [[1, 100, 180], [101, 500, 155], [501, null, 130]]),
+        ],
+      }),
+      variety({
+        name: { en: "Yellow Rose", hi: "पीला गुलाब", gu: "પીળો ગુલાબ" },
+        availability: "in_stock", sunlight: "full_sun", watering: "medium", growthRate: "medium",
+        sizeRange: "1–2 ft", bloomSeason: "October–March",
+        bagSizes: [
+          bagSize("8 × 8",   [[1, 100, 140], [101, 500, 120], [501, null, 100]]),
+          bagSize("10 × 10", [[1, 100, 180], [101, 500, 155], [501, null, 130]]),
+        ],
+      }),
+      variety({
+        name: { en: "Orange Rose", hi: "नारंगी गुलाब", gu: "નારંગી ગુલાબ" },
+        availability: "limited", sunlight: "full_sun", watering: "medium", growthRate: "medium",
+        sizeRange: "1–2 ft", bloomSeason: "October–March",
+        bagSizes: [
+          bagSize("8 × 8",   [[1, 100, 160], [101, null, 135]]),
+          bagSize("10 × 10", [[1, 100, 200], [101, null, 170]]),
+        ],
+      }),
+      variety({
+        name: { en: "Climbing Rose", hi: "चढ़ने वाला गुलाब", gu: "ક્લાઇમ્બિંગ ગુલાબ" },
+        availability: "limited", sunlight: "full_sun", watering: "medium", growthRate: "fast",
+        sizeRange: "3–5 ft", bloomSeason: "October–March",
+        bagSizes: [
+          bagSize("12 × 12", [[1, 50, 260], [51, null, 220]]),
+          bagSize("12 × 15", [[1, 50, 300], [51, null, 260]]),
+        ],
+      }),
     ],
   },
 
-  // ── Categories ─────────────────────────────────────────────────────────────
+  // ── Sandalwood ────────────────────────────────────────────────────────────
   {
-    _id: IDS.catRose,
-    _type: "category",
-    title: { en: "Rose", hi: "गुलाब", gu: "ગુલાબ" },
-    slug: { _type: "slug", current: "rose" },
+    _id: "plant-sandalwood",
+    _type: "plant",
+    name: { en: "Sandalwood", hi: "चंदन", gu: "ચંદન" },
+    slug: { _type: "slug", current: "sandalwood" },
+    scientificName: "Santalum / Pterocarpus",
     description: {
-      en: "A timeless symbol of love and beauty. Our rose collection includes red, pink, yellow and white varieties suited to Indian gardens.",
-      hi: "प्रेम और सुंदरता का प्रतीक। हमारे गुलाब संग्रह में लाल, गुलाबी, पीले और सफेद किस्में हैं।",
-      gu: "પ્રેમ અને સૌંદર્યનું પ્રતીક. અમારી ગુલાબ collection માં લાલ, ગુલાબી, પીળી અને સફેદ જાતો છે.",
+      en: "Sacred and aromatic sandalwood trees prized in Indian culture for millennia. Used in temples, Ayurvedic medicine and traditional rituals. Both white and red varieties available.",
+      hi: "भारतीय संस्कृति में सहस्राब्दियों से पूजित पवित्र और सुगंधित चंदन के पेड़। मंदिरों, आयुर्वेद और परंपराओं में उपयोग।",
+      gu: "ભારતીય સંસ્કૃતિમાં સદીઓથી પૂજ્ય, સુગંધિત ચંદન. મંદિર, આયુર્વેદ અને ધાર્મિક વિધિઓ.",
     },
-  },
-  {
-    _id: IDS.catChandan,
-    _type: "category",
-    title: { en: "Chandan (Sandalwood)", hi: "चंदन", gu: "ચંદન" },
-    slug: { _type: "slug", current: "chandan" },
-    description: {
-      en: "Sacred and aromatic sandalwood plants prized for their fragrant heartwood, used in rituals and Ayurveda.",
-      hi: "पवित्र और सुगंधित चंदन के पौधे, अनुष्ठानों और आयुर्वेद में उपयोग किए जाते हैं।",
-      gu: "પવિત્ર અને સુગંધિત ચંદન છોડ, પૂજા અને આયુર્વેદ માટે.",
+    categories: ["Medicinal", "Outdoor Plants", "Garden Plants"],
+    featured: true,
+    fragrant: true,
+    petSafe: true,
+    careTips: {
+      en: "Plant in well-draining soil with a host plant nearby — sandalwood is semi-parasitic and needs a companion root. Water sparingly once established. Full sun. Slow but rewarding.",
+      hi: "पास में एक मेजबान पौधे के साथ अच्छी जल-निकासी वाली मिट्टी में लगाएं। स्थापित होने के बाद कम पानी।",
+      gu: "Host plant સાથે સારી ડ્રેઇનિંગ માટીમાં રોપો. ઉગ્યા પછી ઓછું પાણી. ધીમો વિકાસ.",
     },
+    tags: ["sacred", "aromatic", "rare", "medicinal"],
+    varieties: [
+      variety({
+        name: { en: "White Sandalwood", hi: "सफेद चंदन", gu: "સફેદ ચંદન" },
+        availability: "limited", sunlight: "full_sun", watering: "low", growthRate: "slow",
+        sizeRange: "1–1.5 ft (sapling)", maxHeight: "10–15 m",
+        bagSizes: [
+          bagSize("6 × 6", [[1, 10, 480], [11, 50, 450], [51, null, 400]]),
+          bagSize("8 × 8", [[1, 10, 580], [11, 50, 540], [51, null, 490]]),
+        ],
+      }),
+      variety({
+        name: { en: "Red Sandalwood", hi: "लाल चंदन", gu: "લાલ ચંદન" },
+        availability: "limited", sunlight: "full_sun", watering: "low", growthRate: "slow",
+        sizeRange: "6–8 inch (sapling)", maxHeight: "8–12 m",
+        bagSizes: [
+          bagSize("6 × 6", [[1, 10, 650], [11, 50, 600], [51, null, 540]]),
+        ],
+      }),
+    ],
   },
+
+  // ── Mango ─────────────────────────────────────────────────────────────────
   {
-    _id: IDS.catMango,
-    _type: "category",
-    title: { en: "Mango", hi: "आम", gu: "કેરી" },
+    _id: "plant-mango",
+    _type: "plant",
+    name: { en: "Mango", hi: "आम", gu: "કેરી" },
     slug: { _type: "slug", current: "mango" },
+    scientificName: "Mangifera indica",
     description: {
-      en: "India's favourite fruit tree. From the prized Kesar to the rare Miyazaki — grow your own mango at home.",
-      hi: "भारत का पसंदीदा फल वृक्ष। केसर से मियाज़ाकी तक — अपना आम खुद उगाएं।",
-      gu: "ભારતનું પ્રિય ફળ વૃક્ષ. કેસર થી મિયાઝાકી — ઘરે તમારી પોતાની કેરી ઉગાડો.",
+      en: "India's favourite fruit tree, available as grafted saplings for faster fruiting. Choose from prized Indian varieties and the rare Japanese Miyazaki.",
+      hi: "भारत का पसंदीदा फल वृक्ष, ग्राफ्टेड पौधों के रूप में उपलब्ध। प्रमुख भारतीय किस्में और दुर्लभ जापानी मियाज़ाकी।",
+      gu: "ભારતનું પ્રિય ફળ, ઝડ ફળ માટે ગ્રાફ્ટેડ. ભારતીય અને જાપાની Miyazaki.",
     },
-  },
-  {
-    _id: IDS.catIndoor,
-    _type: "category",
-    title: { en: "Indoor Plants", hi: "इनडोर पौधे", gu: "ઇન્ડોર છોડ" },
-    slug: { _type: "slug", current: "indoor-plants" },
-    description: {
-      en: "Low-maintenance beauties that thrive inside homes and offices. Perfect air purifiers and mood boosters.",
-      hi: "कम देखभाल वाले पौधे जो घरों और कार्यालयों में पनपते हैं। बेहतरीन वायु शोधक।",
-      gu: "ઓછી સંભાળ, ઘરો અને ઓફિસોમાં ખૂબ સારા. હવા શુદ્ધ કરે છે.",
+    categories: ["Fruit Plants", "Outdoor Plants", "Garden Plants"],
+    featured: true,
+    fragrant: true,
+    petSafe: true,
+    careTips: {
+      en: "Water deeply twice a week in summer, once a week otherwise. Apply potash-rich fertiliser before flowering. Avoid waterlogging. Grafted plants fruit in 2–3 years.",
+      hi: "गर्मियों में सप्ताह में दो बार, अन्यथा एक बार गहराई से पानी दें। फूल आने से पहले पोटाश खाद। ग्राफ्टेड पौधे 2-3 साल में फल देते हैं।",
+      gu: "ઉનાળામાં અઠ. બે વાર, અન્ય ઋtuone. potash ખાતર. ગ્રાફ્ટેડ 2-3 વr.",
     },
-  },
-  {
-    _id: IDS.catSucculent,
-    _type: "category",
-    title: { en: "Succulents & Cacti", hi: "सक्युलेंट और कैक्टस", gu: "સક્યુલન્ટ અને કૅક્ટસ" },
-    slug: { _type: "slug", current: "succulents-cacti" },
-    description: {
-      en: "Hardy, drought-tolerant plants that need almost no attention. Great for beginners and busy plant parents.",
-      hi: "कठोर, सूखा-सहिष्णु पौधे जिन्हें लगभग कोई ध्यान नहीं चाहिए।",
-      gu: "કઠોર, દુકાળ-સહિષ્ણુ છોડ. નવા gardeners માટે આદર્શ.",
-    },
+    tags: ["fruit", "grafted"],
+    varieties: [
+      variety({
+        name: { en: "Kesar", hi: "केसर", gu: "કેસર" },
+        availability: "in_stock", sunlight: "full_sun", watering: "medium", growthRate: "medium",
+        sizeRange: "1.5–2 ft (grafted sapling)", bloomSeason: "February–March", maxHeight: "10–15 m",
+        bagSizes: [
+          bagSize("10 × 10", [[1, 10, 380], [11, 50, 350], [51, null, 310]]),
+          bagSize("12 × 12", [[1, 10, 450], [11, 50, 420], [51, null, 380]]),
+        ],
+      }),
+      variety({
+        name: { en: "Alphonso (Hapus)", hi: "अल्फांसो (हापुस)", gu: "આલ્ફોન્સો (હાફૂસ)" },
+        availability: "in_stock", sunlight: "full_sun", watering: "medium", growthRate: "medium",
+        sizeRange: "1.5–2 ft (grafted sapling)", bloomSeason: "February–March", maxHeight: "10–15 m",
+        bagSizes: [
+          bagSize("10 × 10", [[1, 10, 430], [11, 50, 400], [51, null, 360]]),
+          bagSize("12 × 12", [[1, 10, 510], [11, 50, 475], [51, null, 430]]),
+        ],
+      }),
+      variety({
+        name: { en: "Langra", hi: "लंगड़ा", gu: "લંગડો" },
+        availability: "in_stock", sunlight: "full_sun", watering: "medium", growthRate: "medium",
+        sizeRange: "1.5–2 ft (grafted sapling)", bloomSeason: "February–March", maxHeight: "10–15 m",
+        bagSizes: [
+          bagSize("10 × 10", [[1, 10, 350], [11, 50, 320], [51, null, 285]]),
+          bagSize("12 × 12", [[1, 10, 420], [11, 50, 390], [51, null, 350]]),
+        ],
+      }),
+      variety({
+        name: { en: "Miyazaki", hi: "मियाज़ाकी", gu: "મિયાઝાકી" },
+        availability: "limited", sunlight: "full_sun", watering: "medium", growthRate: "medium",
+        sizeRange: "1.5–2 ft (grafted sapling)", bloomSeason: "February–March", maxHeight: "10–15 m",
+        bagSizes: [
+          bagSize("12 × 12", [[1, 5, 2200], [6, 20, 2000], [21, null, 1800]]),
+          bagSize("12 × 15", [[1, 5, 2600], [6, 20, 2400], [21, null, 2100]]),
+        ],
+      }),
+    ],
   },
 
-  // ── Collections ────────────────────────────────────────────────────────────
+  // ── Snake Plant ───────────────────────────────────────────────────────────
   {
-    _id: IDS.colAirPurifying,
-    _type: "collection",
-    title: { en: "Air Purifying", hi: "वायु शोधक", gu: "હવા શુદ્ધ કરતા" },
-    slug: { _type: "slug", current: "air-purifying" },
-    description: {
-      en: "Plants proven to filter indoor air pollutants and increase oxygen levels.",
-      hi: "ऐसे पौधे जो घर के अंदर की हवा को साफ करते हैं।",
-      gu: "ઘરની હવા શુદ્ધ કરતા છોડ.",
-    },
-  },
-  {
-    _id: IDS.colPetSafe,
-    _type: "collection",
-    title: { en: "Pet Safe", hi: "पालतू जानवरों के लिए सुरक्षित", gu: "પ્રાણીઓ માટે સુરક્ષિત" },
-    slug: { _type: "slug", current: "pet-safe" },
-    description: {
-      en: "Non-toxic to cats and dogs. Let your pets and plants coexist safely.",
-      hi: "बिल्लियों और कुत्तों के लिए गैर-जहरीले पौधे।",
-      gu: "બિલાડીઓ અને કૂતરા માટે બિન-ઝેરી છોડ.",
-    },
-  },
-  {
-    _id: IDS.colLowMaintenance,
-    _type: "collection",
-    title: { en: "Low Maintenance", hi: "कम देखभाल", gu: "ઓછી સંભાળ" },
-    slug: { _type: "slug", current: "low-maintenance" },
-    description: {
-      en: "Perfect for busy people — water once a week or less and they still thrive.",
-      hi: "व्यस्त लोगों के लिए आदर्श — हफ्ते में एक बार पानी दें।",
-      gu: "વ્યસ્ત લોકો માટે — અઠવાડિયામાં એકવાર પાણી.",
-    },
-  },
-
-  // ── Plants ─────────────────────────────────────────────────────────────────
-  {
-    _id: IDS.pRedRose,
-    _type: "plant",
-    name: { en: "Red Rose", hi: "लाल गुलाब", gu: "લાલ ગુલાબ" },
-    slug: { _type: "slug", current: "red-rose" },
-    scientificName: "Rosa × hybrida",
-    description: {
-      en: "Classic deep-red blooms perfect for Indian gardens. Flowers year-round with adequate water and sunlight.",
-      hi: "क्लासिक गहरे लाल फूल भारतीय बगीचों के लिए आदर्श। पर्याप्त पानी और धूप के साथ साल भर खिलते हैं।",
-      gu: "ક્લાસિક ઘેરા-લાલ ફૂલ ભારતીય બગીચા માટે આદર્શ.",
-    },
-    category: ref(IDS.catRose),
-    featured: true,
-    availability: "in_stock",
-    sunlight: "full_sun",
-    watering: "medium",
-    growthRate: "medium",
-    size: "8–10 inch pot",
-    floweringSeason: "October–March",
-    tags: ["flowering", "fragrant", "garden"],
-  },
-  {
-    _id: IDS.pPinkRose,
-    _type: "plant",
-    name: { en: "Pink Rose", hi: "गुलाबी गुलाब", gu: "ગુલાબી ગુલાબ" },
-    slug: { _type: "slug", current: "pink-rose" },
-    scientificName: "Rosa × hybrida",
-    description: {
-      en: "Soft pink blooms with a sweet fragrance. A favourite for gifting and home gardens alike.",
-      hi: "मीठी सुगंध के साथ नरम गुलाबी फूल। उपहार और घर के बगीचे दोनों के लिए पसंदीदा।",
-      gu: "નાજુક ગુલાબી ફૂલ. ભેટ અને ઘરના બગીચા બંને માટે.",
-    },
-    category: ref(IDS.catRose),
-    featured: false,
-    availability: "in_stock",
-    sunlight: "full_sun",
-    watering: "medium",
-    growthRate: "medium",
-    size: "8–10 inch pot",
-    floweringSeason: "October–March",
-    tags: ["flowering", "fragrant", "gifting"],
-  },
-  {
-    _id: IDS.pWhiteChandan,
-    _type: "plant",
-    name: { en: "White Sandalwood", hi: "सफेद चंदन", gu: "સફેદ ચંદન" },
-    slug: { _type: "slug", current: "white-sandalwood" },
-    scientificName: "Santalum album",
-    description: {
-      en: "The sacred white sandalwood of India. Slow-growing but prized for its aromatic wood used in temples and Ayurvedic medicine.",
-      hi: "भारत का पवित्र सफेद चंदन। धीमी गति से बढ़ने वाला लेकिन मंदिरों और आयुर्वेद में उपयोगी।",
-      gu: "ભારતનું પવિત્ર સફેદ ચંદન. ધીમો વિકાસ, પૂજા અને આયુર્વેદ માટે.",
-    },
-    category: ref(IDS.catChandan),
-    featured: true,
-    availability: "limited",
-    sunlight: "full_sun",
-    watering: "low",
-    growthRate: "slow",
-    size: "6–8 inch pot",
-    tags: ["sacred", "aromatic", "rare"],
-  },
-  {
-    _id: IDS.pRedChandan,
-    _type: "plant",
-    name: { en: "Red Sandalwood", hi: "लाल चंदन", gu: "લાલ ચંદન" },
-    slug: { _type: "slug", current: "red-sandalwood" },
-    scientificName: "Pterocarpus santalinus",
-    description: {
-      en: "Rare red sandalwood, native to the Eastern Ghats. Highly valued in religious ceremonies and traditional medicine.",
-      hi: "दुर्लभ लाल चंदन, पूर्वी घाट का मूल निवासी। धार्मिक अनुष्ठानों में अत्यधिक मूल्यवान।",
-      gu: "દુર્લભ લાલ ચંદન, ધાર્મિક વિધિઓ અને પ્રાકૃતિક ઉપચારમાં ઉચ્ચ મૂલ્ય.",
-    },
-    category: ref(IDS.catChandan),
-    featured: false,
-    availability: "limited",
-    sunlight: "full_sun",
-    watering: "low",
-    growthRate: "slow",
-    size: "6 inch pot",
-    tags: ["sacred", "rare", "medicinal"],
-  },
-  {
-    _id: IDS.pKesarMango,
-    _type: "plant",
-    name: { en: "Kesar Mango", hi: "केसर आम", gu: "કેસર કેરી" },
-    slug: { _type: "slug", current: "kesar-mango" },
-    scientificName: "Mangifera indica 'Kesar'",
-    description: {
-      en: "The GI-tagged queen of mangoes from Gujarat. Known for its saffron-like colour, rich aroma and sweet taste.",
-      hi: "गुजरात की GI-टैगेड आमों की रानी। अपने केसर रंग, समृद्ध सुगंध और मीठे स्वाद के लिए जानी जाती है।",
-      gu: "ગુજરાતની GI-ટૅગ્ડ 'કેસર' કેરી. સોનેરી રંગ, સુગંધ અને ગળ્યો સ્વાદ.",
-    },
-    category: ref(IDS.catMango),
-    featured: true,
-    availability: "in_stock",
-    sunlight: "full_sun",
-    watering: "medium",
-    growthRate: "medium",
-    size: "10–12 inch pot (grafted)",
-    floweringSeason: "February–March",
-    tags: ["fruit", "grafted", "Gujarat"],
-  },
-  {
-    _id: IDS.pMiyazakiMango,
-    _type: "plant",
-    name: { en: "Miyazaki Mango", hi: "मियाज़ाकी आम", gu: "મિયાઝાકી કેરી" },
-    slug: { _type: "slug", current: "miyazaki-mango" },
-    scientificName: "Mangifera indica 'Miyazaki'",
-    description: {
-      en: "The world's most expensive mango, originally from Japan. Deep red skin with sweet, fibre-free flesh. A rare collector's variety.",
-      hi: "दुनिया का सबसे महंगा आम, मूलतः जापान से। गहरी लाल त्वचा, मीठा और रेशे-रहित गूदा।",
-      gu: "વિશ્વની સૌથી મોંઘી કેરી, જાપાનથી. ઘેરી લાલ ત્વચા, ગળ્યો, ફાઈબર-ફ્રી ગળો.",
-    },
-    category: ref(IDS.catMango),
-    featured: true,
-    availability: "limited",
-    sunlight: "full_sun",
-    watering: "medium",
-    growthRate: "medium",
-    size: "12 inch pot (grafted)",
-    floweringSeason: "February–March",
-    tags: ["fruit", "rare", "premium", "grafted"],
-  },
-  {
-    _id: IDS.pSnakePlant,
+    _id: "plant-snake-plant",
     _type: "plant",
     name: { en: "Snake Plant", hi: "स्नेक प्लांट", gu: "સ્નેક પ્લાન્ટ" },
     slug: { _type: "slug", current: "snake-plant" },
     scientificName: "Dracaena trifasciata",
     description: {
-      en: "One of the best air-purifying plants. Almost indestructible — survives low light and infrequent watering. Perfect for any room.",
-      hi: "सर्वोत्तम वायु-शोधक पौधों में से एक। लगभग अविनाशी — कम रोशनी और कम पानी में जीवित रहता है।",
-      gu: "શ્રેષ્ઠ હવા-શુદ્ધ કરતા છોડ. ઓછો પ્રકાશ, ઓછું પાણી — ટકાઉ.",
+      en: "One of the best air-purifying plants. Almost indestructible — survives low light and infrequent watering. Available in striking leaf pattern varieties.",
+      hi: "सर्वोत्तम वायु-शोधक पौधों में से एक। कम रोशनी और कम पानी में जीवित रहता है। विभिन्न पत्ती पैटर्न उपलब्ध।",
+      gu: "શ્રેષ્ઠ હવા-શુd્ધ. ઓછો પ્રકાશ, ઓછું પાણી — ટkau.",
     },
-    category: ref(IDS.catIndoor),
-    collections: [ref(IDS.colAirPurifying), ref(IDS.colLowMaintenance)],
+    categories: ["Indoor Plants", "Air-Purifying"],
     featured: true,
-    availability: "in_stock",
-    sunlight: "shade",
-    watering: "low",
-    growthRate: "slow",
-    size: "6 inch pot",
+    fragrant: false,
+    petSafe: false,
+    careTips: {
+      en: "Water only when the top 2 inches of soil are completely dry. Wipe leaves monthly to remove dust. Never let it sit in standing water — root rot is the main risk.",
+      hi: "मिट्टी की ऊपरी 2 इंच पूरी तरह सूखने पर ही पानी दें। मासिक पत्तियां पोंछें। खड़े पानी में न रखें।",
+      gu: "UpperMost 2 inch sukha tyanej paani. masik paan luchho. Sthayi paani nahi.",
+    },
     tags: ["air-purifying", "low-maintenance", "beginner"],
+    varieties: [
+      variety({
+        name: { en: "Laurentii", hi: "लॉरेंटी", gu: "લૉरेntI" },
+        availability: "in_stock", sunlight: "shade", watering: "low", growthRate: "slow",
+        sizeRange: "1–2 ft",
+        bagSizes: [
+          bagSize("6 × 6", [[1, 50, 270], [51, 200, 245], [201, null, 220]]),
+          bagSize("8 × 8", [[1, 50, 330], [51, 200, 300], [201, null, 270]]),
+        ],
+      }),
+      variety({
+        name: { en: "Moonshine", hi: "मूनशाइन", gu: "મૂनShine" },
+        availability: "in_stock", sunlight: "shade", watering: "low", growthRate: "slow",
+        sizeRange: "1–2 ft",
+        bagSizes: [
+          bagSize("6 × 6", [[1, 50, 320], [51, 200, 295], [201, null, 265]]),
+          bagSize("8 × 8", [[1, 50, 390], [51, 200, 355], [201, null, 320]]),
+        ],
+      }),
+      variety({
+        name: { en: "Zeylanica", hi: "ज़ेलानिका", gu: "ઝૅલેनिका" },
+        availability: "in_stock", sunlight: "shade", watering: "low", growthRate: "slow",
+        sizeRange: "1–2 ft",
+        bagSizes: [
+          bagSize("6 × 6", [[1, 50, 240], [51, 200, 215], [201, null, 190]]),
+          bagSize("8 × 8", [[1, 50, 295], [51, 200, 265], [201, null, 240]]),
+        ],
+      }),
+      variety({
+        name: { en: "Black Coral", hi: "ब्लैक कोरल", gu: "Black Coral" },
+        availability: "limited", sunlight: "shade", watering: "low", growthRate: "slow",
+        sizeRange: "8–14 inch",
+        bagSizes: [
+          bagSize("6 × 6", [[1, 20, 380], [21, null, 340]]),
+        ],
+      }),
+    ],
   },
+
+  // ── Money Plant ───────────────────────────────────────────────────────────
   {
-    _id: IDS.pMoneePlant,
+    _id: "plant-money-plant",
     _type: "plant",
     name: { en: "Money Plant", hi: "मनी प्लांट", gu: "મની પ્લાન્ટ" },
     slug: { _type: "slug", current: "money-plant" },
     scientificName: "Epipremnum aureum",
     description: {
-      en: "A beloved trailing vine believed to bring good luck and prosperity. Thrives in water or soil, indoors or out.",
-      hi: "सौभाग्य और समृद्धि लाने वाला माना जाने वाला लोकप्रिय पौधा। पानी या मिट्टी में पनपता है।",
-      gu: "સૌભાગ્ય અને સમૃદ્ધિ આણનાર. પાણી કે માટી — ગમે ત્યાં ઉગે.",
+      en: "A beloved trailing vine believed to bring good luck and prosperity. Thrives in water or soil, indoors or outdoors. Multiple leaf patterns to choose from.",
+      hi: "सौभाग्य और समृद्धि लाने वाला लोकप्रिय पौधा। पानी या मिट्टी में उगता है।",
+      gu: "સૌadhaagya અne samridhi laanar. Paani ke maati — game tyaan uge.",
     },
-    category: ref(IDS.catIndoor),
-    collections: [ref(IDS.colAirPurifying), ref(IDS.colLowMaintenance)],
+    categories: ["Indoor Plants", "Air-Purifying", "Balcony Plants"],
     featured: false,
-    availability: "in_stock",
-    sunlight: "bright_indirect",
-    watering: "medium",
-    growthRate: "fast",
-    size: "4 inch pot",
+    fragrant: false,
+    petSafe: false,
     tags: ["trailing", "air-purifying", "beginner", "lucky"],
+    varieties: [
+      variety({
+        name: { en: "Golden Pothos", hi: "गोल्डन पोथोस", gu: "ગોlden Pothos" },
+        availability: "in_stock", sunlight: "bright_indirect", watering: "medium", growthRate: "fast",
+        sizeRange: "Trailing",
+        bagSizes: [
+          bagSize("4 × 5", [[1, 100, 85], [101, 500, 75], [501, null, 65]]),
+          bagSize("6 × 6", [[1, 100, 110], [101, 500, 95], [501, null, 80]]),
+        ],
+      }),
+      variety({
+        name: { en: "Marble Queen", hi: "मार्बल क्वीन", gu: "Marble Queen" },
+        availability: "in_stock", sunlight: "bright_indirect", watering: "medium", growthRate: "medium",
+        sizeRange: "Trailing",
+        bagSizes: [
+          bagSize("4 × 5", [[1, 100, 105], [101, 500, 90], [501, null, 75]]),
+          bagSize("6 × 6", [[1, 100, 130], [101, 500, 115], [501, null, 95]]),
+        ],
+      }),
+      variety({
+        name: { en: "Neon Pothos", hi: "नियॉन पोथोस", gu: "Neon Pothos" },
+        availability: "in_stock", sunlight: "bright_indirect", watering: "medium", growthRate: "fast",
+        sizeRange: "Trailing",
+        bagSizes: [
+          bagSize("4 × 5", [[1, 100, 95], [101, 500, 80], [501, null, 70]]),
+          bagSize("6 × 6", [[1, 100, 120], [101, 500, 105], [501, null, 88]]),
+        ],
+      }),
+    ],
   },
+
+  // ── Aloe Vera ─────────────────────────────────────────────────────────────
   {
-    _id: IDS.pAloeVera,
+    _id: "plant-aloe-vera",
     _type: "plant",
-    name: { en: "Aloe Vera", hi: "एलोवेरा", gu: "એલોવેરા" },
+    name: { en: "Aloe Vera", hi: "एलोवेरा", gu: "એलોveRa" },
     slug: { _type: "slug", current: "aloe-vera" },
     scientificName: "Aloe barbadensis miller",
     description: {
-      en: "The ultimate medicinal houseplant. Soothing gel for skin and hair, easy to grow in any sunny spot.",
-      hi: "अंतिम औषधीय घरेलू पौधा। त्वचा और बालों के लिए सुखदायक जेल, किसी भी धूप वाली जगह में आसानी से उगाएं।",
-      gu: "ઔષધીય ઘરેલું છોડ. ત્વચા અને વાળ માટે gel, ધૂપ હોય ત્યાં ઉગાડો.",
+      en: "The ultimate medicinal houseplant. Soothing gel for skin and hair. Easy to grow, practically impossible to kill.",
+      hi: "अंतिम औषधीय घरेलू पौधा। त्वचा और बालों के लिए सुखदायक जेल। आसानी से उगाएं।",
+      gu: "Aushadhiya gharelu chhod. Tvachaa ane vaal maat gel. Saral.",
     },
-    category: ref(IDS.catSucculent),
-    collections: [ref(IDS.colLowMaintenance), ref(IDS.colPetSafe)],
+    categories: ["Succulents", "Medicinal", "Indoor Plants"],
     featured: false,
-    availability: "in_stock",
-    sunlight: "full_sun",
-    watering: "low",
-    growthRate: "slow",
-    size: "6 inch pot",
+    fragrant: false,
+    petSafe: false,
+    careTips: {
+      en: "Water every 2–3 weeks. Allow soil to dry completely between waterings. Use a succulent/cactus mix. Avoid overwatering — the number one cause of death.",
+      hi: "हर 2-3 सप्ताह में पानी दें। सिंचाई के बीच मिट्टी पूरी तरह सूखने दें। सक्युलेंट मिक्स।",
+      gu: "2-3 athvadie paani. Vaache sampurna sukavaa do. Succulent mix.",
+    },
     tags: ["medicinal", "succulent", "beginner"],
+    varieties: [
+      variety({
+        name: { en: "Barbadensis (Common Aloe)", hi: "बारबाडेंसिस", gu: "Barbadensis" },
+        availability: "in_stock", sunlight: "full_sun", watering: "low", growthRate: "slow",
+        sizeRange: "4–8 inch spread",
+        bagSizes: [
+          bagSize("6 × 6", [[1, 50, 130], [51, 200, 115], [201, null, 100]]),
+          bagSize("8 × 8", [[1, 50, 165], [51, 200, 145], [201, null, 125]]),
+        ],
+      }),
+      variety({
+        name: { en: "Chinensis (Chinese Aloe)", hi: "चिनेंसिस", gu: "Chinensis" },
+        availability: "in_stock", sunlight: "full_sun", watering: "low", growthRate: "slow",
+        sizeRange: "3–5 inch spread",
+        bagSizes: [
+          bagSize("4 × 5", [[1, 50, 110], [51, 200, 95], [201, null, 80]]),
+          bagSize("6 × 6", [[1, 50, 140], [51, 200, 120], [201, null, 105]]),
+        ],
+      }),
+    ],
   },
+
+  // ── Jade Plant ────────────────────────────────────────────────────────────
   {
-    _id: IDS.pJadePlant,
+    _id: "plant-jade-plant",
     _type: "plant",
-    name: { en: "Jade Plant", hi: "जेड प्लांट", gu: "જેડ પ્લાન્ટ" },
+    name: { en: "Jade Plant", hi: "जेड प्लांट", gu: "જેdeplant" },
     slug: { _type: "slug", current: "jade-plant" },
     scientificName: "Crassula ovata",
     description: {
-      en: "A long-lived succulent often called the 'money tree'. Oval jade-green leaves on woody stems. Thrives on neglect.",
-      hi: "'मनी ट्री' के नाम से जाना जाने वाला लंबे समय तक जीवित रहने वाला सक्युलेंट।",
-      gu: "'Money Tree' — લાંબા આયુ, ઓછી સંભાળ. ઓવ jade-green પાન.",
+      en: "A long-lived succulent called the 'money tree'. Oval jade-green leaves on woody stems. Thrives on neglect and can live for decades.",
+      hi: "'मनी ट्री' — लंबे समय तक जीवित रहने वाला सक्युलेंट। दशकों तक जीवित रह सकता है।",
+      gu: "'Money Tree' — laambu aayu, ochi sambhaal. Dasakao sudhee jive.",
     },
-    category: ref(IDS.catSucculent),
-    collections: [ref(IDS.colLowMaintenance)],
+    categories: ["Succulents", "Indoor Plants"],
     featured: false,
-    availability: "in_stock",
-    sunlight: "bright_indirect",
-    watering: "low",
-    growthRate: "slow",
-    size: "4–6 inch pot",
+    fragrant: false,
+    petSafe: false,
     tags: ["succulent", "low-maintenance", "lucky"],
+    varieties: [
+      variety({
+        name: { en: "Ovata (Common Jade)", hi: "ओवाटा", gu: "Ovaata" },
+        availability: "in_stock", sunlight: "bright_indirect", watering: "low", growthRate: "slow",
+        sizeRange: "4–8 inch",
+        bagSizes: [
+          bagSize("4 × 5", [[1, 50, 185], [51, 200, 165], [201, null, 145]]),
+          bagSize("6 × 6", [[1, 50, 230], [51, 200, 205], [201, null, 180]]),
+        ],
+      }),
+      variety({
+        name: { en: "Gollum (Trumpet Jade)", hi: "गोलम", gu: "Gollum" },
+        availability: "in_stock", sunlight: "bright_indirect", watering: "low", growthRate: "slow",
+        sizeRange: "4–6 inch",
+        bagSizes: [
+          bagSize("4 × 5", [[1, 50, 225], [51, 200, 200], [201, null, 175]]),
+          bagSize("6 × 6", [[1, 50, 275], [51, 200, 245], [201, null, 215]]),
+        ],
+      }),
+    ],
   },
 ];
 
-// ── Run ───────────────────────────────────────────────────────────────────────
 async function seed() {
   console.log(`Seeding ${documents.length} documents to project ${client.config().projectId}…\n`);
-
   const transaction = client.transaction();
-  for (const doc of documents) {
-    transaction.createOrReplace(doc);
-  }
-
+  for (const doc of documents) transaction.createOrReplace(doc);
   try {
     const result = await transaction.commit();
     console.log(`✓ Done — ${result.results.length} documents written.\n`);
-    console.log("Documents created:");
     result.results.forEach((r) => console.log(`  ${r.id}`));
   } catch (err) {
     console.error("✗ Seed failed:", err.message);

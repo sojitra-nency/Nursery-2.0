@@ -6,41 +6,58 @@ import { getLocalized } from "@/lib/i18n/getLocalized";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getSettings } from "@/lib/site";
 import type { Locale } from "@/lib/i18n/config";
-import { AVAILABILITY } from "@/sanity/lib/enums";
-import { Badge } from "@/components/ui/Badge";
-import { ImageGallery } from "@/components/plant/ImageGallery";
-import { CareGuideTable } from "@/components/plant/CareGuideTable";
-import { PlantCard } from "@/components/ui/PlantCard";
+import { VarietyShowcase, type ShowcaseVariety } from "@/components/plant/VarietyShowcase";
+import { PlantCard, type PlantCardData } from "@/components/ui/PlantCard";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import type { SanityImageSource } from "@sanity/image-url";
 
-interface PlantData {
-  _id: string;
-  name: { en?: string; hi?: string; gu?: string };
-  scientificName?: string;
-  slug: { current: string };
-  description?: { en?: string; hi?: string; gu?: string };
-  category?: { _id: string; title: { en?: string }; slug: { current: string } };
-  images?: Array<{
-    _key: string;
-    asset: SanityImageSource;
-    alt?: { en?: string };
-    hotspot?: unknown;
-  }>;
+type LocaleField = { en?: string; hi?: string; gu?: string };
+
+interface PlantImage {
+  _key: string;
+  asset: SanityImageSource;
+  alt?: LocaleField;
+  caption?: LocaleField;
+}
+
+interface PriceTier {
+  minQty: number;
+  maxQty?: number;
+  price: number;
+}
+
+interface BagSizePricing {
+  size: string;
+  tiers: PriceTier[];
+}
+
+interface PlantVariety {
+  _key: string;
+  name?: LocaleField;
+  description?: LocaleField;
+  sizeRange?: string;
+  bagSizes?: BagSizePricing[];
+  availability?: string;
   sunlight?: string;
   watering?: string;
   growthRate?: string;
-  availability?: string;
-  size?: string;
-  floweringSeason?: string;
+  maxHeight?: string;
+  bloomSeason?: string;
+  images?: PlantImage[];
 }
 
-interface RelatedPlant {
-  name: { en?: string; hi?: string; gu?: string };
+interface PlantData {
+  _id: string;
+  name: LocaleField;
+  scientificName?: string;
   slug: { current: string };
-  images?: Array<{ asset: SanityImageSource }>;
-  availability?: string;
-  category?: { slug: { current: string } };
+  description?: LocaleField;
+  categories?: string[];
+  careTips?: LocaleField;
+  fragrant?: boolean;
+  petSafe?: boolean;
+  images?: PlantImage[];
+  varieties?: PlantVariety[];
 }
 
 export async function generateStaticParams() {
@@ -48,6 +65,16 @@ export async function generateStaticParams() {
   if (!slugs) return [];
   const locales = ["en", "hi", "gu"];
   return slugs.flatMap(({ slug }) => locales.map((locale) => ({ locale, slug })));
+}
+
+function prepareImages(images: PlantImage[] | undefined, locale: Locale, fallbackAlt: string) {
+  return (images ?? [])
+    .filter((img) => img?.asset)
+    .map((img) => ({
+      key: img._key,
+      url: urlForImage(img.asset).width(880).height(660).fit("crop").url(),
+      alt: getLocalized(img.alt, locale) || fallbackAlt,
+    }));
 }
 
 export default async function PlantPage({
@@ -68,29 +95,47 @@ export default async function PlantPage({
 
   const name = getLocalized(plant.name, typedLocale);
   const description = getLocalized(plant.description, typedLocale);
-  const avail = AVAILABILITY.find((a) => a.value === plant.availability);
+  const careTips = getLocalized(plant.careTips, typedLocale);
   const whatsapp = settings.whatsapp || "9876543210";
   const waText = encodeURIComponent(`Hi, I'm interested in ${name} from Greenskill Landscape`);
   const waLink = `https://wa.me/91${whatsapp}?text=${waText}`;
 
-  const galleryImages = (plant.images ?? [])
-    .filter((img) => img?.asset)
-    .map((img) => ({
-      _key: img._key,
-      url: urlForImage(img.asset).width(880).height(660).fit("crop").url(),
-      alt: img.alt?.en ?? name,
-    }));
+  // Build the showcase varieties. If the plant has none, fall back to a single
+  // "default" variety built from the plant-level images + description.
+  const varieties: ShowcaseVariety[] = (plant.varieties ?? []).length
+    ? (plant.varieties ?? []).map((v) => ({
+        key: v._key,
+        name: getLocalized(v.name, typedLocale),
+        description: getLocalized(v.description, typedLocale),
+        sizeRange: v.sizeRange,
+        bagSizes: v.bagSizes,
+        availability: v.availability,
+        sunlight: v.sunlight,
+        watering: v.watering,
+        growthRate: v.growthRate,
+        maxHeight: v.maxHeight,
+        bloomSeason: v.bloomSeason,
+        images: prepareImages(v.images, typedLocale, name),
+      }))
+    : [
+        {
+          key: "default",
+          name: "",
+          description,
+          images: prepareImages(plant.images, typedLocale, name),
+        },
+      ];
 
-  const related = plant.category?._id
-    ? await sanityFetch<RelatedPlant[]>(RELATED_PLANTS_QUERY, { catId: plant.category._id, slug }, [
-        "plant",
-      ])
-    : null;
+  const categories = plant.categories ?? [];
+  const related =
+    categories.length > 0
+      ? await sanityFetch<PlantCardData[]>(RELATED_PLANTS_QUERY, { categories, slug }, ["plant"])
+      : null;
 
   return (
     <div className="container mx-auto px-4 py-10">
       {/* Breadcrumb */}
-      <nav className="text-sm text-muted mb-6 flex gap-2">
+      <nav className="text-sm text-muted mb-6 flex gap-2 flex-wrap">
         <a href={`/${locale}`} className="hover:text-foreground">
           Home
         </a>
@@ -98,14 +143,14 @@ export default async function PlantPage({
         <a href={`/${locale}/catalog`} className="hover:text-foreground">
           {dict.nav.catalog}
         </a>
-        {plant.category && (
+        {categories[0] && (
           <>
             <span>/</span>
             <a
-              href={`/${locale}/categories/${plant.category.slug.current}`}
+              href={`/${locale}/catalog?category=${encodeURIComponent(categories[0])}`}
               className="hover:text-foreground"
             >
-              {plant.category.title.en}
+              {categories[0]}
             </a>
           </>
         )}
@@ -113,56 +158,48 @@ export default async function PlantPage({
         <span className="text-foreground">{name}</span>
       </nav>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-        {/* Gallery */}
-        <ImageGallery images={galleryImages} name={name} />
-
-        {/* Info */}
-        <div className="space-y-5">
-          <div>
-            <h1 className="text-3xl font-bold text-foreground">{name}</h1>
-            {plant.scientificName && (
-              <p className="text-muted italic mt-1">{plant.scientificName}</p>
-            )}
-          </div>
-
-          {avail && (
-            <Badge
-              tone={
-                plant.availability === "in_stock"
-                  ? "success"
-                  : plant.availability === "out_of_stock"
-                    ? "danger"
-                    : plant.availability === "limited"
-                      ? "warning"
-                      : "neutral"
-              }
-            >
-              {avail.label}
-            </Badge>
+      {/* Title */}
+      <div className="mb-6">
+        <h1 className="text-3xl font-bold text-foreground">{name}</h1>
+        {plant.scientificName && <p className="text-muted italic mt-1">{plant.scientificName}</p>}
+        <div className="flex gap-2 mt-3 flex-wrap">
+          {plant.fragrant && (
+            <span className="px-2.5 py-0.5 rounded-full bg-accent/10 text-accent text-xs font-medium">
+              🌸 Fragrant
+            </span>
           )}
-
-          {description && <p className="text-muted leading-relaxed">{description}</p>}
-
-          <CareGuideTable
-            sunlight={plant.sunlight}
-            watering={plant.watering}
-            growthRate={plant.growthRate}
-            size={plant.size}
-            floweringSeason={plant.floweringSeason}
-            dict={dict}
-          />
-
-          {/* WhatsApp CTA */}
-          <a
-            href={waLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 w-full py-3 bg-[#25D366] text-white font-semibold rounded-xl hover:bg-[#1ebe5d] transition-colors"
-          >
-            💬 {dict.plant.whatsappCta}
-          </a>
+          {plant.petSafe && (
+            <span className="px-2.5 py-0.5 rounded-full bg-accent/10 text-accent text-xs font-medium">
+              🐾 Pet-Friendly
+            </span>
+          )}
         </div>
+      </div>
+
+      {/* Description (plant-level) */}
+      {description && plant.varieties?.length ? (
+        <p className="text-muted leading-relaxed max-w-3xl mb-8">{description}</p>
+      ) : null}
+
+      {/* Varieties + per-variety gallery & care */}
+      <VarietyShowcase varieties={varieties} fallbackName={name} dict={dict} />
+
+      {/* Care tips + WhatsApp CTA */}
+      <div className="max-w-xl mt-8 space-y-5">
+        {careTips && (
+          <div className="rounded-xl border border-border bg-surface p-4">
+            <h3 className="font-semibold text-foreground text-sm mb-1">Care Tips</h3>
+            <p className="text-muted text-sm leading-relaxed">{careTips}</p>
+          </div>
+        )}
+        <a
+          href={waLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-center gap-2 w-full py-3 bg-[#25D366] text-white font-semibold rounded-xl hover:bg-[#1ebe5d] transition-colors"
+        >
+          💬 {dict.plant.whatsappCta}
+        </a>
       </div>
 
       {/* Related plants */}

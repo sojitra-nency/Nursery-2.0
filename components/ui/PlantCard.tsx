@@ -8,20 +8,22 @@ import { AVAILABILITY } from "@/sanity/lib/enums";
 import type { Locale } from "@/lib/i18n/config";
 import type { SanityImageSource } from "@sanity/image-url";
 
+export interface PlantCardData {
+  name: { en?: string; hi?: string; gu?: string };
+  slug: { current: string };
+  categories?: string[];
+  image?: { asset: SanityImageSource } | null;
+  availability?: string;
+}
+
 interface PlantCardProps {
-  plant: {
-    name: { en?: string; hi?: string; gu?: string };
-    slug: { current: string };
-    images?: Array<{ asset: SanityImageSource }>;
-    availability?: string;
-    category?: { slug: { current: string } };
-  };
+  plant: PlantCardData;
   locale: Locale;
 }
 
 export function PlantCard({ plant, locale }: PlantCardProps) {
   const name = getLocalized(plant.name, locale);
-  const imageAsset = plant.images?.[0]?.asset;
+  const imageAsset = plant.image?.asset;
   const imageUrl = imageAsset
     ? urlForImage(imageAsset).width(400).height(300).fit("crop").url()
     : null;

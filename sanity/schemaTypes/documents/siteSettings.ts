@@ -13,24 +13,32 @@ export const siteSettings = defineType({
     defineField({ name: "whatsapp", title: "WhatsApp Number", type: "string" }),
     defineField({ name: "email", title: "Email", type: "string" }),
     defineField({ name: "address", title: "Address", type: "localeText" }),
-    defineField({ name: "city", title: "City", type: "string" }),
-    defineField({ name: "region", title: "State / Region", type: "string" }),
+    defineField({ name: "city", title: "City", type: "localeString" }),
+    defineField({ name: "region", title: "State / Region", type: "localeString" }),
     defineField({ name: "geo", title: "Geo Coordinates", type: "geopoint" }),
     defineField({
-      name: "openingHours",
-      title: "Opening Hours",
-      type: "array",
-      of: [
-        {
-          type: "object",
-          fields: [
-            { name: "days", title: "Days", type: "string" },
-            { name: "hours", title: "Hours", type: "string" },
-            { name: "opens", title: "Opens (24h)", type: "string" },
-            { name: "closes", title: "Closes (24h)", type: "string" },
-          ],
-        },
-      ],
+      name: "openEveryday",
+      title: "Open Every Day",
+      type: "boolean",
+      initialValue: true,
+    }),
+    defineField({
+      name: "openTime",
+      title: "Opening Time",
+      type: "string",
+      initialValue: "8:00 AM",
+    }),
+    defineField({
+      name: "closeTime",
+      title: "Closing Time",
+      type: "string",
+      initialValue: "8:00 PM",
+    }),
+    defineField({
+      name: "hoursNote",
+      title: "Hours Note (optional)",
+      description: "Shown instead of the times when filled — e.g. holiday hours.",
+      type: "localeString",
     }),
     defineField({
       name: "socialLinks",

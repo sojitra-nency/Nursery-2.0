@@ -10,7 +10,4 @@ export const structure = (S: StructureBuilder) =>
         .child(S.document().schemaType("siteSettings").documentId("siteSettings")),
       S.divider(),
       S.documentTypeListItem("plant").title("Plants"),
-      S.documentTypeListItem("category").title("Categories"),
-      S.documentTypeListItem("subcategory").title("Subcategories"),
-      S.documentTypeListItem("collection").title("Collections"),
     ]);

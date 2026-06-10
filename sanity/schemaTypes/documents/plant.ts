@@ -1,5 +1,6 @@
 import { defineType, defineField } from "sanity";
-import { AVAILABILITY, SUNLIGHT, WATERING, GROWTH_RATE } from "../../lib/enums";
+import { CATEGORY_OPTIONS } from "../../lib/enums";
+import { CheckboxListWithAdd } from "../../components/CheckboxListWithAdd";
 
 export const plant = defineType({
   name: "plant",
@@ -7,8 +8,7 @@ export const plant = defineType({
   type: "document",
   groups: [
     { name: "content", title: "Content", default: true },
-    { name: "care", title: "Care Guide" },
-    { name: "commerce", title: "Commerce", hidden: true },
+    { name: "varieties", title: "Varieties" },
     { name: "seo", title: "SEO" },
   ],
   fields: [
@@ -38,22 +38,18 @@ export const plant = defineType({
       group: "content",
     }),
     defineField({
-      name: "category",
-      title: "Category",
-      type: "reference",
-      to: [{ type: "category" }],
-      group: "content",
-    }),
-    defineField({
-      name: "collections",
-      title: "Collections",
+      name: "categories",
+      title: "Categories",
       type: "array",
-      of: [{ type: "reference", to: [{ type: "collection" }] }],
+      of: [{ type: "string" }],
+      options: { list: CATEGORY_OPTIONS as unknown as string[] },
+      components: { input: CheckboxListWithAdd },
       group: "content",
     }),
     defineField({
       name: "images",
       title: "Images",
+      description: "Shown when this plant has no varieties (fallback gallery).",
       type: "array",
       of: [
         {
@@ -65,6 +61,26 @@ export const plant = defineType({
           ],
         },
       ],
+      group: "content",
+    }),
+    defineField({
+      name: "careTips",
+      title: "Care Tips",
+      type: "localeText",
+      group: "content",
+    }),
+    defineField({
+      name: "fragrant",
+      title: "Fragrant",
+      type: "boolean",
+      initialValue: false,
+      group: "content",
+    }),
+    defineField({
+      name: "petSafe",
+      title: "Pet-Friendly / Non-Toxic",
+      type: "boolean",
+      initialValue: false,
       group: "content",
     }),
     defineField({
@@ -83,69 +99,23 @@ export const plant = defineType({
       group: "content",
     }),
     defineField({
-      name: "availability",
-      title: "Availability",
-      type: "string",
-      options: { list: AVAILABILITY.map((a) => ({ title: a.label, value: a.value })) },
-      initialValue: "in_stock",
-      group: "care",
-    }),
-    defineField({
-      name: "sunlight",
-      title: "Sunlight",
-      type: "string",
-      options: { list: SUNLIGHT.map((s) => ({ title: s.label, value: s.value })) },
-      group: "care",
-    }),
-    defineField({
-      name: "watering",
-      title: "Watering",
-      type: "string",
-      options: { list: WATERING.map((w) => ({ title: w.label, value: w.value })) },
-      group: "care",
-    }),
-    defineField({
-      name: "growthRate",
-      title: "Growth Rate",
-      type: "string",
-      options: { list: GROWTH_RATE.map((g) => ({ title: g.label, value: g.value })) },
-      group: "care",
-    }),
-    defineField({ name: "size", title: "Size (e.g. 6–8 inch pot)", type: "string", group: "care" }),
-    defineField({
-      name: "floweringSeason",
-      title: "Flowering Season",
-      type: "string",
-      group: "care",
-    }),
-    defineField({
-      name: "priceMinor",
-      title: "Price (paise)",
-      description: "Price in INR paise (e.g. 29900 = ₹299)",
-      type: "number",
-      group: "commerce",
-      hidden: true,
-    }),
-    defineField({
-      name: "salePriceMinor",
-      title: "Sale Price (paise)",
-      type: "number",
-      group: "commerce",
-      hidden: true,
-    }),
-    defineField({
-      name: "stockQuantity",
-      title: "Stock Quantity",
-      type: "number",
-      group: "commerce",
-      hidden: true,
+      name: "varieties",
+      title: "Varieties",
+      description: "Each variety has its own images, size, availability and care info.",
+      type: "array",
+      of: [{ type: "variety" }],
+      group: "varieties",
     }),
     defineField({ name: "seo", title: "SEO", type: "seo", group: "seo" }),
   ],
   preview: {
-    select: { title: "name.en", media: "images.0" },
-    prepare({ title, media }) {
-      return { title: title || "Untitled Plant", media };
+    select: {
+      title: "name.en",
+      varietyMedia: "varieties.0.images.0",
+      plantMedia: "images.0",
+    },
+    prepare({ title, varietyMedia, plantMedia }) {
+      return { title: title || "Untitled Plant", media: varietyMedia || plantMedia };
     },
   },
 });

@@ -1,33 +1,20 @@
 import { Suspense } from "react";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { sanityFetch } from "@/sanity/lib/fetch";
-import { catalogPlantsQuery, ALL_CATEGORIES_QUERY } from "@/sanity/lib/queries";
+import { catalogPlantsQuery, USED_CATEGORIES_QUERY } from "@/sanity/lib/queries";
 import { CatalogGrid } from "@/components/catalog/CatalogGrid";
 import { CatalogFilters } from "@/components/catalog/CatalogFilters";
 import { EmptyState } from "@/components/catalog/EmptyState";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import type { PlantCardData } from "@/components/ui/PlantCard";
 import type { Locale } from "@/lib/i18n/config";
-import type { SanityImageSource } from "@sanity/image-url";
-
-interface Plant {
-  name: { en?: string; hi?: string; gu?: string };
-  slug: { current: string };
-  images?: Array<{ asset: SanityImageSource }>;
-  availability?: string;
-  category?: { slug: { current: string } };
-}
-
-interface Category {
-  title: { en?: string };
-  slug: { current: string };
-}
 
 export default async function CatalogPage({
   params,
   searchParams,
 }: {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ q?: string; category?: string; availability?: string; sort?: string }>;
+  searchParams: Promise<{ q?: string; category?: string; sort?: string }>;
 }) {
   const { locale } = await params;
   const sp = await searchParams;
@@ -35,16 +22,15 @@ export default async function CatalogPage({
 
   const [dict, plants, categories] = await Promise.all([
     getDictionary(locale),
-    sanityFetch<Plant[]>(
+    sanityFetch<PlantCardData[]>(
       catalogPlantsQuery(sp.sort),
       {
         search: sp.q ? `*${sp.q}*` : "",
         category: sp.category ?? "",
-        availability: sp.availability ?? "",
       },
       ["plant"]
     ),
-    sanityFetch<Category[]>(ALL_CATEGORIES_QUERY, {}, ["category"]),
+    sanityFetch<string[]>(USED_CATEGORIES_QUERY, {}, ["plant"]),
   ]);
 
   return (

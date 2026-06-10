@@ -9,9 +9,12 @@ export type SiteSettings = {
   phone?: string;
   whatsapp?: string;
   email?: string;
-  city?: string;
-  region?: string;
-  openingHours?: Array<{ days?: string; hours?: string; opens?: string; closes?: string }>;
+  city?: { en?: string; hi?: string; gu?: string };
+  region?: { en?: string; hi?: string; gu?: string };
+  openEveryday?: boolean;
+  openTime?: string;
+  closeTime?: string;
+  hoursNote?: { en?: string; hi?: string; gu?: string };
   socialLinks?: Array<{ platform?: string; url?: string }>;
   currency?: string;
 };
@@ -23,10 +26,13 @@ const FALLBACK: SiteSettings = {
     hi: "चाकरिया बस स्टैंड के पास, चिखली-वनसदा रोड",
     gu: "ચાકરિયા બસ સ્ટેન્ડ પાસે, ચીખલી-વાંસદા રોડ",
   },
-  city: "Navsari",
-  region: "Gujarat",
+  city: { en: "Navsari" },
+  region: { en: "Gujarat" },
   phone: "9876543210",
   whatsapp: "9876543210",
+  openEveryday: true,
+  openTime: "8:00 AM",
+  closeTime: "8:00 PM",
   currency: "INR",
 };
 

@@ -3,15 +3,9 @@
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { useCallback } from "react";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
-import { AVAILABILITY } from "@/sanity/lib/enums";
-
-interface Category {
-  title: { en?: string };
-  slug: { current: string };
-}
 
 interface CatalogFiltersProps {
-  categories: Category[];
+  categories: string[];
   dict: Dictionary;
 }
 
@@ -22,7 +16,6 @@ export function CatalogFilters({ categories, dict }: CatalogFiltersProps) {
 
   const q = searchParams.get("q") ?? "";
   const category = searchParams.get("category") ?? "";
-  const availability = searchParams.get("availability") ?? "";
   const sort = searchParams.get("sort") ?? "";
 
   const update = useCallback(
@@ -42,7 +35,7 @@ export function CatalogFilters({ categories, dict }: CatalogFiltersProps) {
     router.replace(pathname, { scroll: false });
   };
 
-  const hasFilters = q || category || availability || sort;
+  const hasFilters = q || category || sort;
 
   return (
     <div className="flex flex-col gap-3 mb-6">
@@ -69,30 +62,15 @@ export function CatalogFilters({ categories, dict }: CatalogFiltersProps) {
         </button>
         {categories.map((cat) => (
           <button
-            key={cat.slug.current}
-            onClick={() => update("category", cat.slug.current)}
+            key={cat}
+            onClick={() => update("category", cat)}
             className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors ${
-              category === cat.slug.current
+              category === cat
                 ? "bg-accent text-white border-accent"
                 : "bg-surface border-border text-muted hover:border-accent"
             }`}
           >
-            {cat.title.en ?? cat.slug.current}
-          </button>
-        ))}
-
-        {/* Availability chips */}
-        {AVAILABILITY.map((a) => (
-          <button
-            key={a.value}
-            onClick={() => update("availability", availability === a.value ? "" : a.value)}
-            className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors ${
-              availability === a.value
-                ? "bg-accent text-white border-accent"
-                : "bg-surface border-border text-muted hover:border-accent"
-            }`}
-          >
-            {a.label}
+            {cat}
           </button>
         ))}
 

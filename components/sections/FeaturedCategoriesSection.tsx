@@ -1,18 +1,10 @@
 import Link from "next/link";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { CategoryCard } from "@/components/ui/CategoryCard";
 import type { Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
-import type { SanityImageSource } from "@sanity/image-url";
-
-interface Category {
-  title: { en?: string; hi?: string; gu?: string };
-  slug: { current: string };
-  heroImage?: { asset: SanityImageSource };
-}
 
 interface FeaturedCategoriesSectionProps {
-  categories: Category[];
+  categories: string[];
   locale: Locale;
   dict: Dictionary;
 }
@@ -36,9 +28,15 @@ export function FeaturedCategoriesSection({
             {dict.common.viewAll} →
           </Link>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="flex flex-wrap gap-3">
           {categories.map((cat) => (
-            <CategoryCard key={cat.slug.current} category={cat} locale={locale} />
+            <Link
+              key={cat}
+              href={`/${locale}/catalog?category=${encodeURIComponent(cat)}`}
+              className="px-4 py-2 rounded-full text-sm font-medium border border-border bg-surface text-foreground hover:border-accent hover:text-accent transition-colors"
+            >
+              {cat}
+            </Link>
           ))}
         </div>
       </div>

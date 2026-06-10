@@ -4,8 +4,10 @@ import { localBusinessJsonLd, productJsonLd, breadcrumbJsonLd } from "@/lib/seo/
 const mockSettings = {
   name: { en: "Greenskill Landscape" },
   phone: "9876543210",
-  city: "Ahmedabad",
+  city: { en: "Ahmedabad" },
   address: { en: "123 Garden Street" },
+  openTime: "8:00 AM",
+  closeTime: "8:00 PM",
 };
 
 describe("localBusinessJsonLd", () => {
@@ -23,6 +25,15 @@ describe("localBusinessJsonLd", () => {
   it("formats the phone number with +91 prefix", () => {
     const ld = localBusinessJsonLd(mockSettings);
     expect(ld.telephone).toBe("+919876543210");
+  });
+
+  it("derives all-week opening hours from open/close times", () => {
+    const ld = localBusinessJsonLd(mockSettings);
+    expect(ld.openingHoursSpecification).toHaveLength(1);
+    const spec = ld.openingHoursSpecification[0];
+    expect(spec.dayOfWeek).toContain("Sunday");
+    expect(spec.opens).toBe("08:00");
+    expect(spec.closes).toBe("20:00");
   });
 });
 

@@ -5,36 +5,31 @@ export const SETTINGS_QUERY = groq`
     name, tagline, description, logo,
     phone, whatsapp, email,
     address, city, region, geo,
-    openingHours[], socialLinks[],
+    openEveryday, openTime, closeTime, hoursNote,
+    socialLinks[],
     currency, defaultSeo
   }
 `;
 
-export const FEATURED_CATEGORIES_QUERY = groq`
-  *[_type == "category"] | order(_createdAt asc) [0..3] {
-    title, slug, heroImage{ asset, alt }
-  }
-`;
-
-export const ALL_CATEGORIES_QUERY = groq`
-  *[_type == "category"] | order(_createdAt asc) {
-    title, slug
-  }
+// Common projection for plant cards: prefer first variety image, fall back to plant image.
+const CARD_FIELDS = `
+  name, slug, categories,
+  "image": coalesce(varieties[0].images[0]{ asset, alt }, images[0]{ asset, alt }),
+  "availability": coalesce(varieties[0].availability, "in_stock")
 `;
 
 export const FEATURED_PLANTS_QUERY = groq`
   *[_type == "plant" && featured == true] | order(_createdAt desc) [0..7] {
-    name, slug, images[0]{ asset, alt }, availability, category->{ slug }
+    ${CARD_FIELDS}
   }
 `;
 
 const CATALOG_FILTER = `
   _type == "plant"
   && ($search == "" || name.en match $search || name.hi match $search || name.gu match $search)
-  && ($category == "" || category->slug.current == $category)
-  && ($availability == "" || availability == $availability)
+  && ($category == "" || $category in categories)
 `;
-const CATALOG_FIELDS = `name, slug, images[0]{ asset, alt }, availability, category->{ title, slug }`;
+const CATALOG_FIELDS = CARD_FIELDS;
 
 export const CATALOG_PLANTS_QUERY_NAME_ASC = groq`*[${CATALOG_FILTER}] | order(name.en asc) { ${CATALOG_FIELDS} }`;
 export const CATALOG_PLANTS_QUERY_NAME_DESC = groq`*[${CATALOG_FILTER}] | order(name.en desc) { ${CATALOG_FIELDS} }`;
@@ -46,16 +41,26 @@ export function catalogPlantsQuery(sort?: string) {
   return CATALOG_PLANTS_QUERY_NAME_ASC;
 }
 
+// Distinct list of category strings actually used across plants (for filters / category pages).
+export const USED_CATEGORIES_QUERY = groq`
+  array::unique(*[_type == "plant" && defined(categories)].categories[])
+`;
+
 export const PLANT_BY_SLUG_QUERY = groq`
   *[_type == "plant" && slug.current == $slug][0]{
     _id,
     name, scientificName, slug,
     description,
-    category->{ _id, title, slug },
-    collections[]->{ title, slug },
+    categories,
+    careTips, fragrant, petSafe,
     images[]{ _key, asset, alt, caption, hotspot },
-    sunlight, watering, growthRate,
-    availability, size, floweringSeason,
+    varieties[]{
+      _key, name, description, sizeRange,
+      bagSizes[]{ size, tiers[]{ minQty, maxQty, price } },
+      availability, sunlight, watering, growthRate,
+      maxHeight, bloomSeason,
+      images[]{ _key, asset, alt, caption, hotspot }
+    },
     featured, tags,
     seo
   }
@@ -66,39 +71,14 @@ export const PLANT_SLUGS_QUERY = groq`
 `;
 
 export const RELATED_PLANTS_QUERY = groq`
-  *[_type == "plant" && category._ref == $catId && slug.current != $slug] | order(_createdAt desc) [0..3] {
-    name, slug, images[0]{ asset, alt }, availability
+  *[_type == "plant" && count(categories[@ in $categories]) > 0 && slug.current != $slug]
+    | order(_createdAt desc) [0..3] {
+    ${CARD_FIELDS}
   }
-`;
-
-export const CATEGORY_BY_SLUG_QUERY = groq`
-  *[_type == "category" && slug.current == $slug][0]{
-    title, slug, description, heroImage{ asset, alt }, seo
-  }
-`;
-
-export const CATEGORY_SLUGS_QUERY = groq`
-  *[_type == "category" && defined(slug.current)]{ "slug": slug.current }
 `;
 
 export const PLANTS_BY_CATEGORY_QUERY = groq`
-  *[_type == "plant" && category->slug.current == $slug] | order(name.en asc) {
-    name, slug, images[0]{ asset, alt }, availability, category->{ slug }
-  }
-`;
-
-export const COLLECTION_BY_SLUG_QUERY = groq`
-  *[_type == "collection" && slug.current == $slug][0]{
-    title, slug, description, seo
-  }
-`;
-
-export const COLLECTION_SLUGS_QUERY = groq`
-  *[_type == "collection" && defined(slug.current)]{ "slug": slug.current }
-`;
-
-export const PLANTS_BY_COLLECTION_QUERY = groq`
-  *[_type == "plant" && $slug in collections[]->slug.current] | order(name.en asc) {
-    name, slug, images[0]{ asset, alt }, availability, category->{ slug }
+  *[_type == "plant" && $category in categories] | order(name.en asc) {
+    ${CARD_FIELDS}
   }
 `;

@@ -1,6 +1,7 @@
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getSettings } from "@/lib/site";
 import { getLocalized } from "@/lib/i18n/getLocalized";
+import { formatHours } from "@/lib/hours";
 import type { Locale } from "@/lib/i18n/config";
 
 export default async function AboutPage({ params }: { params: Promise<{ locale: string }> }) {
@@ -10,6 +11,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
 
   const description = getLocalized(settings.description, typedLocale);
   const address = getLocalized(settings.address, typedLocale);
+  const hours = formatHours(settings, typedLocale, dict.contact.openEveryDay);
   const phone = settings.phone || "9876543210";
   const whatsapp = settings.whatsapp || "9876543210";
 
@@ -54,24 +56,12 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
       </section>
 
       {/* Opening hours */}
-      {settings.openingHours && settings.openingHours.length > 0 && (
-        <section className="mb-10">
-          <h2 className="text-xl font-semibold text-foreground mb-4">
-            {dict.contact.openingHours}
-          </h2>
-          <div className="rounded-xl border border-border overflow-hidden">
-            {settings.openingHours.map((row: { days?: string; hours?: string }, i: number) => (
-              <div
-                key={i}
-                className={`flex justify-between px-4 py-3 text-sm ${i % 2 === 0 ? "bg-surface" : "bg-background"}`}
-              >
-                <span className="text-muted">{row.days}</span>
-                <span className="font-medium text-foreground">{row.hours}</span>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
+      <section className="mb-10">
+        <h2 className="text-xl font-semibold text-foreground mb-4">{dict.contact.openingHours}</h2>
+        <div className="rounded-xl border border-border bg-surface px-4 py-3 max-w-sm">
+          <p className="font-medium text-foreground">{hours}</p>
+        </div>
+      </section>
 
       {/* Social links */}
       {settings.socialLinks && settings.socialLinks.length > 0 && (

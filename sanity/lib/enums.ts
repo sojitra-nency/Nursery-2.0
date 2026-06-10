@@ -23,3 +23,38 @@ export const GROWTH_RATE = [
   { value: "medium", label: "Medium" },
   { value: "fast", label: "Fast" },
 ] as const;
+
+export const CATEGORY_OPTIONS = [
+  "Indoor Plants",
+  "Outdoor Plants",
+  "Balcony Plants",
+  "Terrace Plants",
+  "Garden Plants",
+  "Greenhouse Plants",
+  "Aquatic Plants",
+  "Pond Plants",
+  "Forest Plants",
+  "Fruit Plants",
+  "Flowering",
+  "Non-Flowering",
+  "Succulents",
+  "Herbs",
+  "Climbers",
+  "Medicinal",
+  "Air-Purifying",
+] as const;
+
+export const BAG_SIZES = [
+  "3 × 4",
+  "4 × 5",
+  "6 × 6",
+  "8 × 8",
+  "10 × 10",
+  "12 × 12",
+  "12 × 15",
+  "14 × 16",
+  "16 × 18",
+  "18 × 24",
+  "21 × 21",
+  "24 × 24",
+] as const;
