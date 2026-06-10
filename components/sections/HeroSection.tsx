@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
+import { Reveal } from "@/components/ui/Reveal";
 import type { SiteSettings } from "@/lib/site";
 import type { Locale } from "@/lib/i18n/config";
 import { getLocalized } from "@/lib/i18n/getLocalized";
@@ -19,14 +20,32 @@ export function HeroSection({ settings, locale, dict }: HeroSectionProps) {
   const waLink = `https://wa.me/91${whatsapp}?text=${waText}`;
 
   return (
-    <section className="relative bg-gradient-to-br from-accent/10 via-surface to-background py-20 md:py-28">
-      <div className="container mx-auto px-4 text-center max-w-3xl">
-        <p className="text-accent font-semibold text-sm uppercase tracking-widest mb-3">{name}</p>
-        <h1 className="text-4xl md:text-6xl font-bold text-foreground leading-tight mb-4">
+    <section className="relative overflow-hidden bg-gradient-to-br from-accent/10 via-surface to-background py-20 md:py-28">
+      {/* Soft decorative blobs — purely cosmetic, hidden from assistive tech. */}
+      <div
+        aria-hidden
+        className="hero-float pointer-events-none absolute -top-16 -right-10 h-64 w-64 rounded-full bg-accent/10 blur-3xl"
+      />
+      <div
+        aria-hidden
+        className="hero-float pointer-events-none absolute -bottom-20 -left-10 h-72 w-72 rounded-full bg-accent/5 blur-3xl"
+        style={{ animationDelay: "-3s" }}
+      />
+      <div className="relative container mx-auto px-4 text-center max-w-3xl">
+        <Reveal as="p" className="text-accent font-semibold text-sm uppercase tracking-widest mb-3">
+          {name}
+        </Reveal>
+        <Reveal
+          as="h1"
+          index={1}
+          className="font-display text-4xl md:text-6xl font-semibold tracking-tight text-foreground leading-tight mb-4"
+        >
           {tagline}
-        </h1>
-        <p className="text-muted text-lg mb-8">{dict.home.heroSubtitle}</p>
-        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+        </Reveal>
+        <Reveal as="p" index={2} className="text-muted text-lg mb-8">
+          {dict.home.heroSubtitle}
+        </Reveal>
+        <Reveal index={3} className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link href={`/${locale}/catalog`}>
             <Button size="lg">{dict.home.browseCatalog}</Button>
           </Link>
@@ -35,7 +54,7 @@ export function HeroSection({ settings, locale, dict }: HeroSectionProps) {
               💬 {dict.home.whatsappCta}
             </Button>
           </a>
-        </div>
+        </Reveal>
       </div>
     </section>
   );

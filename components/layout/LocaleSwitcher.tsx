@@ -19,11 +19,11 @@ export function LocaleSwitcher({ locale }: { locale: string }) {
         <Link
           key={l}
           href={switchTo(l)}
-          className={
+          className={`link-focus ${
             l === locale
               ? "font-semibold text-accent"
               : "text-muted hover:text-foreground transition-colors"
-          }
+          }`}
         >
           {localeNames[l]}
         </Link>

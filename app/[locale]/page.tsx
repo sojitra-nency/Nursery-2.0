@@ -6,6 +6,7 @@ import { USED_CATEGORIES_QUERY, FEATURED_PLANTS_QUERY } from "@/sanity/lib/queri
 import { HeroSection } from "@/components/sections/HeroSection";
 import { FeaturedCategoriesSection } from "@/components/sections/FeaturedCategoriesSection";
 import { FeaturedPlantsSection } from "@/components/sections/FeaturedPlantsSection";
+import { Reveal } from "@/components/ui/Reveal";
 import type { PlantCardData } from "@/components/ui/PlantCard";
 import { getLocalized } from "@/lib/i18n/getLocalized";
 import { formatHours } from "@/lib/hours";
@@ -33,33 +34,35 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       {/* About teaser */}
       {description && (
         <section className="py-16 bg-background">
-          <div className="container mx-auto px-4 max-w-3xl text-center">
-            <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">
+          <Reveal className="container mx-auto px-4 max-w-3xl text-center">
+            <h2 className="font-display text-3xl md:text-4xl font-semibold tracking-tight text-foreground mb-4">
               {dict.home.aboutTeaser}
             </h2>
             <p className="text-muted leading-relaxed mb-6">{description}</p>
             <Link
               href={`/${locale}/about`}
-              className="text-accent font-medium hover:text-accent-dark"
+              className="link-focus text-accent font-medium hover:text-accent-dark"
             >
               {dict.common.learnMore} →
             </Link>
-          </div>
+          </Reveal>
         </section>
       )}
 
       {/* Visit teaser */}
       <section className="py-16 bg-accent text-white">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold mb-3">{dict.home.visitTeaser}</h2>
+        <Reveal className="container mx-auto px-4 text-center">
+          <h2 className="font-display text-3xl md:text-4xl font-semibold tracking-tight mb-3">
+            {dict.home.visitTeaser}
+          </h2>
           <p className="text-white/80 mb-6">{hours}</p>
           <Link
             href={`/${locale}/visit`}
-            className="inline-flex items-center px-6 py-3 bg-white text-accent font-semibold rounded-lg hover:bg-white/90 transition-colors"
+            className="inline-flex items-center px-6 py-3 bg-white text-accent font-semibold rounded-lg transition-[transform,background-color] duration-200 hover:bg-white/90 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-accent"
           >
             {dict.contact.getDirections} →
           </Link>
-        </div>
+        </Reveal>
       </section>
     </>
   );

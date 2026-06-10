@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Fraunces } from "next/font/google";
 import "../globals.css";
 import { locales, hasLocale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getSettings } from "@/lib/site";
+import { resolveThemeVars } from "@/lib/theme/resolve";
 import { getLocalized } from "@/lib/i18n/getLocalized";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -20,6 +21,12 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
+  subsets: ["latin"],
+  axes: ["opsz"],
+  display: "swap",
 });
 
 export function generateStaticParams() {
@@ -60,16 +67,19 @@ export default async function LocaleLayout({
   const nurseryName = getLocalized(settings.name, typedLocale) || NURSERY_NAME;
 
   const ld = localBusinessJsonLd(settings);
+  const themeVars = resolveThemeVars(settings.theme);
 
   return (
-    <html lang={locale}>
+    <html lang={locale} style={themeVars as React.CSSProperties}>
       <head>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }}
         />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased pb-16 md:pb-0`}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} antialiased pb-16 md:pb-0`}
+      >
         <Header nurseryName={nurseryName} locale={locale} dict={dict} />
         <main>{children}</main>
         <Footer nurseryName={nurseryName} locale={locale} dict={dict} />

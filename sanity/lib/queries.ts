@@ -7,7 +7,8 @@ export const SETTINGS_QUERY = groq`
     address, city, region, geo,
     openEveryday, openTime, closeTime, hoursNote,
     socialLinks[],
-    currency, defaultSeo
+    currency, defaultSeo,
+    theme{ preset, background, foreground, surface, border, muted, accent, accentDark }
   }
 `;
 

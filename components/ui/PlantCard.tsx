@@ -30,11 +30,19 @@ export function PlantCard({ plant, locale }: PlantCardProps) {
   const avail = AVAILABILITY.find((a) => a.value === plant.availability);
 
   return (
-    <Link href={`/${locale}/plants/${plant.slug.current}`}>
+    <Link
+      href={`/${locale}/plants/${plant.slug.current}`}
+      className="group block h-full rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+    >
       <Card hover className="h-full flex flex-col">
-        <div className="relative aspect-[4/3] bg-border">
+        <div className="relative aspect-[4/3] overflow-hidden bg-border">
           {imageUrl ? (
-            <Image src={imageUrl} alt={name} fill className="object-cover" />
+            <Image
+              src={imageUrl}
+              alt={name}
+              fill
+              className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+            />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center text-muted text-4xl">
               🌿

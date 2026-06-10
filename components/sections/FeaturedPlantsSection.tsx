@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { PlantCard, type PlantCardData } from "@/components/ui/PlantCard";
+import { Reveal } from "@/components/ui/Reveal";
 import type { Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
 
@@ -20,14 +21,16 @@ export function FeaturedPlantsSection({ plants, locale, dict }: FeaturedPlantsSe
           <SectionHeading title={dict.home.featuredPlants} />
           <Link
             href={`/${locale}/catalog`}
-            className="text-sm text-accent hover:text-accent-dark font-medium"
+            className="link-focus text-sm text-accent hover:text-accent-dark font-medium"
           >
             {dict.common.viewAll} →
           </Link>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-          {plants.map((plant) => (
-            <PlantCard key={plant.slug.current} plant={plant} locale={locale} />
+          {plants.map((plant, i) => (
+            <Reveal key={plant.slug.current} index={i}>
+              <PlantCard plant={plant} locale={locale} />
+            </Reveal>
           ))}
         </div>
       </div>

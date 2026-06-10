@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { Reveal } from "@/components/ui/Reveal";
 import type { Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
 
@@ -23,20 +24,21 @@ export function FeaturedCategoriesSection({
           <SectionHeading title={dict.home.featuredCategories} />
           <Link
             href={`/${locale}/catalog`}
-            className="text-sm text-accent hover:text-accent-dark font-medium"
+            className="link-focus text-sm text-accent hover:text-accent-dark font-medium"
           >
             {dict.common.viewAll} →
           </Link>
         </div>
         <div className="flex flex-wrap gap-3">
-          {categories.map((cat) => (
-            <Link
-              key={cat}
-              href={`/${locale}/catalog?category=${encodeURIComponent(cat)}`}
-              className="px-4 py-2 rounded-full text-sm font-medium border border-border bg-surface text-foreground hover:border-accent hover:text-accent transition-colors"
-            >
-              {cat}
-            </Link>
+          {categories.map((cat, i) => (
+            <Reveal key={cat} index={i}>
+              <Link
+                href={`/${locale}/catalog?category=${encodeURIComponent(cat)}`}
+                className="inline-block px-4 py-2 rounded-full text-sm font-medium border border-border bg-surface text-foreground transition-colors hover:border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              >
+                {cat}
+              </Link>
+            </Reveal>
           ))}
         </div>
       </div>

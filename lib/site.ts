@@ -1,6 +1,19 @@
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { SETTINGS_QUERY } from "@/sanity/lib/queries";
 
+export type ThemeSettings = {
+  /** A preset key (e.g. "forest") or "custom". */
+  preset?: string;
+  /** Flat custom hex overrides — only meaningful when preset === "custom". */
+  background?: string;
+  foreground?: string;
+  surface?: string;
+  border?: string;
+  muted?: string;
+  accent?: string;
+  accentDark?: string;
+};
+
 export type SiteSettings = {
   name?: { en?: string; hi?: string; gu?: string };
   tagline?: { en?: string; hi?: string; gu?: string };
@@ -17,6 +30,7 @@ export type SiteSettings = {
   hoursNote?: { en?: string; hi?: string; gu?: string };
   socialLinks?: Array<{ platform?: string; url?: string }>;
   currency?: string;
+  theme?: ThemeSettings;
 };
 
 const FALLBACK: SiteSettings = {
@@ -34,6 +48,7 @@ const FALLBACK: SiteSettings = {
   openTime: "8:00 AM",
   closeTime: "8:00 PM",
   currency: "INR",
+  theme: { preset: "forest" },
 };
 
 export async function getSettings(): Promise<SiteSettings> {

@@ -9,6 +9,7 @@ export const siteSettings = defineType({
     defineField({ name: "tagline", title: "Tagline", type: "localeString" }),
     defineField({ name: "description", title: "Description", type: "localeText" }),
     defineField({ name: "logo", title: "Logo", type: "image", options: { hotspot: true } }),
+    defineField({ name: "theme", title: "Theme", type: "themeSettings" }),
     defineField({ name: "phone", title: "Phone", type: "string" }),
     defineField({ name: "whatsapp", title: "WhatsApp Number", type: "string" }),
     defineField({ name: "email", title: "Email", type: "string" }),
