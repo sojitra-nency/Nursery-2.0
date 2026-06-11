@@ -1,3 +1,5 @@
+import { cache } from "react";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { PLANT_BY_SLUG_QUERY, PLANT_SLUGS_QUERY, RELATED_PLANTS_QUERY } from "@/sanity/lib/queries";
@@ -5,66 +7,50 @@ import { urlForImage } from "@/sanity/lib/image";
 import { getLocalized } from "@/lib/i18n/getLocalized";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getSettings } from "@/lib/site";
-import type { Locale } from "@/lib/i18n/config";
+import { hasLocale, locales, type Locale } from "@/lib/i18n/config";
+import { buildMetadata } from "@/lib/seo/metadata";
+import { productJsonLd, breadcrumbJsonLd } from "@/lib/seo/jsonld";
+import { SITE_DOMAIN, NURSERY_NAME, DEFAULT_PHONE } from "@/lib/constants";
 import { VarietyShowcase, type ShowcaseVariety } from "@/components/plant/VarietyShowcase";
 import { PlantCard, type PlantCardData } from "@/components/ui/PlantCard";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import type { SanityImageSource } from "@sanity/image-url";
+import { Badge } from "@/components/ui/Badge";
+import type { PlantData, PlantImage } from "@/lib/types/plant";
 
-type LocaleField = { en?: string; hi?: string; gu?: string };
+/** Fetch a plant once per request — shared by generateMetadata and the page. */
+const getPlant = cache((slug: string) =>
+  sanityFetch<PlantData>(PLANT_BY_SLUG_QUERY, { slug }, ["plant"])
+);
 
-interface PlantImage {
-  _key: string;
-  asset: SanityImageSource;
-  alt?: LocaleField;
-  caption?: LocaleField;
-}
-
-interface PriceTier {
-  minQty: number;
-  maxQty?: number;
-  price: number;
-}
-
-interface BagSizePricing {
-  size: string;
-  tiers: PriceTier[];
-}
-
-interface PlantVariety {
-  _key: string;
-  name?: LocaleField;
-  description?: LocaleField;
-  sizeRange?: string;
-  bagSizes?: BagSizePricing[];
-  availability?: string;
-  sunlight?: string;
-  watering?: string;
-  growthRate?: string;
-  maxHeight?: string;
-  bloomSeason?: string;
-  images?: PlantImage[];
-}
-
-interface PlantData {
-  _id: string;
-  name: LocaleField;
-  scientificName?: string;
-  slug: { current: string };
-  description?: LocaleField;
-  categories?: string[];
-  careTips?: LocaleField;
-  fragrant?: boolean;
-  petSafe?: boolean;
-  images?: PlantImage[];
-  varieties?: PlantVariety[];
+/** Primary image asset: first variety image, else first plant image. */
+function primaryAsset(plant: PlantData) {
+  return plant.varieties?.[0]?.images?.[0]?.asset ?? plant.images?.[0]?.asset;
 }
 
 export async function generateStaticParams() {
   const slugs = await sanityFetch<Array<{ slug: string }>>(PLANT_SLUGS_QUERY, {}, ["plant"]);
   if (!slugs) return [];
-  const locales = ["en", "hi", "gu"];
   return slugs.flatMap(({ slug }) => locales.map((locale) => ({ locale, slug })));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; slug: string }>;
+}): Promise<Metadata> {
+  const { locale, slug } = await params;
+  if (!hasLocale(locale)) return {};
+
+  const plant = await getPlant(slug);
+  if (!plant) return {};
+
+  const name = getLocalized(plant.name, locale);
+  const dict = await getDictionary(locale);
+  const description = getLocalized(plant.description, locale) || dict.seo.defaultDescription;
+  const asset = primaryAsset(plant);
+  const imageUrl = asset ? urlForImage(asset).width(1200).height(630).fit("crop").url() : undefined;
+
+  return buildMetadata({ title: name, description, imageUrl, slug: `plants/${slug}`, locale });
 }
 
 function prepareImages(images: PlantImage[] | undefined, locale: Locale, fallbackAlt: string) {
@@ -83,30 +69,31 @@ export default async function PlantPage({
   params: Promise<{ locale: string; slug: string }>;
 }) {
   const { locale, slug } = await params;
-  const typedLocale = locale as Locale;
+  if (!hasLocale(locale)) notFound();
 
   const [dict, settings, plant] = await Promise.all([
     getDictionary(locale),
     getSettings(),
-    sanityFetch<PlantData>(PLANT_BY_SLUG_QUERY, { slug }, ["plant"]),
+    getPlant(slug),
   ]);
 
   if (!plant) notFound();
 
-  const name = getLocalized(plant.name, typedLocale);
-  const description = getLocalized(plant.description, typedLocale);
-  const careTips = getLocalized(plant.careTips, typedLocale);
-  const whatsapp = settings.whatsapp || "9876543210";
-  const waText = encodeURIComponent(`Hi, I'm interested in ${name} from Greenskill Landscape`);
+  const name = getLocalized(plant.name, locale);
+  const description = getLocalized(plant.description, locale);
+  const careTips = getLocalized(plant.careTips, locale);
+  const whatsapp = settings.whatsapp || DEFAULT_PHONE;
+  const waText = encodeURIComponent(`Hi, I'm interested in ${name} from ${NURSERY_NAME}`);
   const waLink = `https://wa.me/91${whatsapp}?text=${waText}`;
+  const categories = plant.categories ?? [];
 
   // Build the showcase varieties. If the plant has none, fall back to a single
   // "default" variety built from the plant-level images + description.
   const varieties: ShowcaseVariety[] = (plant.varieties ?? []).length
     ? (plant.varieties ?? []).map((v) => ({
         key: v._key,
-        name: getLocalized(v.name, typedLocale),
-        description: getLocalized(v.description, typedLocale),
+        name: getLocalized(v.name, locale),
+        description: getLocalized(v.description, locale),
         sizeRange: v.sizeRange,
         bagSizes: v.bagSizes,
         availability: v.availability,
@@ -115,29 +102,65 @@ export default async function PlantPage({
         growthRate: v.growthRate,
         maxHeight: v.maxHeight,
         bloomSeason: v.bloomSeason,
-        images: prepareImages(v.images, typedLocale, name),
+        images: prepareImages(v.images, locale, name),
       }))
     : [
         {
           key: "default",
           name: "",
           description,
-          images: prepareImages(plant.images, typedLocale, name),
+          images: prepareImages(plant.images, locale, name),
         },
       ];
 
-  const categories = plant.categories ?? [];
   const related =
     categories.length > 0
       ? await sanityFetch<PlantCardData[]>(RELATED_PLANTS_QUERY, { categories, slug }, ["plant"])
       : null;
 
+  // Structured data (reuses the existing, previously-unwired helpers).
+  const asset = primaryAsset(plant);
+  const imageUrl = asset ? urlForImage(asset).width(1200).height(630).fit("crop").url() : undefined;
+  const productLd = productJsonLd({
+    name,
+    description: description || undefined,
+    imageUrl,
+    slug,
+    availability: plant.varieties?.[0]?.availability ?? "in_stock",
+    locale,
+  });
+  const breadcrumbLd = breadcrumbJsonLd([
+    { name: dict.nav.home, url: `${SITE_DOMAIN}/${locale}` },
+    { name: dict.nav.catalog, url: `${SITE_DOMAIN}/${locale}/catalog` },
+    ...(categories[0]
+      ? [
+          {
+            name: categories[0],
+            url: `${SITE_DOMAIN}/${locale}/catalog?category=${encodeURIComponent(categories[0])}`,
+          },
+        ]
+      : []),
+    { name, url: `${SITE_DOMAIN}/${locale}/plants/${slug}` },
+  ]);
+
   return (
     <div className="container mx-auto px-4 py-10">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+      />
+
       {/* Breadcrumb */}
-      <nav className="text-sm text-muted mb-6 flex gap-2 flex-wrap">
+      <nav
+        aria-label={dict.common.breadcrumb}
+        className="text-sm text-muted mb-6 flex gap-2 flex-wrap"
+      >
         <a href={`/${locale}`} className="hover:text-foreground">
-          Home
+          {dict.nav.home}
         </a>
         <span>/</span>
         <a href={`/${locale}/catalog`} className="hover:text-foreground">
@@ -164,14 +187,14 @@ export default async function PlantPage({
         {plant.scientificName && <p className="text-muted italic mt-1">{plant.scientificName}</p>}
         <div className="flex gap-2 mt-3 flex-wrap">
           {plant.fragrant && (
-            <span className="px-2.5 py-0.5 rounded-full bg-accent/10 text-accent text-xs font-medium">
-              🌸 Fragrant
-            </span>
+            <Badge tone="accent">
+              <span aria-hidden="true">🌸</span> {dict.plant.fragrant}
+            </Badge>
           )}
           {plant.petSafe && (
-            <span className="px-2.5 py-0.5 rounded-full bg-accent/10 text-accent text-xs font-medium">
-              🐾 Pet-Friendly
-            </span>
+            <Badge tone="accent">
+              <span aria-hidden="true">🐾</span> {dict.plant.petFriendly}
+            </Badge>
           )}
         </div>
       </div>
@@ -188,7 +211,7 @@ export default async function PlantPage({
       <div className="max-w-xl mt-8 space-y-5">
         {careTips && (
           <div className="rounded-xl border border-border bg-surface p-4">
-            <h3 className="font-semibold text-foreground text-sm mb-1">Care Tips</h3>
+            <h2 className="font-semibold text-foreground text-sm mb-1">{dict.plant.careTips}</h2>
             <p className="text-muted text-sm leading-relaxed">{careTips}</p>
           </div>
         )}
@@ -208,7 +231,7 @@ export default async function PlantPage({
           <SectionHeading title={dict.plant.relatedPlants} />
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             {related.map((p) => (
-              <PlantCard key={p.slug.current} plant={p} locale={typedLocale} />
+              <PlantCard key={p.slug.current} plant={p} locale={locale} />
             ))}
           </div>
         </section>

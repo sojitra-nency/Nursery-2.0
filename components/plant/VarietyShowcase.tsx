@@ -3,25 +3,16 @@
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { Badge } from "@/components/ui/Badge";
+import { Chip } from "@/components/ui/Chip";
 import { CareGuideTable } from "@/components/plant/CareGuideTable";
 import { AVAILABILITY } from "@/sanity/lib/enums";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
+import type { BagSizePricing } from "@/lib/types/plant";
 
 export interface ShowcaseImage {
   key: string;
   url: string;
   alt: string;
-}
-
-export interface PriceTier {
-  minQty: number;
-  maxQty?: number;
-  price: number;
-}
-
-export interface BagSizePricing {
-  size: string;
-  tiers: PriceTier[];
 }
 
 export interface ShowcaseVariety {
@@ -84,7 +75,14 @@ function CircularSlider({ images, name }: { images: ShowcaseImage[]; name: strin
   return (
     <div className="space-y-3">
       <div className="relative aspect-[4/3] rounded-xl overflow-hidden bg-border">
-        <Image src={current.url} alt={current.alt || name} fill className="object-cover" priority />
+        <Image
+          src={current.url}
+          alt={current.alt || name}
+          fill
+          sizes="(min-width: 768px) 50vw, 100vw"
+          className="object-cover"
+          priority
+        />
         {images.length > 1 && (
           <>
             <button
@@ -155,18 +153,9 @@ export function VarietyShowcase({ varieties, fallbackName, dict }: VarietyShowca
         {varieties.length > 1 && (
           <div className="flex flex-wrap gap-2">
             {varieties.map((v) => (
-              <button
-                key={v.key}
-                type="button"
-                onClick={() => setActiveKey(v.key)}
-                className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
-                  v.key === active.key
-                    ? "bg-accent text-on-accent border-accent"
-                    : "bg-surface border-border text-muted hover:border-accent"
-                }`}
-              >
+              <Chip key={v.key} active={v.key === active.key} onClick={() => setActiveKey(v.key)}>
                 {v.name}
-              </button>
+              </Chip>
             ))}
           </div>
         )}
@@ -196,21 +185,17 @@ export function VarietyShowcase({ varieties, fallbackName, dict }: VarietyShowca
         {/* Bag size selector + tiered pricing */}
         {active.bagSizes && active.bagSizes.length > 0 && (
           <div className="space-y-3">
-            <p className="text-sm font-medium text-foreground">Bag Size</p>
+            <p className="text-sm font-medium text-foreground">{dict.plant.bagSize}</p>
             <div className="flex flex-wrap gap-2">
               {active.bagSizes.map((b) => (
-                <button
+                <Chip
                   key={b.size}
-                  type="button"
+                  shape="square"
+                  active={b.size === activeBagSize}
                   onClick={() => setActiveBagSize(b.size)}
-                  className={`px-3 py-1.5 rounded-md text-xs font-medium border transition-colors ${
-                    b.size === activeBagSize
-                      ? "bg-accent text-on-accent border-accent"
-                      : "bg-surface border-border text-muted hover:border-accent"
-                  }`}
                 >
                   {b.size}
-                </button>
+                </Chip>
               ))}
             </div>
 
@@ -218,8 +203,8 @@ export function VarietyShowcase({ varieties, fallbackName, dict }: VarietyShowca
               <table className="w-full text-sm border border-border rounded-lg overflow-hidden">
                 <thead className="bg-surface text-muted">
                   <tr>
-                    <th className="text-left px-3 py-2 font-medium">Quantity</th>
-                    <th className="text-right px-3 py-2 font-medium">Price / plant</th>
+                    <th className="text-left px-3 py-2 font-medium">{dict.plant.quantity}</th>
+                    <th className="text-right px-3 py-2 font-medium">{dict.plant.pricePerPlant}</th>
                   </tr>
                 </thead>
                 <tbody>

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getSettings } from "@/lib/site";
@@ -10,7 +11,25 @@ import { Reveal } from "@/components/ui/Reveal";
 import type { PlantCardData } from "@/components/ui/PlantCard";
 import { getLocalized } from "@/lib/i18n/getLocalized";
 import { formatHours } from "@/lib/hours";
-import type { Locale } from "@/lib/i18n/config";
+import { hasLocale, type Locale } from "@/lib/i18n/config";
+import { buildMetadata } from "@/lib/seo/metadata";
+import { NURSERY_NAME } from "@/lib/constants";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  if (!hasLocale(locale)) return {};
+  const dict = await getDictionary(locale);
+  return buildMetadata({
+    title: NURSERY_NAME,
+    titleAbsolute: true,
+    description: dict.seo.defaultDescription,
+    locale,
+  });
+}
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;

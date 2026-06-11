@@ -1,7 +1,8 @@
 "use client";
 
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { Chip } from "@/components/ui/Chip";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
 
 interface CatalogFiltersProps {
@@ -31,6 +32,24 @@ export function CatalogFilters({ categories, dict }: CatalogFiltersProps) {
     [router, pathname, searchParams]
   );
 
+  // Debounce the search term so we don't fire a navigation + refetch per keystroke.
+  const [term, setTerm] = useState(q);
+
+  // Keep the local input in sync when `q` changes externally (e.g. Clear).
+  // Adjust state during render — the idiom already used in VarietyShowcase —
+  // rather than an effect, which the lint config disallows for prop→state sync.
+  const [prevQ, setPrevQ] = useState(q);
+  if (prevQ !== q) {
+    setPrevQ(q);
+    setTerm(q);
+  }
+
+  useEffect(() => {
+    if (term === q) return;
+    const id = setTimeout(() => update("q", term), 300);
+    return () => clearTimeout(id);
+  }, [term, q, update]);
+
   const clearAll = () => {
     router.replace(pathname, { scroll: false });
   };
@@ -40,45 +59,40 @@ export function CatalogFilters({ categories, dict }: CatalogFiltersProps) {
   return (
     <div className="flex flex-col gap-3 mb-6">
       {/* Search */}
+      <label htmlFor="catalog-search" className="sr-only">
+        {dict.catalog.searchPlaceholder}
+      </label>
       <input
+        id="catalog-search"
         type="search"
-        value={q}
-        onChange={(e) => update("q", e.target.value)}
+        value={term}
+        onChange={(e) => setTerm(e.target.value)}
         placeholder={dict.catalog.searchPlaceholder}
-        className="w-full md:max-w-sm px-4 py-2 rounded-lg border border-border bg-surface text-sm text-foreground placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-accent"
+        aria-label={dict.catalog.searchPlaceholder}
+        className="w-full md:max-w-sm px-4 py-2 rounded-lg border border-border bg-surface text-sm text-foreground placeholder:text-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
       />
 
       <div className="flex flex-wrap gap-2 items-center">
         {/* Category chips */}
-        <button
-          onClick={() => update("category", "")}
-          className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors ${
-            !category
-              ? "bg-accent text-on-accent border-accent"
-              : "bg-surface border-border text-muted hover:border-accent"
-          }`}
-        >
+        <Chip active={!category} onClick={() => update("category", "")}>
           {dict.catalog.allCategories}
-        </button>
+        </Chip>
         {categories.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => update("category", cat)}
-            className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors ${
-              category === cat
-                ? "bg-accent text-on-accent border-accent"
-                : "bg-surface border-border text-muted hover:border-accent"
-            }`}
-          >
+          <Chip key={cat} active={category === cat} onClick={() => update("category", cat)}>
             {cat}
-          </button>
+          </Chip>
         ))}
 
         {/* Sort */}
+        <label htmlFor="catalog-sort" className="sr-only">
+          {dict.catalog.sortBy}
+        </label>
         <select
+          id="catalog-sort"
           value={sort}
           onChange={(e) => update("sort", e.target.value)}
-          className="px-3 py-1 rounded-lg border border-border bg-surface text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-accent ml-auto"
+          aria-label={dict.catalog.sortBy}
+          className="px-3 py-1 rounded-lg border border-border bg-surface text-xs text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ml-auto"
         >
           <option value="">{dict.catalog.sortBy}</option>
           <option value="name_asc">{dict.catalog.sortNameAsc}</option>
@@ -89,8 +103,9 @@ export function CatalogFilters({ categories, dict }: CatalogFiltersProps) {
         {/* Clear */}
         {hasFilters && (
           <button
+            type="button"
             onClick={clearAll}
-            className="px-3 py-1 rounded-full text-xs font-medium text-accent border border-accent hover:bg-accent/10 transition-colors"
+            className="px-3 py-1 rounded-full text-xs font-medium text-accent border border-accent hover:bg-accent/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
             {dict.catalog.clearFilters}
           </button>

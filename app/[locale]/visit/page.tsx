@@ -1,8 +1,27 @@
+import type { Metadata } from "next";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getSettings } from "@/lib/site";
 import { getLocalized } from "@/lib/i18n/getLocalized";
 import { formatHours } from "@/lib/hours";
-import type { Locale } from "@/lib/i18n/config";
+import { hasLocale, type Locale } from "@/lib/i18n/config";
+import { buildMetadata } from "@/lib/seo/metadata";
+import { DEFAULT_PHONE } from "@/lib/constants";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  if (!hasLocale(locale)) return {};
+  const dict = await getDictionary(locale);
+  return buildMetadata({
+    title: dict.nav.visit,
+    description: dict.seo.visit,
+    slug: "visit",
+    locale,
+  });
+}
 
 export default async function VisitPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -12,7 +31,7 @@ export default async function VisitPage({ params }: { params: Promise<{ locale: 
   const address = getLocalized(settings.address, typedLocale);
   const city = getLocalized(settings.city, typedLocale);
   const region = getLocalized(settings.region, typedLocale);
-  const phone = settings.phone || "9876543210";
+  const phone = settings.phone || DEFAULT_PHONE;
   const hours = formatHours(settings, typedLocale, dict.contact.openEveryDay);
   const mapsQuery = encodeURIComponent(
     [address, city, region, "Green Skill Nursery"].filter(Boolean).join(", ")

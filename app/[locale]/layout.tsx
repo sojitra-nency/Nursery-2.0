@@ -10,9 +10,8 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { StickyContactBar } from "@/components/layout/StickyContactBar";
 import { localBusinessJsonLd } from "@/lib/seo/jsonld";
+import { NURSERY_NAME } from "@/lib/constants";
 import type { Locale } from "@/lib/i18n/config";
-
-const NURSERY_NAME = "Greenskill Landscape";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

@@ -1,8 +1,27 @@
+import type { Metadata } from "next";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getSettings } from "@/lib/site";
 import { getLocalized } from "@/lib/i18n/getLocalized";
 import { formatHours } from "@/lib/hours";
-import type { Locale } from "@/lib/i18n/config";
+import { hasLocale, type Locale } from "@/lib/i18n/config";
+import { buildMetadata } from "@/lib/seo/metadata";
+import { DEFAULT_PHONE } from "@/lib/constants";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  if (!hasLocale(locale)) return {};
+  const dict = await getDictionary(locale);
+  return buildMetadata({
+    title: dict.home.aboutTeaser,
+    description: dict.seo.about,
+    slug: "about",
+    locale,
+  });
+}
 
 export default async function AboutPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -12,8 +31,8 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
   const description = getLocalized(settings.description, typedLocale);
   const address = getLocalized(settings.address, typedLocale);
   const hours = formatHours(settings, typedLocale, dict.contact.openEveryDay);
-  const phone = settings.phone || "9876543210";
-  const whatsapp = settings.whatsapp || "9876543210";
+  const phone = settings.phone || DEFAULT_PHONE;
+  const whatsapp = settings.whatsapp || DEFAULT_PHONE;
 
   return (
     <div className="container mx-auto px-4 py-12 max-w-3xl">

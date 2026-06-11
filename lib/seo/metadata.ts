@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import type { Locale } from "@/lib/i18n/config";
 import { locales } from "@/lib/i18n/config";
-
-const DOMAIN = process.env.NEXT_PUBLIC_SITE_URL || "https://greenskilllandscape.pages.dev";
-const NURSERY_NAME = "Greenskill Landscape";
+import { SITE_DOMAIN as DOMAIN, NURSERY_NAME } from "@/lib/constants";
 
 interface BuildMetadataOpts {
   title?: string;
@@ -11,6 +9,11 @@ interface BuildMetadataOpts {
   imageUrl?: string;
   slug?: string;
   locale: Locale;
+  /**
+   * Bypass the layout's `%s | Brand` title template (e.g. the home page, whose
+   * title is already the brand name). Defaults to false → template applies.
+   */
+  titleAbsolute?: boolean;
 }
 
 export function buildMetadata({
@@ -19,6 +22,7 @@ export function buildMetadata({
   imageUrl,
   slug = "",
   locale,
+  titleAbsolute = false,
 }: BuildMetadataOpts): Metadata {
   const pageTitle = title ?? NURSERY_NAME;
   const pageDescription =
@@ -26,7 +30,8 @@ export function buildMetadata({
   const canonical = `${DOMAIN}/${locale}${slug ? `/${slug}` : ""}`;
 
   return {
-    title: pageTitle,
+    metadataBase: new URL(DOMAIN),
+    title: titleAbsolute ? { absolute: pageTitle } : pageTitle,
     description: pageDescription,
     alternates: {
       canonical,

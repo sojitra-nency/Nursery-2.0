@@ -2,8 +2,7 @@ import type { MetadataRoute } from "next";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { PLANT_SLUGS_QUERY } from "@/sanity/lib/queries";
 import { locales } from "@/lib/i18n/config";
-
-const DOMAIN = process.env.NEXT_PUBLIC_SITE_URL || "https://greenskilllandscape.pages.dev";
+import { SITE_DOMAIN as DOMAIN } from "@/lib/constants";
 
 function urls(path: string): MetadataRoute.Sitemap[number] {
   return {

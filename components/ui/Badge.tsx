@@ -1,9 +1,10 @@
 import type { ReactNode } from "react";
 
-type Tone = "neutral" | "success" | "warning" | "danger";
+type Tone = "neutral" | "accent" | "success" | "warning" | "danger";
 
 const toneClasses: Record<Tone, string> = {
   neutral: "bg-border text-foreground",
+  accent: "bg-accent/10 text-accent",
   success: "bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-200",
   warning: "bg-yellow-100 text-yellow-800 dark:bg-amber-900/40 dark:text-amber-200",
   danger: "bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-200",

@@ -6,15 +6,9 @@ import { urlForImage } from "@/sanity/lib/image";
 import { getLocalized } from "@/lib/i18n/getLocalized";
 import { AVAILABILITY } from "@/sanity/lib/enums";
 import type { Locale } from "@/lib/i18n/config";
-import type { SanityImageSource } from "@sanity/image-url";
+import type { PlantCardData } from "@/lib/types/plant";
 
-export interface PlantCardData {
-  name: { en?: string; hi?: string; gu?: string };
-  slug: { current: string };
-  categories?: string[];
-  image?: { asset: SanityImageSource } | null;
-  availability?: string;
-}
+export type { PlantCardData };
 
 interface PlantCardProps {
   plant: PlantCardData;
@@ -41,6 +35,7 @@ export function PlantCard({ plant, locale }: PlantCardProps) {
               src={imageUrl}
               alt={name}
               fill
+              sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
               className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
             />
           ) : (

@@ -1,13 +1,12 @@
 import type { SiteSettings } from "@/lib/site";
 import type { Locale } from "@/lib/i18n/config";
 import { to24h } from "@/lib/hours";
-
-const DOMAIN = process.env.NEXT_PUBLIC_SITE_URL || "https://greenskilllandscape.pages.dev";
+import { SITE_DOMAIN as DOMAIN, NURSERY_NAME } from "@/lib/constants";
 
 const ALL_DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
 export function localBusinessJsonLd(settings: SiteSettings) {
-  const name = settings.name?.en ?? "Greenskill Landscape";
+  const name = settings.name?.en ?? NURSERY_NAME;
   const phone = settings.phone ? `+91${settings.phone}` : undefined;
   const address = settings.address?.en;
   const city = settings.city?.en ?? "";
@@ -74,12 +73,12 @@ export function productJsonLd({
     ...(description ? { description } : {}),
     ...(imageUrl ? { image: imageUrl } : {}),
     url: `${DOMAIN}/${locale}/plants/${slug}`,
-    brand: { "@type": "Brand", name: "Greenskill Landscape" },
+    brand: { "@type": "Brand", name: NURSERY_NAME },
     offers: {
       "@type": "Offer",
       priceCurrency: "INR",
       availability: SCHEMA_AVAILABILITY[availability ?? "in_stock"] ?? "https://schema.org/InStock",
-      seller: { "@type": "Organization", name: "Greenskill Landscape" },
+      seller: { "@type": "Organization", name: NURSERY_NAME },
     },
   };
 }

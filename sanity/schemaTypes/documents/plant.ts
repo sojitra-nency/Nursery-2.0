@@ -29,6 +29,7 @@ export const plant = defineType({
       title: "Slug",
       type: "slug",
       options: { source: "name.en" },
+      validation: (rule) => rule.required(),
       group: "content",
     }),
     defineField({
@@ -42,8 +43,9 @@ export const plant = defineType({
       title: "Categories",
       type: "array",
       of: [{ type: "string" }],
-      options: { list: CATEGORY_OPTIONS as unknown as string[] },
+      options: { list: [...CATEGORY_OPTIONS] },
       components: { input: CheckboxListWithAdd },
+      validation: (rule) => rule.min(1),
       group: "content",
     }),
     defineField({

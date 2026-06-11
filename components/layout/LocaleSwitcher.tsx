@@ -19,6 +19,7 @@ export function LocaleSwitcher({ locale }: { locale: string }) {
         <Link
           key={l}
           href={switchTo(l)}
+          aria-current={l === locale ? "page" : undefined}
           className={`link-focus ${
             l === locale
               ? "font-semibold text-accent"

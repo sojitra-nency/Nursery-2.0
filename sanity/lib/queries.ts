@@ -77,9 +77,3 @@ export const RELATED_PLANTS_QUERY = groq`
     ${CARD_FIELDS}
   }
 `;
-
-export const PLANTS_BY_CATEGORY_QUERY = groq`
-  *[_type == "plant" && $category in categories] | order(name.en asc) {
-    ${CARD_FIELDS}
-  }
-`;

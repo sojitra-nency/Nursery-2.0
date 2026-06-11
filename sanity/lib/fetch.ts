@@ -14,5 +14,8 @@ export async function sanityFetch<T>(
     return client.fetch<T>(query, params, { cache: "no-store" });
   }
 
-  return client.fetch<T>(query, params, { next: { tags } });
+  // Tag-based purge (via the Sanity webhook) is the primary mechanism; the
+  // time-based revalidate is a safety net so content can't cache indefinitely
+  // if the webhook is ever missing or misconfigured.
+  return client.fetch<T>(query, params, { next: { tags, revalidate: 3600 } });
 }

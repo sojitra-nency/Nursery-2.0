@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
+import { Chip } from "@/components/ui/Chip";
 import type { Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
 
@@ -32,12 +33,9 @@ export function FeaturedCategoriesSection({
         <div className="flex flex-wrap gap-3">
           {categories.map((cat, i) => (
             <Reveal key={cat} index={i}>
-              <Link
-                href={`/${locale}/catalog?category=${encodeURIComponent(cat)}`}
-                className="inline-block px-4 py-2 rounded-full text-sm font-medium border border-border bg-surface text-foreground transition-colors hover:border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-              >
+              <Chip href={`/${locale}/catalog?category=${encodeURIComponent(cat)}`} size="md">
                 {cat}
-              </Link>
+              </Chip>
             </Reveal>
           ))}
         </div>

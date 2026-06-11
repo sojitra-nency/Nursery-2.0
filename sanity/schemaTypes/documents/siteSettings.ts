@@ -1,5 +1,10 @@
 import { defineType, defineField } from "sanity";
 
+// Accepts the display format consumed by `to24h` in lib/hours.ts, e.g. "8:00 AM".
+const TIME_RE = /^\d{1,2}(?::\d{2})?\s*(am|pm)?$/i;
+const validTime = (v?: string): true | string =>
+  !v || TIME_RE.test(v.trim()) || 'Use a time like "8:00 AM"';
+
 export const siteSettings = defineType({
   name: "siteSettings",
   title: "Site Settings",
@@ -28,12 +33,14 @@ export const siteSettings = defineType({
       title: "Opening Time",
       type: "string",
       initialValue: "8:00 AM",
+      validation: (rule) => rule.custom(validTime),
     }),
     defineField({
       name: "closeTime",
       title: "Closing Time",
       type: "string",
       initialValue: "8:00 PM",
+      validation: (rule) => rule.custom(validTime),
     }),
     defineField({
       name: "hoursNote",
