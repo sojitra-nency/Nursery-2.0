@@ -13,7 +13,8 @@
     "viewAll": "View All",
     "search": "Search plants…",
     "filter": "Filter",
-    "sort": "Sort"
+    "sort": "Sort",
+    "toggleTheme": "Toggle dark mode"
   },
   "home": {
     "heroTitleFallback": "Healthy Plants for Every Home",

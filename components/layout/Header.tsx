@@ -1,18 +1,20 @@
 import Link from "next/link";
 import { LocaleSwitcher } from "./LocaleSwitcher";
 import { HeaderShell } from "./HeaderShell";
+import { ThemeToggle } from "./ThemeToggle";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
 
 interface HeaderProps {
   nurseryName: string;
   locale: string;
   dict: Dictionary;
+  showThemeToggle?: boolean;
 }
 
 const navLinkClass =
   "text-muted hover:text-foreground transition-colors rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 
-export function Header({ nurseryName, locale, dict }: HeaderProps) {
+export function Header({ nurseryName, locale, dict, showThemeToggle = false }: HeaderProps) {
   return (
     <HeaderShell>
       <div className="container mx-auto px-4 h-16 flex items-center justify-between gap-4">
@@ -33,7 +35,10 @@ export function Header({ nurseryName, locale, dict }: HeaderProps) {
             {dict.nav.visit}
           </Link>
         </nav>
-        <LocaleSwitcher locale={locale} />
+        <div className="flex items-center gap-3">
+          <LocaleSwitcher locale={locale} />
+          {showThemeToggle && <ThemeToggle label={dict.common.toggleTheme} />}
+        </div>
       </div>
     </HeaderShell>
   );

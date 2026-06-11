@@ -13,7 +13,8 @@
     "viewAll": "બધા જુઓ",
     "search": "છોડ શોધો…",
     "filter": "ફિલ્ટર",
-    "sort": "ક્રમ"
+    "sort": "ક્રમ",
+    "toggleTheme": "ડાર્ક મોડ ટૉગલ કરો"
   },
   "home": {
     "heroTitleFallback": "દરેક ઘર માટે સ્વસ્થ છોડ",

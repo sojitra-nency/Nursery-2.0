@@ -4,9 +4,9 @@ type Tone = "neutral" | "success" | "warning" | "danger";
 
 const toneClasses: Record<Tone, string> = {
   neutral: "bg-border text-foreground",
-  success: "bg-green-100 text-green-800",
-  warning: "bg-yellow-100 text-yellow-800",
-  danger: "bg-red-100 text-red-800",
+  success: "bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-200",
+  warning: "bg-yellow-100 text-yellow-800 dark:bg-amber-900/40 dark:text-amber-200",
+  danger: "bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-200",
 };
 
 interface BadgeProps {

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { THEME_PRESETS, presetByKey, tokensToCssVars } from "@/lib/theme/presets";
+import { THEME_PRESETS, presetByKey, tokensToCssVars, type TokenMap } from "@/lib/theme/presets";
 import { resolveThemeVars } from "@/lib/theme/resolve";
 
 // ── WCAG contrast helpers (no dependency) ───────────────────────────────────
@@ -32,62 +32,57 @@ function contrastRatio(a: string, b: string): number {
 }
 
 const AA_NORMAL = 4.5;
-const WHITE = "#ffffff";
 
-describe("theme presets — WCAG AA contrast", () => {
+function assertModeAA(t: TokenMap) {
+  // Body / heading text on the two surfaces.
+  expect(contrastRatio(t.foreground, t.background)).toBeGreaterThanOrEqual(AA_NORMAL);
+  expect(contrastRatio(t.foreground, t.surface)).toBeGreaterThanOrEqual(AA_NORMAL);
+  // Muted secondary text.
+  expect(contrastRatio(t.muted, t.surface)).toBeGreaterThanOrEqual(AA_NORMAL);
+  expect(contrastRatio(t.muted, t.background)).toBeGreaterThanOrEqual(AA_NORMAL);
+  // Accent used as link / eyebrow text.
+  expect(contrastRatio(t.accent, t.background)).toBeGreaterThanOrEqual(AA_NORMAL);
+  expect(contrastRatio(t.accent, t.surface)).toBeGreaterThanOrEqual(AA_NORMAL);
+  // Text placed ON accent buttons/bands (white in light, dark in dark).
+  expect(contrastRatio(t.onAccent, t.accent)).toBeGreaterThanOrEqual(AA_NORMAL);
+  expect(contrastRatio(t.onAccent, t.accentDark)).toBeGreaterThanOrEqual(AA_NORMAL);
+}
+
+describe("theme presets — WCAG AA contrast (light + dark)", () => {
   for (const preset of THEME_PRESETS) {
-    const t = preset.tokens;
     describe(preset.label, () => {
-      it("foreground text on background ≥ 4.5:1", () => {
-        expect(contrastRatio(t.foreground, t.background)).toBeGreaterThanOrEqual(AA_NORMAL);
-      });
-      it("foreground text on surface ≥ 4.5:1", () => {
-        expect(contrastRatio(t.foreground, t.surface)).toBeGreaterThanOrEqual(AA_NORMAL);
-      });
-      it("muted text on surface ≥ 4.5:1", () => {
-        expect(contrastRatio(t.muted, t.surface)).toBeGreaterThanOrEqual(AA_NORMAL);
-      });
-      it("muted text on background ≥ 4.5:1", () => {
-        expect(contrastRatio(t.muted, t.background)).toBeGreaterThanOrEqual(AA_NORMAL);
-      });
-      it("white label on accent button ≥ 4.5:1", () => {
-        expect(contrastRatio(WHITE, t.accent)).toBeGreaterThanOrEqual(AA_NORMAL);
-      });
-      it("white label on accent-dark (hover) ≥ 4.5:1", () => {
-        expect(contrastRatio(WHITE, t.accentDark)).toBeGreaterThanOrEqual(AA_NORMAL);
-      });
-      it("accent as text on background ≥ 4.5:1", () => {
-        expect(contrastRatio(t.accent, t.background)).toBeGreaterThanOrEqual(AA_NORMAL);
-      });
+      it("light mode clears AA", () => assertModeAA(preset.tokens.light));
+      it("dark mode clears AA", () => assertModeAA(preset.tokens.dark));
     });
   }
 });
 
 describe("resolveThemeVars", () => {
-  it("falls back to the default (forest) preset when theme is undefined", () => {
-    expect(resolveThemeVars(undefined)).toEqual(tokensToCssVars(presetByKey("forest").tokens));
+  it("falls back to the default (forest) light map when theme is undefined", () => {
+    expect(resolveThemeVars(undefined)).toEqual(
+      tokensToCssVars(presetByKey("forest").tokens.light)
+    );
   });
 
-  it("resolves a named preset to its token map", () => {
+  it("resolves a named preset to its light token map", () => {
     expect(resolveThemeVars({ preset: "ocean" })).toEqual(
-      tokensToCssVars(presetByKey("ocean").tokens)
+      tokensToCssVars(presetByKey("ocean").tokens.light)
     );
   });
 
   it("falls back to default for an unknown preset key", () => {
     expect(resolveThemeVars({ preset: "does-not-exist" })).toEqual(
-      tokensToCssVars(presetByKey("forest").tokens)
+      tokensToCssVars(presetByKey("forest").tokens.light)
     );
   });
 
-  it("overlays custom hexes on the default map, keeping defaults for empty fields", () => {
+  it("overlays custom hexes on the default light map, keeping defaults for empty fields", () => {
     const vars = resolveThemeVars({ preset: "custom", accent: "#123456" });
     expect(vars["--color-accent"]).toBe("#123456");
-    // Untouched tokens keep the default preset value.
-    expect(vars["--color-background"]).toBe(presetByKey("forest").tokens.background);
+    expect(vars["--color-background"]).toBe(presetByKey("forest").tokens.light.background);
   });
 
-  it("emits all seven color custom properties", () => {
+  it("emits all eight color custom properties", () => {
     const vars = resolveThemeVars({ preset: "plum" });
     expect(Object.keys(vars).sort()).toEqual(
       [
@@ -97,6 +92,7 @@ describe("resolveThemeVars", () => {
         "--color-border",
         "--color-foreground",
         "--color-muted",
+        "--color-on-accent",
         "--color-surface",
       ].sort()
     );

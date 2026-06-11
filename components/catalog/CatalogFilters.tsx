@@ -54,7 +54,7 @@ export function CatalogFilters({ categories, dict }: CatalogFiltersProps) {
           onClick={() => update("category", "")}
           className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors ${
             !category
-              ? "bg-accent text-white border-accent"
+              ? "bg-accent text-on-accent border-accent"
               : "bg-surface border-border text-muted hover:border-accent"
           }`}
         >
@@ -66,7 +66,7 @@ export function CatalogFilters({ categories, dict }: CatalogFiltersProps) {
             onClick={() => update("category", cat)}
             className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors ${
               category === cat
-                ? "bg-accent text-white border-accent"
+                ? "bg-accent text-on-accent border-accent"
                 : "bg-surface border-border text-muted hover:border-accent"
             }`}
           >

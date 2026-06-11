@@ -4,6 +4,8 @@ import { SETTINGS_QUERY } from "@/sanity/lib/queries";
 export type ThemeSettings = {
   /** A preset key (e.g. "forest") or "custom". */
   preset?: string;
+  /** Per-branch dark-mode policy: follow the visitor's OS, or force a mode. */
+  darkMode?: "auto" | "light" | "dark";
   /** Flat custom hex overrides — only meaningful when preset === "custom". */
   background?: string;
   foreground?: string;
@@ -12,6 +14,7 @@ export type ThemeSettings = {
   muted?: string;
   accent?: string;
   accentDark?: string;
+  onAccent?: string;
 };
 
 export type SiteSettings = {
@@ -48,7 +51,7 @@ const FALLBACK: SiteSettings = {
   openTime: "8:00 AM",
   closeTime: "8:00 PM",
   currency: "INR",
-  theme: { preset: "forest" },
+  theme: { preset: "forest", darkMode: "auto" },
 };
 
 export async function getSettings(): Promise<SiteSettings> {

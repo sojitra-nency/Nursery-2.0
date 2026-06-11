@@ -4,7 +4,10 @@ import { test, expect } from "@playwright/test";
 const FOREST_ACCENT_HEX = "#2f7d32";
 const FOREST_ACCENT_RGB = "rgb(47, 125, 50)";
 
-test("injects the theme color tokens as inline CSS variables on <html>", async ({ page }) => {
+// These assertions expect light mode; pin the context so a dark-OS runner can't flip it.
+test.use({ colorScheme: "light" });
+
+test("injects the theme color tokens into <html> (light)", async ({ page }) => {
   await page.goto("/en");
 
   const accentVar = await page.evaluate(() =>

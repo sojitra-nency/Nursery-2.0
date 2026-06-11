@@ -42,7 +42,7 @@ export default async function VisitPage({ params }: { params: Promise<{ locale: 
           href={`https://maps.google.com/?q=${mapsQuery}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 px-5 py-3 bg-accent text-white font-semibold rounded-xl hover:bg-accent-dark transition-colors"
+          className="inline-flex items-center gap-2 px-5 py-3 bg-accent text-on-accent font-semibold rounded-xl hover:bg-accent-dark transition-colors"
         >
           📍 {dict.contact.getDirections}
         </a>

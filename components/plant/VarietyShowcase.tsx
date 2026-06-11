@@ -161,7 +161,7 @@ export function VarietyShowcase({ varieties, fallbackName, dict }: VarietyShowca
                 onClick={() => setActiveKey(v.key)}
                 className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
                   v.key === active.key
-                    ? "bg-accent text-white border-accent"
+                    ? "bg-accent text-on-accent border-accent"
                     : "bg-surface border-border text-muted hover:border-accent"
                 }`}
               >
@@ -205,7 +205,7 @@ export function VarietyShowcase({ varieties, fallbackName, dict }: VarietyShowca
                   onClick={() => setActiveBagSize(b.size)}
                   className={`px-3 py-1.5 rounded-md text-xs font-medium border transition-colors ${
                     b.size === activeBagSize
-                      ? "bg-accent text-white border-accent"
+                      ? "bg-accent text-on-accent border-accent"
                       : "bg-surface border-border text-muted hover:border-accent"
                   }`}
                 >

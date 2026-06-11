@@ -71,7 +71,7 @@ const documents = [
     city: { en: "Ahmedabad", hi: "अहमदाबाद", gu: "અમદાવાદ" },
     region: { en: "Gujarat", hi: "गुजरात", gu: "ગુજરાત" },
     currency: "INR",
-    theme: { preset: "forest" },
+    theme: { preset: "forest", darkMode: "auto" },
     openEveryday: true,
     openTime: "8:00 AM",
     closeTime: "8:00 PM",

@@ -8,7 +8,7 @@ export const SETTINGS_QUERY = groq`
     openEveryday, openTime, closeTime, hoursNote,
     socialLinks[],
     currency, defaultSeo,
-    theme{ preset, background, foreground, surface, border, muted, accent, accentDark }
+    theme{ preset, darkMode, background, foreground, surface, border, muted, accent, accentDark, onAccent }
   }
 `;
 

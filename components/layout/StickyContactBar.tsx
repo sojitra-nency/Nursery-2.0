@@ -14,7 +14,7 @@ export function StickyContactBar({ settings, dict }: StickyContactBarProps) {
     <div className="fixed bottom-0 left-0 right-0 z-50 flex md:hidden">
       <a
         href={`tel:+91${phone}`}
-        className="flex-1 flex items-center justify-center gap-2 py-4 bg-foreground text-white text-sm font-semibold"
+        className="flex-1 flex items-center justify-center gap-2 py-4 bg-foreground text-background text-sm font-semibold"
       >
         📞 {dict.contact.callUs}
       </a>

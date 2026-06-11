@@ -12,6 +12,7 @@ const TOKEN_LABELS: Record<(typeof THEME_TOKEN_KEYS)[number], string> = {
   muted: "Muted text",
   accent: "Accent",
   accentDark: "Accent (dark / hover)",
+  onAccent: "Text on accent",
 };
 
 export const themeSettings = defineType({
@@ -39,6 +40,22 @@ export const themeSettings = defineType({
         list: [
           ...THEME_PRESETS.map((p) => ({ title: `${p.label}  ·  ${p.swatch}`, value: p.key })),
           { title: "Custom (set your own colors)", value: "custom" },
+        ],
+      },
+    }),
+    defineField({
+      name: "darkMode",
+      title: "Dark Mode",
+      description:
+        "Auto = follow each visitor's device setting (with a toggle in the header). Or force one mode for the whole site.",
+      type: "string",
+      initialValue: "auto",
+      options: {
+        layout: "radio",
+        list: [
+          { title: "Auto (follow visitor's device)", value: "auto" },
+          { title: "Always light", value: "light" },
+          { title: "Always dark", value: "dark" },
         ],
       },
     }),

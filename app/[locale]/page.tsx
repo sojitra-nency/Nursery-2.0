@@ -50,15 +50,15 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       )}
 
       {/* Visit teaser */}
-      <section className="py-16 bg-accent text-white">
+      <section className="py-16 bg-accent text-on-accent">
         <Reveal className="container mx-auto px-4 text-center">
           <h2 className="font-display text-3xl md:text-4xl font-semibold tracking-tight mb-3">
             {dict.home.visitTeaser}
           </h2>
-          <p className="text-white/80 mb-6">{hours}</p>
+          <p className="text-on-accent/80 mb-6">{hours}</p>
           <Link
             href={`/${locale}/visit`}
-            className="inline-flex items-center px-6 py-3 bg-white text-accent font-semibold rounded-lg transition-[transform,background-color] duration-200 hover:bg-white/90 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-accent"
+            className="inline-flex items-center px-6 py-3 bg-on-accent text-accent font-semibold rounded-lg transition-[transform,background-color] duration-200 hover:bg-on-accent/90 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-on-accent focus-visible:ring-offset-2 focus-visible:ring-offset-accent"
           >
             {dict.contact.getDirections} →
           </Link>

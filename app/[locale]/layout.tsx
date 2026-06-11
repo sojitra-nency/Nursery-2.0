@@ -4,7 +4,7 @@ import "../globals.css";
 import { locales, hasLocale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getSettings } from "@/lib/site";
-import { resolveThemeVars } from "@/lib/theme/resolve";
+import { buildThemeCss } from "@/lib/theme/resolve";
 import { getLocalized } from "@/lib/i18n/getLocalized";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -67,11 +67,22 @@ export default async function LocaleLayout({
   const nurseryName = getLocalized(settings.name, typedLocale) || NURSERY_NAME;
 
   const ld = localBusinessJsonLd(settings);
-  const themeVars = resolveThemeVars(settings.theme);
+  const themeCss = buildThemeCss(settings.theme);
+  const mode = settings.theme?.darkMode ?? "auto";
+  const forced = mode === "light" || mode === "dark";
+
+  // In `auto` mode, resolve the effective mode before first paint (no FOUC):
+  // localStorage wins, else the visitor's OS preference.
+  const autoModeScript =
+    "(function(){try{var s=localStorage.getItem('nursery-theme');" +
+    "var d=s?s==='dark':matchMedia('(prefers-color-scheme: dark)').matches;" +
+    "document.documentElement.dataset.mode=d?'dark':'light';}catch(e){}})();";
 
   return (
-    <html lang={locale} style={themeVars as React.CSSProperties}>
+    <html lang={locale} suppressHydrationWarning {...(forced ? { "data-mode": mode } : {})}>
       <head>
+        <style dangerouslySetInnerHTML={{ __html: themeCss }} />
+        {!forced && <script dangerouslySetInnerHTML={{ __html: autoModeScript }} />}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }}
@@ -80,7 +91,7 @@ export default async function LocaleLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} antialiased pb-16 md:pb-0`}
       >
-        <Header nurseryName={nurseryName} locale={locale} dict={dict} />
+        <Header nurseryName={nurseryName} locale={locale} dict={dict} showThemeToggle={!forced} />
         <main>{children}</main>
         <Footer nurseryName={nurseryName} locale={locale} dict={dict} />
         <StickyContactBar settings={settings} dict={dict} />
