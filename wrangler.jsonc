@@ -4,8 +4,16 @@
   "main": ".open-next/worker.js",
   "compatibility_date": "2026-06-01",
   "compatibility_flags": ["nodejs_compat"],
+  // Publish to <name>.<subdomain>.workers.dev (i.e. nursery.snency.workers.dev).
+  // Explicit so a deploy never silently drops the workers.dev route.
+  "workers_dev": true,
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS",
+  },
+  // Codified from the dashboard so settings stay consistent across deploys.
+  // Set to true to enable Workers Logs (handy for debugging the revalidate webhook).
+  "observability": {
+    "enabled": false,
   },
 }
