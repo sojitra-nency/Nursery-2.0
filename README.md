@@ -67,12 +67,33 @@ pnpm sanity deploy   # hosted, free *.sanity.studio
 
 ### 2. Cloudflare
 
+Manual, one-off deploy:
+
 ```bash
 npx wrangler login
 pnpm cf:deploy
 ```
 
 Add the deployed origin to Sanity CORS (step 1). Enable **Cloudflare Web Analytics** for the site (free).
+
+#### Auto-deploy (GitHub Actions)
+
+`.github/workflows/deploy.yml` builds and deploys on every push to `main` (and via
+manual **Run workflow**), gated on typecheck + lint + unit tests. Configure once in
+**GitHub → Settings → Secrets and variables → Actions**:
+
+- **Secrets:**
+  - `CLOUDFLARE_API_TOKEN` — token with the _Edit Cloudflare Workers_ template
+  - `CLOUDFLARE_ACCOUNT_ID` — from the Cloudflare dashboard
+- **Variables** (public, inlined at build time):
+  - `NEXT_PUBLIC_SANITY_PROJECT_ID`, `NEXT_PUBLIC_SANITY_DATASET`, `NEXT_PUBLIC_SANITY_API_VERSION`
+
+The app currently reads only **published** content via a token-less client, so the build
+needs nothing beyond the variables above. The one runtime secret in use —
+`SANITY_REVALIDATE_SECRET` (webhook auth, see `app/api/revalidate/route.ts`) — persists on
+the Worker across deploys, so set it **once** with `wrangler secret put SANITY_REVALIDATE_SECRET`
+(or in the dashboard); the Action doesn't manage it. `SANITY_API_READ_TOKEN` is only needed
+if/when draft previews get wired up — it isn't used yet.
 
 ## Project structure
 
