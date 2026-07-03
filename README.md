@@ -11,13 +11,13 @@ A $0, catalog-first nursery website. **Next.js 16** (App Router) + **Tailwind v4
 - Sanity (hosted CMS, Studio, image CDN) via `next-sanity` + GROQ
 - Native i18n: `/[locale]/` routing + JSON dictionaries (`messages/`) + Sanity field-level localization
 - Cloudflare deploy via `@opennextjs/cloudflare` + Wrangler
-- Vitest + Testing Library, Playwright; ESLint 9 + Prettier + Husky + lint-staged (+ optional gitleaks); pnpm
+- Vitest + Testing Library, Playwright; ESLint 9 + Prettier + Husky + lint-staged (+ optional gitleaks); npm
 
 ## Develop
 
 ```bash
-pnpm install
-pnpm dev            # http://localhost:3000  (/ → /en)
+npm install
+npm run dev         # http://localhost:3000  (/ → /en)
 ```
 
 The app runs **before** Sanity is configured: content fetches are guarded and fall back, so pages render with
@@ -25,18 +25,18 @@ placeholder data until you complete the steps below.
 
 ## Scripts
 
-| Script                        | Purpose                                               |
-| ----------------------------- | ----------------------------------------------------- |
-| `pnpm dev`                    | Next dev server                                       |
-| `pnpm build` / `pnpm start`   | Next production build / serve                         |
-| `pnpm typecheck`              | `tsc --noEmit`                                        |
-| `pnpm lint` / `pnpm format`   | ESLint / Prettier                                     |
-| `pnpm test` / `pnpm test:e2e` | Vitest unit / Playwright e2e                          |
-| `pnpm cf:build`               | Build the Cloudflare worker (`.open-next/`)           |
-| `pnpm cf:preview`             | Build + preview the worker locally (Wrangler)         |
-| `pnpm cf:deploy`              | Build + deploy to Cloudflare (needs `wrangler login`) |
-| `pnpm sanity dev`             | Run Sanity Studio locally (http://localhost:3333)     |
-| `pnpm sanity deploy`          | Deploy Studio to a free `*.sanity.studio` URL         |
+| Script                            | Purpose                                               |
+| --------------------------------- | ----------------------------------------------------- |
+| `npm run dev`                     | Next dev server                                       |
+| `npm run build` / `npm start`     | Next production build / serve                         |
+| `npm run typecheck`               | `tsc --noEmit`                                        |
+| `npm run lint` / `npm run format` | ESLint / Prettier                                     |
+| `npm test` / `npm run test:e2e`   | Vitest unit / Playwright e2e                          |
+| `npm run cf:build`                | Build the Cloudflare worker (`.open-next/`)           |
+| `npm run cf:preview`              | Build + preview the worker locally (Wrangler)         |
+| `npm run cf:deploy`               | Build + deploy to Cloudflare (needs `wrangler login`) |
+| `npx sanity dev`                  | Run Sanity Studio locally (http://localhost:3333)     |
+| `npx sanity deploy`               | Deploy Studio to a free `*.sanity.studio` URL         |
 
 ## Finish setup (credentialed steps)
 
@@ -61,8 +61,8 @@ Then in `.env.local` set `NEXT_PUBLIC_SANITY_PROJECT_ID` and `SANITY_STUDIO_PROJ
 Run the Studio and add content (nursery settings + a few plants/categories):
 
 ```bash
-pnpm sanity dev      # local
-pnpm sanity deploy   # hosted, free *.sanity.studio
+npx sanity dev       # local
+npx sanity deploy    # hosted, free *.sanity.studio
 ```
 
 ### 2. Cloudflare
@@ -71,7 +71,7 @@ Manual, one-off deploy:
 
 ```bash
 npx wrangler login
-pnpm cf:deploy
+npm run cf:deploy
 ```
 
 Add the deployed origin to Sanity CORS (step 1). Enable **Cloudflare Web Analytics** for the site (free).

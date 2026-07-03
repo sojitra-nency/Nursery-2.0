@@ -1,11 +1,11 @@
 #!/bin/sh
 set -e
 
-pnpm exec lint-staged
+npx lint-staged
 
 # Type errors aren't caught by lint-staged (which only sees individual staged
 # files), so run a full project typecheck to block commits that don't compile.
-pnpm typecheck
+npm run typecheck
 
 # Optional: secret scanning (requires gitleaks to be installed)
 if command -v gitleaks > /dev/null 2>&1; then
