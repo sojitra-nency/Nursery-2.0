@@ -37,6 +37,14 @@
   --animate-fade-down: fade-down 0.25s var(--ease-soft) both;
   --animate-shimmer: shimmer 1.5s linear infinite;
   --animate-float: float 6s ease-in-out infinite;
+  --animate-sway: sway 9s ease-in-out infinite;
+}
+
+/* Paint the canvas with theme tokens so every mode/preset combination is
+   correct even outside token-colored sections. */
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
 }
 
 /* ── Base niceties ────────────────────────────────────────────────────────── */
@@ -92,6 +100,16 @@
   }
 }
 
+@keyframes sway {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(2.5deg);
+  }
+}
+
 /* ── Scroll reveal ────────────────────────────────────────────────────────── */
 /* Elements start hidden and slide up once observed (see components/ui/Reveal). */
 .reveal {
@@ -124,6 +142,12 @@
 /* ── Decorative hero motion ───────────────────────────────────────────────── */
 .hero-float {
   animation: var(--animate-float);
+}
+/* Gentle foliage sway. Applied to the inner SVG so it composes with placement
+   transforms (rotate/scale utilities) on the wrapper element. */
+.hero-sway {
+  animation: var(--animate-sway);
+  transform-origin: bottom center;
 }
 
 /* ── Consistent focus ring for bare links ─────────────────────────────────── */
@@ -179,7 +203,8 @@
     transition: none !important;
   }
   .skeleton,
-  .hero-float {
+  .hero-float,
+  .hero-sway {
     animation: none !important;
   }
   *,

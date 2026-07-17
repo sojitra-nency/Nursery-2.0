@@ -30,7 +30,13 @@
     "aboutTeaser": "About Us",
     "visitTeaser": "Visit Our Nursery",
     "whatsappCta": "Chat on WhatsApp",
-    "browseCatalog": "Browse Catalog"
+    "browseCatalog": "Browse Catalog",
+    "trustHealthy": "Healthy, nursery-grown plants",
+    "trustVariety": "Wide range of varieties",
+    "trustAdvice": "Expert planting advice",
+    "categoriesEyebrow": "Find your plant",
+    "plantsEyebrow": "Fresh from the nursery",
+    "aboutEyebrow": "Our story"
   },
   "catalog": {
     "title": "Our Plants",

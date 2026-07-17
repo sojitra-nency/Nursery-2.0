@@ -60,7 +60,7 @@ export default async function CatalogPage({
 
   return (
     <div className="container mx-auto px-4 py-10">
-      <SectionHeading title={dict.catalog.title} subtitle={countLabel} />
+      <SectionHeading eyebrow={dict.nav.catalog} title={dict.catalog.title} subtitle={countLabel} />
       <Suspense>
         <CatalogFilters categories={categories ?? []} dict={dict} />
       </Suspense>

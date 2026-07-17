@@ -225,7 +225,9 @@ export function VarietyShowcase({ varieties, fallbackName, dict }: VarietyShowca
 
         <div className="flex items-center gap-3 flex-wrap">
           {avail && (
-            <Badge tone={availabilityTone(active.availability)}>{dict.common[avail.key]}</Badge>
+            <Badge dot tone={availabilityTone(active.availability)}>
+              {dict.common[avail.key]}
+            </Badge>
           )}
         </div>
 

@@ -5,9 +5,9 @@ export function PlantCardSkeleton() {
   return (
     <Card className="h-full flex flex-col">
       <div className="skeleton aspect-[4/3]" />
-      <div className="p-3 flex flex-col gap-2 flex-1">
+      <div className="p-3.5 flex flex-col gap-2 flex-1">
         <div className="skeleton h-4 w-3/4 rounded" />
-        <div className="skeleton h-5 w-16 rounded-full" />
+        <div className="skeleton h-6 w-20 rounded-full" />
       </div>
     </Card>
   );

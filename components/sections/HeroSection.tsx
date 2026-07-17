@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
-import { ArrowRightIcon, WhatsAppIcon } from "@/components/ui/icons";
+import { ArrowRightIcon, CheckIcon, LeafIcon, WhatsAppIcon } from "@/components/ui/icons";
+import { LeafSprig } from "@/components/ui/botanicals";
 import type { SiteSettings } from "@/lib/site";
 import type { Locale } from "@/lib/i18n/config";
 import { getLocalized } from "@/lib/i18n/getLocalized";
@@ -12,37 +13,59 @@ interface HeroSectionProps {
   dict: Dictionary;
 }
 
+/** Split a headline so its final word can carry the italic accent styling. */
+function splitTagline(tagline: string): { lead: string; accent: string } {
+  const words = tagline.trim().split(/\s+/);
+  const accent = words.pop() ?? "";
+  return { lead: words.join(" "), accent };
+}
+
 export function HeroSection({ settings, locale, dict }: HeroSectionProps) {
   const name = getLocalized(settings.name, locale) || "Greenskill Landscape";
   const tagline = getLocalized(settings.tagline, locale) || dict.home.heroTitleFallback;
   const whatsapp = settings.whatsapp || "9876543210";
   const waText = encodeURIComponent("Hi, I'm interested in plants from Greenskill Landscape");
   const waLink = `https://wa.me/91${whatsapp}?text=${waText}`;
+  const { lead, accent } = splitTagline(tagline);
+  const trustItems = [dict.home.trustHealthy, dict.home.trustVariety, dict.home.trustAdvice];
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-accent/10 via-surface to-background py-20 md:py-28">
-      {/* Soft decorative blobs — purely cosmetic, hidden from assistive tech. */}
-      <div
-        aria-hidden
-        className="hero-float pointer-events-none absolute -top-16 -right-10 h-64 w-64 rounded-full bg-accent/10 blur-3xl"
-      />
-      <div
-        aria-hidden
-        className="hero-float pointer-events-none absolute -bottom-20 -left-10 h-72 w-72 rounded-full bg-accent/5 blur-3xl"
-        style={{ animationDelay: "-3s" }}
-      />
+    <section className="relative overflow-hidden bg-gradient-to-b from-surface via-background to-background pt-20 pb-16 md:pt-28 md:pb-24">
+      {/* Decorative layer — color washes + swaying botanical line art. */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+        <div className="hero-float absolute -top-28 -left-28 h-96 w-96 rounded-full bg-accent/10 blur-3xl" />
+        <div
+          className="hero-float absolute -bottom-36 -right-20 h-[28rem] w-[28rem] rounded-full bg-accent/10 blur-3xl"
+          style={{ animationDelay: "-3s" }}
+        />
+        <div className="absolute -left-10 bottom-0 hidden -rotate-[20deg] md:block lg:left-4">
+          <LeafSprig className="hero-sway h-[24rem] w-auto text-accent/15" />
+        </div>
+        <div className="absolute -right-10 bottom-0 hidden rotate-[20deg] -scale-x-100 md:block lg:right-4">
+          <LeafSprig
+            className="hero-sway h-[24rem] w-auto text-accent/15"
+            style={{ animationDelay: "-4.5s" }}
+          />
+        </div>
+      </div>
+
       <div className="relative container mx-auto px-4 text-center max-w-3xl">
-        <Reveal as="p" className="text-accent font-semibold text-sm uppercase tracking-widest mb-3">
+        <Reveal
+          as="p"
+          className="mb-5 inline-flex items-center gap-2 rounded-full border border-accent/20 bg-accent/5 px-4 py-1.5 text-xs md:text-sm font-semibold uppercase tracking-[0.18em] text-accent"
+        >
+          <LeafIcon className="h-4 w-4" />
           {name}
         </Reveal>
         <Reveal
           as="h1"
           index={1}
-          className="font-display text-4xl md:text-6xl font-semibold tracking-tight text-foreground leading-tight mb-4"
+          className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold tracking-tight text-balance text-foreground leading-[1.05] mb-5"
         >
-          {tagline}
+          {lead && <>{lead} </>}
+          <em className="italic text-accent">{accent}</em>
         </Reveal>
-        <Reveal as="p" index={2} className="text-muted text-lg mb-8">
+        <Reveal as="p" index={2} className="text-muted text-lg md:text-xl text-balance mb-9">
           {dict.home.heroSubtitle}
         </Reveal>
         <Reveal index={3} className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -60,6 +83,17 @@ export function HeroSection({ settings, locale, dict }: HeroSectionProps) {
             <WhatsAppIcon className="h-5 w-5 text-accent" />
             {dict.home.whatsappCta}
           </Button>
+        </Reveal>
+        <Reveal
+          index={4}
+          className="mt-12 flex flex-wrap items-center justify-center gap-x-8 gap-y-3"
+        >
+          {trustItems.map((item) => (
+            <span key={item} className="inline-flex items-center gap-2 text-sm text-muted">
+              <CheckIcon className="h-4 w-4 shrink-0 text-accent" />
+              {item}
+            </span>
+          ))}
         </Reveal>
       </div>
     </section>

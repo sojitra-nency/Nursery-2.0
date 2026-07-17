@@ -241,7 +241,7 @@ export default async function PlantPage({
           href={waLink}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center justify-center gap-2 w-full py-3 bg-whatsapp text-on-whatsapp font-semibold rounded-xl shadow-soft transition-[background-color,box-shadow,transform] duration-200 hover:bg-whatsapp-dark hover:shadow-lift active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-whatsapp focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          className="flex items-center justify-center gap-2 w-full py-3 bg-whatsapp text-on-whatsapp font-semibold rounded-full shadow-soft transition-[background-color,box-shadow,transform] duration-200 hover:bg-whatsapp-dark hover:shadow-lift active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-whatsapp focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         >
           <WhatsAppIcon className="h-5 w-5" />
           {dict.plant.whatsappCta}

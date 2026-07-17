@@ -2,7 +2,15 @@ import Link from "next/link";
 import { getLocalized } from "@/lib/i18n/getLocalized";
 import { formatHours } from "@/lib/hours";
 import { DEFAULT_PHONE } from "@/lib/constants";
-import { ClockIcon, MailIcon, MapPinIcon, PhoneIcon, WhatsAppIcon } from "@/components/ui/icons";
+import {
+  ClockIcon,
+  LeafIcon,
+  MailIcon,
+  MapPinIcon,
+  PhoneIcon,
+  WhatsAppIcon,
+} from "@/components/ui/icons";
+import { LeafSprig } from "@/components/ui/botanicals";
 import type { SiteSettings } from "@/lib/site";
 import type { Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
@@ -33,12 +41,25 @@ export function Footer({ nurseryName, locale, dict, settings }: FooterProps) {
   ];
 
   return (
-    <footer className="mt-16 border-t border-border bg-surface">
-      <div className="container mx-auto px-4 py-12">
+    <footer className="relative mt-16 overflow-hidden border-t border-border bg-surface">
+      {/* Botanical watermark — decorative only. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-8 -bottom-12 rotate-[16deg]"
+      >
+        <LeafSprig className="h-72 w-auto text-accent/[0.07]" />
+      </div>
+      <div className="relative container mx-auto px-4 py-12 md:py-16">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
           {/* Brand */}
           <div className="sm:col-span-2 lg:col-span-1">
-            <p className="font-display text-lg font-semibold tracking-tight text-foreground">
+            <p className="inline-flex items-center gap-2.5 font-display text-lg font-semibold tracking-tight text-foreground">
+              <span
+                aria-hidden="true"
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent text-on-accent"
+              >
+                <LeafIcon className="h-4 w-4" />
+              </span>
               {nurseryName}
             </p>
             {description && (
@@ -108,7 +129,7 @@ export function Footer({ nurseryName, locale, dict, settings }: FooterProps) {
         </div>
       </div>
 
-      <div className="border-t border-border">
+      <div className="relative border-t border-border">
         <div className="container mx-auto px-4 py-5 text-center text-xs text-muted">
           © {new Date().getFullYear()} {nurseryName}. {dict.footer.rights}
         </div>

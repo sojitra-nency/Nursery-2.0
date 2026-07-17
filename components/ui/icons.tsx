@@ -92,6 +92,14 @@ export function LeafIcon(props: IconProps) {
   );
 }
 
+export function CheckIcon(props: IconProps) {
+  return (
+    <StrokeIcon {...props}>
+      <path d="M20 6 9 17l-5-5" />
+    </StrokeIcon>
+  );
+}
+
 export function MenuIcon(props: IconProps) {
   return (
     <StrokeIcon {...props}>

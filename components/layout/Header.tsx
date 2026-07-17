@@ -4,6 +4,7 @@ import { HeaderShell } from "./HeaderShell";
 import { ThemeToggle } from "./ThemeToggle";
 import { NavLinks, type NavItem } from "./NavLinks";
 import { MobileMenu } from "./MobileMenu";
+import { LeafIcon } from "@/components/ui/icons";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
 
 interface HeaderProps {
@@ -25,8 +26,14 @@ export function Header({ nurseryName, locale, dict, showThemeToggle = false }: H
       <div className="container mx-auto px-4 h-16 flex items-center justify-between gap-4">
         <Link
           href={`/${locale}`}
-          className="font-display font-semibold text-xl tracking-tight text-foreground rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          className="inline-flex items-center gap-2.5 font-display font-semibold text-xl tracking-tight text-foreground rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         >
+          <span
+            aria-hidden="true"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent text-on-accent"
+          >
+            <LeafIcon className="h-4 w-4" />
+          </span>
           {nurseryName}
         </Link>
 
