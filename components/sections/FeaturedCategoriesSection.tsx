@@ -2,6 +2,7 @@ import Link from "next/link";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 import { Chip } from "@/components/ui/Chip";
+import { ArrowRightIcon } from "@/components/ui/icons";
 import type { Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
 
@@ -19,15 +20,16 @@ export function FeaturedCategoriesSection({
   if (!categories.length) return null;
 
   return (
-    <section className="py-16 bg-background">
+    <section className="py-16 md:py-20 bg-background">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between mb-8">
-          <SectionHeading title={dict.home.featuredCategories} />
+        <div className="flex items-baseline justify-between gap-4 mb-8">
+          <SectionHeading title={dict.home.featuredCategories} className="mb-0" />
           <Link
             href={`/${locale}/catalog`}
-            className="link-focus text-sm text-accent hover:text-accent-dark font-medium"
+            className="link-focus group inline-flex shrink-0 items-center gap-1 text-sm text-accent hover:text-accent-dark font-medium transition-colors"
           >
-            {dict.common.viewAll} →
+            {dict.common.viewAll}
+            <ArrowRightIcon className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
           </Link>
         </div>
         <div className="flex flex-wrap gap-3">

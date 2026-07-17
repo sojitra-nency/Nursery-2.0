@@ -6,6 +6,10 @@ import { formatHours } from "@/lib/hours";
 import { hasLocale, type Locale } from "@/lib/i18n/config";
 import { buildMetadata } from "@/lib/seo/metadata";
 import { DEFAULT_PHONE } from "@/lib/constants";
+import { ClockIcon, MailIcon, PhoneIcon, WhatsAppIcon } from "@/components/ui/icons";
+
+const contactLinkClass =
+  "link-focus inline-flex items-center gap-2 text-accent font-medium hover:text-accent-dark transition-colors";
 
 export async function generateMetadata({
   params,
@@ -36,7 +40,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
 
   return (
     <div className="container mx-auto px-4 py-12 max-w-3xl">
-      <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+      <h1 className="font-display text-3xl md:text-4xl font-semibold tracking-tight text-balance text-foreground mb-8">
         {dict.home.aboutTeaser}
       </h1>
 
@@ -47,27 +51,24 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
         <h2 className="text-xl font-semibold text-foreground mb-4">{dict.contact.address}</h2>
         <div className="space-y-3">
           {address && <p className="text-muted">{address}</p>}
-          <div className="flex flex-wrap gap-4">
-            <a
-              href={`tel:+91${phone}`}
-              className="inline-flex items-center gap-2 text-accent font-medium hover:text-accent-dark"
-            >
-              📞 {phone}
+          <div className="flex flex-wrap gap-x-5 gap-y-3">
+            <a href={`tel:+91${phone}`} className={contactLinkClass}>
+              <PhoneIcon className="h-4 w-4" />
+              {phone}
             </a>
             <a
               href={`https://wa.me/91${whatsapp}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-accent font-medium hover:text-accent-dark"
+              className={contactLinkClass}
             >
-              💬 WhatsApp
+              <WhatsAppIcon className="h-4 w-4" />
+              {dict.contact.whatsapp}
             </a>
             {settings.email && (
-              <a
-                href={`mailto:${settings.email}`}
-                className="inline-flex items-center gap-2 text-accent font-medium hover:text-accent-dark"
-              >
-                ✉️ {settings.email}
+              <a href={`mailto:${settings.email}`} className={contactLinkClass}>
+                <MailIcon className="h-4 w-4" />
+                {settings.email}
               </a>
             )}
           </div>
@@ -77,7 +78,8 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
       {/* Opening hours */}
       <section className="mb-10">
         <h2 className="text-xl font-semibold text-foreground mb-4">{dict.contact.openingHours}</h2>
-        <div className="rounded-xl border border-border bg-surface px-4 py-3 max-w-sm">
+        <div className="flex items-center gap-3 rounded-xl border border-border bg-surface px-4 py-3 max-w-sm">
+          <ClockIcon className="h-5 w-5 shrink-0 text-accent" />
           <p className="font-medium text-foreground">{hours}</p>
         </div>
       </section>
@@ -85,7 +87,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
       {/* Social links */}
       {settings.socialLinks && settings.socialLinks.length > 0 && (
         <section>
-          <h2 className="text-xl font-semibold text-foreground mb-4">Follow Us</h2>
+          <h2 className="text-xl font-semibold text-foreground mb-4">{dict.contact.followUs}</h2>
           <div className="flex gap-4 flex-wrap">
             {settings.socialLinks.map((link: { platform?: string; url?: string }, i: number) =>
               link.url ? (
@@ -94,7 +96,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
                   href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-accent font-medium hover:text-accent-dark capitalize"
+                  className={`${contactLinkClass} capitalize`}
                 >
                   {link.platform}
                 </a>

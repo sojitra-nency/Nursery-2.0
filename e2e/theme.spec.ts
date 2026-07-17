@@ -1,8 +1,5 @@
 import { test, expect } from "@playwright/test";
-
-// The default (Forest Green) preset — what the FALLBACK settings resolve to.
-const FOREST_ACCENT_HEX = "#2f7d32";
-const FOREST_ACCENT_RGB = "rgb(47, 125, 50)";
+import { accentVar, hexToRgbString, injectedAccents } from "./utils";
 
 // These assertions expect light mode; pin the context so a dark-OS runner can't flip it.
 test.use({ colorScheme: "light" });
@@ -10,17 +7,17 @@ test.use({ colorScheme: "light" });
 test("injects the theme color tokens into <html> (light)", async ({ page }) => {
   await page.goto("/en");
 
-  const accentVar = await page.evaluate(() =>
-    getComputedStyle(document.documentElement).getPropertyValue("--color-accent").trim()
-  );
-  expect(accentVar).toBe(FOREST_ACCENT_HEX);
+  // The computed token must match whatever the server injected (any preset).
+  const { light } = await injectedAccents(page);
+  expect(light).toBeTruthy();
+  expect(await accentVar(page)).toBe(light);
 
   // A `bg-accent` utility must resolve to that same color (no FOUC, server-rendered).
   const bg = await page
     .locator(".bg-accent")
     .first()
     .evaluate((el) => getComputedStyle(el).backgroundColor);
-  expect(bg).toBe(FOREST_ACCENT_RGB);
+  expect(bg).toBe(hexToRgbString(light!));
 });
 
 test("reveal content is visible immediately under reduced motion", async ({ browser }) => {

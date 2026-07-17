@@ -6,6 +6,8 @@ import { formatHours } from "@/lib/hours";
 import { hasLocale, type Locale } from "@/lib/i18n/config";
 import { buildMetadata } from "@/lib/seo/metadata";
 import { DEFAULT_PHONE } from "@/lib/constants";
+import { Button } from "@/components/ui/Button";
+import { ClockIcon, MapPinIcon, PhoneIcon } from "@/components/ui/icons";
 
 export async function generateMetadata({
   params,
@@ -39,10 +41,12 @@ export default async function VisitPage({ params }: { params: Promise<{ locale: 
 
   return (
     <div className="container mx-auto px-4 py-12 max-w-4xl">
-      <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-8">{dict.nav.visit}</h1>
+      <h1 className="font-display text-3xl md:text-4xl font-semibold tracking-tight text-balance text-foreground mb-8">
+        {dict.nav.visit}
+      </h1>
 
       {/* Map embed */}
-      <div className="rounded-xl overflow-hidden border border-border mb-10 aspect-video">
+      <div className="rounded-xl overflow-hidden border border-border shadow-soft mb-10 aspect-video">
         <iframe
           src={`https://maps.google.com/maps?q=${mapsQuery}&output=embed`}
           width="100%"
@@ -57,36 +61,43 @@ export default async function VisitPage({ params }: { params: Promise<{ locale: 
 
       {/* CTAs */}
       <div className="flex flex-wrap gap-4 mb-10">
-        <a
+        <Button
           href={`https://maps.google.com/?q=${mapsQuery}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 px-5 py-3 bg-accent text-on-accent font-semibold rounded-xl hover:bg-accent-dark transition-colors"
+          size="lg"
         >
-          📍 {dict.contact.getDirections}
-        </a>
-        <a
-          href={`tel:+91${phone}`}
-          className="inline-flex items-center gap-2 px-5 py-3 border-2 border-accent text-accent font-semibold rounded-xl hover:bg-accent/10 transition-colors"
-        >
-          📞 {dict.contact.callUs}
-        </a>
+          <MapPinIcon className="h-5 w-5" />
+          {dict.contact.getDirections}
+        </Button>
+        <Button href={`tel:+91${phone}`} variant="outline" size="lg">
+          <PhoneIcon className="h-5 w-5" />
+          {dict.contact.callUs}
+        </Button>
       </div>
 
-      {address && (
-        <div className="mb-10">
-          <h2 className="text-xl font-semibold text-foreground mb-2">{dict.contact.address}</h2>
-          <p className="text-muted">{address}</p>
-        </div>
-      )}
+      <div className="grid gap-6 sm:grid-cols-2">
+        {address && (
+          <section>
+            <h2 className="text-xl font-semibold text-foreground mb-4">{dict.contact.address}</h2>
+            <div className="flex items-start gap-3 rounded-xl border border-border bg-surface px-4 py-3">
+              <MapPinIcon className="mt-0.5 h-5 w-5 shrink-0 text-accent" />
+              <p className="text-muted">{address}</p>
+            </div>
+          </section>
+        )}
 
-      {/* Opening hours */}
-      <section>
-        <h2 className="text-xl font-semibold text-foreground mb-4">{dict.contact.openingHours}</h2>
-        <div className="rounded-xl border border-border bg-surface px-4 py-3 max-w-sm">
-          <p className="font-medium text-foreground">{hours}</p>
-        </div>
-      </section>
+        {/* Opening hours */}
+        <section>
+          <h2 className="text-xl font-semibold text-foreground mb-4">
+            {dict.contact.openingHours}
+          </h2>
+          <div className="flex items-center gap-3 rounded-xl border border-border bg-surface px-4 py-3">
+            <ClockIcon className="h-5 w-5 shrink-0 text-accent" />
+            <p className="font-medium text-foreground">{hours}</p>
+          </div>
+        </section>
+      </div>
     </div>
   );
 }

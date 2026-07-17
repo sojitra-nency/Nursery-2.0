@@ -42,6 +42,7 @@ export async function generateMetadata({
     title: { default: NURSERY_NAME, template: `%s | ${NURSERY_NAME}` },
     description:
       "Greenskill Landscape — quality plants for homes, gardens and offices. Browse our collection of indoor, outdoor and rare plants.",
+    icons: { icon: "/favicon.svg" },
     alternates: {
       languages: Object.fromEntries(locales.map((l) => [l, `/${l}`])),
     },
@@ -88,11 +89,14 @@ export default async function LocaleLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} antialiased pb-16 md:pb-0`}
+        className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} antialiased pb-[calc(4rem+env(safe-area-inset-bottom))] md:pb-0`}
       >
+        <a href="#main-content" className="skip-link">
+          {dict.common.skipToContent}
+        </a>
         <Header nurseryName={nurseryName} locale={locale} dict={dict} showThemeToggle={!forced} />
-        <main>{children}</main>
-        <Footer nurseryName={nurseryName} locale={locale} dict={dict} />
+        <main id="main-content">{children}</main>
+        <Footer nurseryName={nurseryName} locale={locale} dict={dict} settings={settings} />
         <StickyContactBar settings={settings} dict={dict} />
       </body>
     </html>

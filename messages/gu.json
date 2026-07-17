@@ -16,7 +16,11 @@
     "filter": "ફિલ્ટર",
     "sort": "ક્રમ",
     "toggleTheme": "ડાર્ક મોડ ટૉગલ કરો",
-    "breadcrumb": "નેવિગેશન પાથ"
+    "breadcrumb": "નેવિગેશન પાથ",
+    "skipToContent": "મુખ્ય સામગ્રી પર જાઓ",
+    "openMenu": "મેનૂ ખોલો",
+    "closeMenu": "મેનૂ બંધ કરો",
+    "language": "ભાષા"
   },
   "home": {
     "heroTitleFallback": "દરેક ઘર માટે સ્વસ્થ છોડ",
@@ -39,7 +43,9 @@
     "sortNewest": "નવું",
     "allCategories": "બધી શ્રેણીઓ",
     "allAvailability": "બધી ઉપલબ્ધતા",
-    "searchPlaceholder": "છોડ શોધો…"
+    "searchPlaceholder": "છોડ શોધો…",
+    "resultsCount": "{count} છોડ ઉપલબ્ધ",
+    "resultsCountOne": "1 છોડ ઉપલબ્ધ"
   },
   "plant": {
     "careGuide": "સંભાળ માર્ગદર્શિકા",
@@ -65,7 +71,11 @@
     "wateringHigh": "વધારે",
     "growthSlow": "ધીમો",
     "growthMedium": "મધ્યમ",
-    "growthFast": "ઝડપી"
+    "growthFast": "ઝડપી",
+    "prevImage": "પાછલી છબી",
+    "nextImage": "આગલી છબી",
+    "goToImage": "છબી {n} પર જાઓ",
+    "imageCounter": "છબી {current} / {total}"
   },
   "contact": {
     "callUs": "ફોન કરો",
@@ -75,7 +85,8 @@
     "openEveryDay": "દરરોજ ખુલ્લું",
     "email": "ઈમેઈલ",
     "phone": "ફોન",
-    "address": "સરનામું"
+    "address": "સરનામું",
+    "followUs": "અમને ફોલો કરો"
   },
   "seo": {
     "defaultDescription": "ગ્રીનસ્કિલ લેન્ડસ્કેપ — ઘર, બગીચા અને ઓફિસ માટે ગુણવત્તાયુક્ત છોડ. અમારા ઇન્ડોર, આઉટડોર અને દુર્લભ છોડનો સંગ્રહ જુઓ.",
@@ -84,6 +95,8 @@
     "visit": "ગ્રીનસ્કિલ લેન્ડસ્કેપ સુધી પહોંચો — અમારી નર્સરી આવવા માટે રસ્તો, સરનામું અને ખુલવાનો સમય."
   },
   "footer": {
-    "rights": "સર્વ હક્કો સુરક્ષિત."
+    "rights": "સર્વ હક્કો સુરક્ષિત.",
+    "quickLinks": "ઝડપી લિંક્સ",
+    "contact": "સંપર્ક"
   }
 }

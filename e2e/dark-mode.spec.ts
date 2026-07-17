@@ -1,21 +1,18 @@
-import { test, expect, type Page } from "@playwright/test";
+import { test, expect } from "@playwright/test";
+import { accentVar, dataMode, injectedAccents, isAutoMode } from "./utils";
 
-const FOREST_LIGHT_ACCENT = "#2f7d32";
-const FOREST_DARK_ACCENT = "#5fcf66";
-
-const accentVar = (page: Page) =>
-  page.evaluate(() =>
-    getComputedStyle(document.documentElement).getPropertyValue("--color-accent").trim()
-  );
-const dataMode = (page: Page) => page.evaluate(() => document.documentElement.dataset.mode ?? null);
+const FORCED_MODE_SKIP = "CMS forces a fixed dark-mode policy — auto/toggle behavior not active";
 
 test("auto mode follows the OS dark preference before paint (no FOUC)", async ({ browser }) => {
   const context = await browser.newContext({ colorScheme: "dark" });
   const page = await context.newPage();
   await page.goto("/en");
+  test.skip(!(await isAutoMode(page)), FORCED_MODE_SKIP);
   // The blocking head script stamps data-mode synchronously, so it's already set.
   expect(await dataMode(page)).toBe("dark");
-  expect(await accentVar(page)).toBe(FOREST_DARK_ACCENT);
+  const { dark } = await injectedAccents(page);
+  expect(dark).toBeTruthy();
+  expect(await accentVar(page)).toBe(dark);
   await context.close();
 });
 
@@ -23,8 +20,11 @@ test("auto mode follows the OS light preference", async ({ browser }) => {
   const context = await browser.newContext({ colorScheme: "light" });
   const page = await context.newPage();
   await page.goto("/en");
+  test.skip(!(await isAutoMode(page)), FORCED_MODE_SKIP);
   expect(await dataMode(page)).toBe("light");
-  expect(await accentVar(page)).toBe(FOREST_LIGHT_ACCENT);
+  const { light } = await injectedAccents(page);
+  expect(light).toBeTruthy();
+  expect(await accentVar(page)).toBe(light);
   await context.close();
 });
 
@@ -32,9 +32,13 @@ test("the dark stylesheet rule swaps tokens when data-mode=dark", async ({ brows
   const context = await browser.newContext({ colorScheme: "light" });
   const page = await context.newPage();
   await page.goto("/en");
-  expect(await accentVar(page)).toBe(FOREST_LIGHT_ACCENT);
+  const { light, dark } = await injectedAccents(page);
+  expect(light).toBeTruthy();
+  expect(dark).toBeTruthy();
+  expect(dark).not.toBe(light); // dark map must actually differ
+  expect(await accentVar(page)).toBe(light);
   await page.evaluate(() => (document.documentElement.dataset.mode = "dark"));
-  expect(await accentVar(page)).toBe(FOREST_DARK_ACCENT);
+  expect(await accentVar(page)).toBe(dark);
   await context.close();
 });
 
@@ -42,6 +46,7 @@ test("the toggle flips the mode and persists across reload", async ({ browser })
   const context = await browser.newContext({ colorScheme: "light" });
   const page = await context.newPage();
   await page.goto("/en");
+  test.skip(!(await isAutoMode(page)), FORCED_MODE_SKIP);
   expect(await dataMode(page)).toBe("light");
 
   await page.getByRole("button", { name: "Toggle dark mode" }).click();
@@ -51,6 +56,7 @@ test("the toggle flips the mode and persists across reload", async ({ browser })
   await page.reload();
   // The stored choice survives reload (blocking script reads localStorage first).
   expect(await dataMode(page)).toBe("dark");
-  expect(await accentVar(page)).toBe(FOREST_DARK_ACCENT);
+  const { dark } = await injectedAccents(page);
+  expect(await accentVar(page)).toBe(dark);
   await context.close();
 });

@@ -16,7 +16,11 @@
     "filter": "Filter",
     "sort": "Sort",
     "toggleTheme": "Toggle dark mode",
-    "breadcrumb": "Breadcrumb"
+    "breadcrumb": "Breadcrumb",
+    "skipToContent": "Skip to content",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "language": "Language"
   },
   "home": {
     "heroTitleFallback": "Healthy Plants for Every Home",
@@ -39,7 +43,9 @@
     "sortNewest": "Newest",
     "allCategories": "All Categories",
     "allAvailability": "All Availability",
-    "searchPlaceholder": "Search plants…"
+    "searchPlaceholder": "Search plants…",
+    "resultsCount": "{count} plants available",
+    "resultsCountOne": "1 plant available"
   },
   "plant": {
     "careGuide": "Care Guide",
@@ -65,7 +71,11 @@
     "wateringHigh": "High",
     "growthSlow": "Slow",
     "growthMedium": "Medium",
-    "growthFast": "Fast"
+    "growthFast": "Fast",
+    "prevImage": "Previous image",
+    "nextImage": "Next image",
+    "goToImage": "Go to image {n}",
+    "imageCounter": "Image {current} of {total}"
   },
   "contact": {
     "callUs": "Call Us",
@@ -75,7 +85,8 @@
     "openEveryDay": "Open every day",
     "email": "Email",
     "phone": "Phone",
-    "address": "Address"
+    "address": "Address",
+    "followUs": "Follow Us"
   },
   "seo": {
     "defaultDescription": "Greenskill Landscape — quality plants for homes, gardens and offices. Browse our collection of indoor, outdoor and rare plants.",
@@ -84,6 +95,8 @@
     "visit": "Find Greenskill Landscape — directions, address and opening hours to visit our nursery."
   },
   "footer": {
-    "rights": "All rights reserved."
+    "rights": "All rights reserved.",
+    "quickLinks": "Quick Links",
+    "contact": "Contact"
   }
 }

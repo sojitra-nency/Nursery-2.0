@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Button } from "@/components/ui/Button";
 import { localeFromPath } from "@/lib/i18n/localeFromPath";
 import type { Locale } from "@/lib/i18n/config";
 
@@ -32,14 +32,13 @@ export default function NotFound() {
       <div className="text-6xl mb-4" aria-hidden="true">
         🌵
       </div>
-      <h1 className="text-2xl font-semibold text-foreground mb-2">{t.title}</h1>
+      <h1 className="font-display text-2xl md:text-3xl font-semibold tracking-tight text-foreground mb-2">
+        {t.title}
+      </h1>
       <p className="text-muted mb-6 max-w-md">{t.body}</p>
-      <Link
-        href={`/${locale}`}
-        className="inline-flex items-center justify-center gap-2 rounded-lg font-medium px-5 py-3 bg-accent text-on-accent hover:bg-accent-dark transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-      >
+      <Button href={`/${locale}`} size="lg">
         {t.home}
-      </Link>
+      </Button>
     </div>
   );
 }

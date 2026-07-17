@@ -1,5 +1,6 @@
 import { cache } from "react";
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { PLANT_BY_SLUG_QUERY, PLANT_SLUGS_QUERY, RELATED_PLANTS_QUERY } from "@/sanity/lib/queries";
@@ -15,7 +16,10 @@ import { VarietyShowcase, type ShowcaseVariety } from "@/components/plant/Variet
 import { PlantCard, type PlantCardData } from "@/components/ui/PlantCard";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Badge } from "@/components/ui/Badge";
+import { ChevronRightIcon, LeafIcon, WhatsAppIcon } from "@/components/ui/icons";
 import type { PlantData, PlantImage } from "@/lib/types/plant";
+
+const breadcrumbLinkClass = "link-focus transition-colors hover:text-foreground";
 
 /** Fetch a plant once per request — shared by generateMetadata and the page. */
 const getPlant = cache((slug: string) =>
@@ -155,35 +159,50 @@ export default async function PlantPage({
       />
 
       {/* Breadcrumb */}
-      <nav
-        aria-label={dict.common.breadcrumb}
-        className="text-sm text-muted mb-6 flex gap-2 flex-wrap"
-      >
-        <a href={`/${locale}`} className="hover:text-foreground">
-          {dict.nav.home}
-        </a>
-        <span>/</span>
-        <a href={`/${locale}/catalog`} className="hover:text-foreground">
-          {dict.nav.catalog}
-        </a>
-        {categories[0] && (
-          <>
-            <span>/</span>
-            <a
-              href={`/${locale}/catalog?category=${encodeURIComponent(categories[0])}`}
-              className="hover:text-foreground"
-            >
-              {categories[0]}
-            </a>
-          </>
-        )}
-        <span>/</span>
-        <span className="text-foreground">{name}</span>
+      <nav aria-label={dict.common.breadcrumb} className="mb-6">
+        <ol className="flex flex-wrap items-center gap-1.5 text-sm text-muted">
+          <li>
+            <Link href={`/${locale}`} className={breadcrumbLinkClass}>
+              {dict.nav.home}
+            </Link>
+          </li>
+          <li aria-hidden="true">
+            <ChevronRightIcon className="h-3.5 w-3.5 text-muted/70" />
+          </li>
+          <li>
+            <Link href={`/${locale}/catalog`} className={breadcrumbLinkClass}>
+              {dict.nav.catalog}
+            </Link>
+          </li>
+          {categories[0] && (
+            <>
+              <li aria-hidden="true">
+                <ChevronRightIcon className="h-3.5 w-3.5 text-muted/70" />
+              </li>
+              <li>
+                <Link
+                  href={`/${locale}/catalog?category=${encodeURIComponent(categories[0])}`}
+                  className={breadcrumbLinkClass}
+                >
+                  {categories[0]}
+                </Link>
+              </li>
+            </>
+          )}
+          <li aria-hidden="true">
+            <ChevronRightIcon className="h-3.5 w-3.5 text-muted/70" />
+          </li>
+          <li aria-current="page" className="font-medium text-foreground">
+            {name}
+          </li>
+        </ol>
       </nav>
 
       {/* Title */}
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-foreground">{name}</h1>
+        <h1 className="font-display text-3xl md:text-4xl font-semibold tracking-tight text-balance text-foreground">
+          {name}
+        </h1>
         {plant.scientificName && <p className="text-muted italic mt-1">{plant.scientificName}</p>}
         <div className="flex gap-2 mt-3 flex-wrap">
           {plant.fragrant && (
@@ -211,7 +230,10 @@ export default async function PlantPage({
       <div className="max-w-xl mt-8 space-y-5">
         {careTips && (
           <div className="rounded-xl border border-border bg-surface p-4">
-            <h2 className="font-semibold text-foreground text-sm mb-1">{dict.plant.careTips}</h2>
+            <h2 className="flex items-center gap-2 font-semibold text-foreground text-sm mb-1.5">
+              <LeafIcon className="h-4 w-4 text-accent" />
+              {dict.plant.careTips}
+            </h2>
             <p className="text-muted text-sm leading-relaxed">{careTips}</p>
           </div>
         )}
@@ -219,9 +241,10 @@ export default async function PlantPage({
           href={waLink}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center justify-center gap-2 w-full py-3 bg-[#25D366] text-white font-semibold rounded-xl hover:bg-[#1ebe5d] transition-colors"
+          className="flex items-center justify-center gap-2 w-full py-3 bg-whatsapp text-on-whatsapp font-semibold rounded-xl shadow-soft transition-[background-color,box-shadow,transform] duration-200 hover:bg-whatsapp-dark hover:shadow-lift active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-whatsapp focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         >
-          💬 {dict.plant.whatsappCta}
+          <WhatsAppIcon className="h-5 w-5" />
+          {dict.plant.whatsappCta}
         </a>
       </div>
 
@@ -229,9 +252,9 @@ export default async function PlantPage({
       {related && related.length > 0 && (
         <section className="mt-16">
           <SectionHeading title={dict.plant.relatedPlants} />
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             {related.map((p) => (
-              <PlantCard key={p.slug.current} plant={p} locale={locale} />
+              <PlantCard key={p.slug.current} plant={p} locale={locale} dict={dict} />
             ))}
           </div>
         </section>

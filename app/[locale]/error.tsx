@@ -43,7 +43,9 @@ export default function Error({
       <div className="text-6xl mb-4" aria-hidden="true">
         🪴
       </div>
-      <h1 className="text-2xl font-semibold text-foreground mb-2">{t.title}</h1>
+      <h1 className="font-display text-2xl md:text-3xl font-semibold tracking-tight text-foreground mb-2">
+        {t.title}
+      </h1>
       <p className="text-muted mb-6 max-w-md">{t.body}</p>
       <Button size="lg" onClick={reset}>
         {t.retry}

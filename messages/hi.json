@@ -16,7 +16,11 @@
     "filter": "फ़िल्टर",
     "sort": "क्रमबद्ध करें",
     "toggleTheme": "डार्क मोड टॉगल करें",
-    "breadcrumb": "नेविगेशन पथ"
+    "breadcrumb": "नेविगेशन पथ",
+    "skipToContent": "मुख्य सामग्री पर जाएं",
+    "openMenu": "मेनू खोलें",
+    "closeMenu": "मेनू बंद करें",
+    "language": "भाषा"
   },
   "home": {
     "heroTitleFallback": "हर घर के लिए स्वस्थ पौधे",
@@ -39,7 +43,9 @@
     "sortNewest": "नवीनतम",
     "allCategories": "सभी श्रेणियां",
     "allAvailability": "सभी उपलब्धता",
-    "searchPlaceholder": "पौधे खोजें…"
+    "searchPlaceholder": "पौधे खोजें…",
+    "resultsCount": "{count} पौधे उपलब्ध",
+    "resultsCountOne": "1 पौधा उपलब्ध"
   },
   "plant": {
     "careGuide": "देखभाल गाइड",
@@ -65,7 +71,11 @@
     "wateringHigh": "अधिक",
     "growthSlow": "धीमा",
     "growthMedium": "मध्यम",
-    "growthFast": "तेज़"
+    "growthFast": "तेज़",
+    "prevImage": "पिछली छवि",
+    "nextImage": "अगली छवि",
+    "goToImage": "छवि {n} पर जाएं",
+    "imageCounter": "छवि {current} / {total}"
   },
   "contact": {
     "callUs": "हमें कॉल करें",
@@ -75,7 +85,8 @@
     "openEveryDay": "हर दिन खुला",
     "email": "ईमेल",
     "phone": "फोन",
-    "address": "पता"
+    "address": "पता",
+    "followUs": "हमें फॉलो करें"
   },
   "seo": {
     "defaultDescription": "ग्रीनस्किल लैंडस्केप — घर, बगीचे और दफ्तर के लिए गुणवत्तापूर्ण पौधे। हमारे इनडोर, आउटडोर और दुर्लभ पौधों का संग्रह देखें।",
@@ -84,6 +95,8 @@
     "visit": "ग्रीनस्किल लैंडस्केप तक पहुंचें — हमारी नर्सरी आने के लिए रास्ता, पता और खुलने का समय।"
   },
   "footer": {
-    "rights": "सर्वाधिकार सुरक्षित।"
+    "rights": "सर्वाधिकार सुरक्षित।",
+    "quickLinks": "त्वरित लिंक",
+    "contact": "संपर्क"
   }
 }

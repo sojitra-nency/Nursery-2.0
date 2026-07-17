@@ -16,10 +16,10 @@ const sizeClass: Record<ChipSize, string> = {
 
 function chipClass(active: boolean, shape: ChipShape, size: ChipSize, extra: string) {
   const state = active
-    ? "bg-accent text-on-accent border-accent"
-    : "bg-surface border-border text-muted hover:border-accent hover:text-accent";
+    ? "bg-accent text-on-accent border-accent shadow-soft"
+    : "bg-surface border-border text-muted hover:border-accent hover:text-accent hover:bg-accent/5";
   return [
-    "inline-flex items-center justify-center font-medium border transition-colors",
+    "inline-flex items-center justify-center font-medium border cursor-pointer transition-colors",
     shapeClass[shape],
     sizeClass[size],
     state,

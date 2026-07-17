@@ -51,16 +51,23 @@ export default async function CatalogPage({
     sanityFetch<string[]>(USED_CATEGORIES_QUERY, {}, ["plant"]),
   ]);
 
+  const count = plants?.length ?? 0;
+  const hasFilters = Boolean(sp.q || sp.category || sp.sort);
+  const countLabel =
+    count === 1
+      ? dict.catalog.resultsCountOne
+      : dict.catalog.resultsCount.replace("{count}", String(count));
+
   return (
     <div className="container mx-auto px-4 py-10">
-      <SectionHeading title={dict.catalog.title} />
+      <SectionHeading title={dict.catalog.title} subtitle={countLabel} />
       <Suspense>
         <CatalogFilters categories={categories ?? []} dict={dict} />
       </Suspense>
       {plants && plants.length > 0 ? (
-        <CatalogGrid plants={plants} locale={typedLocale} />
+        <CatalogGrid plants={plants} locale={typedLocale} dict={dict} />
       ) : (
-        <EmptyState dict={dict} />
+        <EmptyState dict={dict} clearHref={hasFilters ? `/${locale}/catalog` : undefined} />
       )}
     </div>
   );

@@ -8,6 +8,7 @@ import { HeroSection } from "@/components/sections/HeroSection";
 import { FeaturedCategoriesSection } from "@/components/sections/FeaturedCategoriesSection";
 import { FeaturedPlantsSection } from "@/components/sections/FeaturedPlantsSection";
 import { Reveal } from "@/components/ui/Reveal";
+import { ArrowRightIcon, MapPinIcon } from "@/components/ui/icons";
 import type { PlantCardData } from "@/components/ui/PlantCard";
 import { getLocalized } from "@/lib/i18n/getLocalized";
 import { formatHours } from "@/lib/hours";
@@ -52,34 +53,37 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
       {/* About teaser */}
       {description && (
-        <section className="py-16 bg-background">
+        <section className="py-16 md:py-20 bg-background">
           <Reveal className="container mx-auto px-4 max-w-3xl text-center">
-            <h2 className="font-display text-3xl md:text-4xl font-semibold tracking-tight text-foreground mb-4">
+            <h2 className="font-display text-3xl md:text-4xl font-semibold tracking-tight text-balance text-foreground mb-4">
               {dict.home.aboutTeaser}
             </h2>
             <p className="text-muted leading-relaxed mb-6">{description}</p>
             <Link
               href={`/${locale}/about`}
-              className="link-focus text-accent font-medium hover:text-accent-dark"
+              className="link-focus group inline-flex items-center gap-1 text-accent font-medium hover:text-accent-dark transition-colors"
             >
-              {dict.common.learnMore} →
+              {dict.common.learnMore}
+              <ArrowRightIcon className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
             </Link>
           </Reveal>
         </section>
       )}
 
       {/* Visit teaser */}
-      <section className="py-16 bg-accent text-on-accent">
+      <section className="py-16 md:py-20 bg-accent text-on-accent">
         <Reveal className="container mx-auto px-4 text-center">
-          <h2 className="font-display text-3xl md:text-4xl font-semibold tracking-tight mb-3">
+          <h2 className="font-display text-3xl md:text-4xl font-semibold tracking-tight text-balance mb-3">
             {dict.home.visitTeaser}
           </h2>
           <p className="text-on-accent/80 mb-6">{hours}</p>
           <Link
             href={`/${locale}/visit`}
-            className="inline-flex items-center px-6 py-3 bg-on-accent text-accent font-semibold rounded-lg transition-[transform,background-color] duration-200 hover:bg-on-accent/90 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-on-accent focus-visible:ring-offset-2 focus-visible:ring-offset-accent"
+            className="group inline-flex items-center gap-2 px-6 py-3 bg-on-accent text-accent font-semibold rounded-lg shadow-soft transition-[transform,background-color,box-shadow] duration-200 hover:bg-on-accent/90 hover:shadow-lift active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-on-accent focus-visible:ring-offset-2 focus-visible:ring-offset-accent"
           >
-            {dict.contact.getDirections} →
+            <MapPinIcon className="h-4 w-4" />
+            {dict.contact.getDirections}
+            <ArrowRightIcon className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
           </Link>
         </Reveal>
       </section>

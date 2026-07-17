@@ -14,13 +14,40 @@
   --color-accent: #2f7d32;
   --color-accent-dark: #1f5d23;
   --color-on-accent: #ffffff;
+
+  /* Fixed brand/overlay colors — mode-independent, but centralized as tokens so
+     nothing hardcodes hexes in markup. WhatsApp green is the deep brand shade
+     (white text clears WCAG AA on it in both modes). Scrim darkens imagery
+     behind overlay controls. */
+  --color-whatsapp: #075e54;
+  --color-whatsapp-dark: #054c45;
+  --color-on-whatsapp: #ffffff;
+  --color-scrim: #0b0d10;
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-display: var(--font-fraunces);
 
-  --animate-fade-up: fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  /* Elevation + motion primitives shared across components. */
+  --shadow-soft: 0 1px 2px rgb(11 13 16 / 0.05), 0 2px 8px rgb(11 13 16 / 0.05);
+  --shadow-lift: 0 4px 12px rgb(11 13 16 / 0.08), 0 12px 28px rgb(11 13 16 / 0.1);
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --animate-fade-up: fade-up 0.6s var(--ease-soft) both;
+  --animate-fade-down: fade-down 0.25s var(--ease-soft) both;
   --animate-shimmer: shimmer 1.5s linear infinite;
   --animate-float: float 6s ease-in-out infinite;
+}
+
+/* ── Base niceties ────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-accent) 24%, transparent);
 }
 
 /* ── Keyframes ────────────────────────────────────────────────────────────── */
@@ -28,6 +55,17 @@
   from {
     opacity: 0;
     transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-down {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
   }
   to {
     opacity: 1;
@@ -60,8 +98,8 @@
   opacity: 0;
   transform: translateY(12px);
   transition:
-    opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    opacity 0.6s var(--ease-soft),
+    transform 0.6s var(--ease-soft);
   transition-delay: var(--reveal-delay, 0ms);
   will-change: opacity, transform;
 }
@@ -98,6 +136,39 @@
     0 0 0 2px var(--color-background),
     0 0 0 4px var(--color-accent);
   border-radius: 0.375rem;
+}
+
+/* ── Skip-to-content link ─────────────────────────────────────────────────── */
+/* Visually hidden until keyboard-focused (WCAG 2.4.1 bypass blocks). Sits above
+   the sticky header (z-40) and mobile contact bar (z-50). */
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 60;
+  padding: 0.625rem 1rem;
+  border-radius: 0.5rem;
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  font-size: 0.875rem;
+  font-weight: 600;
+  box-shadow: var(--shadow-lift);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-0.5rem);
+  transition:
+    opacity 0.2s var(--ease-soft),
+    transform 0.2s var(--ease-soft);
+}
+.skip-link:focus-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--color-background),
+    0 0 0 4px var(--color-accent),
+    var(--shadow-lift);
 }
 
 /* ── Reduced motion ───────────────────────────────────────────────────────── */

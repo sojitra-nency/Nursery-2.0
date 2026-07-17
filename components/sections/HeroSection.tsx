@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
+import { ArrowRightIcon, WhatsAppIcon } from "@/components/ui/icons";
 import type { SiteSettings } from "@/lib/site";
 import type { Locale } from "@/lib/i18n/config";
 import { getLocalized } from "@/lib/i18n/getLocalized";
@@ -46,14 +46,20 @@ export function HeroSection({ settings, locale, dict }: HeroSectionProps) {
           {dict.home.heroSubtitle}
         </Reveal>
         <Reveal index={3} className="flex flex-col sm:flex-row gap-3 justify-center">
-          <Link href={`/${locale}/catalog`}>
-            <Button size="lg">{dict.home.browseCatalog}</Button>
-          </Link>
-          <a href={waLink} target="_blank" rel="noopener noreferrer">
-            <Button variant="secondary" size="lg">
-              💬 {dict.home.whatsappCta}
-            </Button>
-          </a>
+          <Button href={`/${locale}/catalog`} size="lg">
+            {dict.home.browseCatalog}
+            <ArrowRightIcon className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+          </Button>
+          <Button
+            href={waLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            variant="secondary"
+            size="lg"
+          >
+            <WhatsAppIcon className="h-5 w-5 text-accent" />
+            {dict.home.whatsappCta}
+          </Button>
         </Reveal>
       </div>
     </section>
