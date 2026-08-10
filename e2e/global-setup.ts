@@ -15,7 +15,16 @@ export default async function globalSetup() {
   const port = process.env.E2E_PORT ?? "3000";
   const baseUrl = `http://localhost:${port}`;
 
-  const paths = ["/", ...locales.flatMap((l) => [`/${l}`, `/${l}/catalog`])];
+  // The plant and variety routes are warmed for English only: the discovery suite
+  // exercises them there, and compiling all 13 locales of each would cost more than
+  // the races it prevents.
+  const paths = [
+    "/",
+    ...locales.flatMap((l) => [`/${l}`, `/${l}/catalog`]),
+    "/en/catalog?q=Mango",
+    "/en/plants/mango",
+    "/en/plants/mango/kesar",
+  ];
 
   await Promise.all(
     paths.map((path) =>

@@ -245,6 +245,27 @@ export function FlowerIcon(props: IconProps) {
 }
 
 /** WhatsApp brand glyph — filled, from Simple Icons. */
+/** Touch/tap affordance — pairs with the "tap a variety" hint. */
+export function TapIcon(props: IconProps) {
+  return (
+    <StrokeIcon {...props}>
+      <path d="M9 11V6a2 2 0 0 1 4 0v5" />
+      <path d="M13 11V9.5a2 2 0 0 1 4 0V11" />
+      <path d="M17 11v-.5a2 2 0 0 1 4 0V15a6 6 0 0 1-6 6h-2a7 7 0 0 1-5.2-2.3l-2.5-2.9a2 2 0 0 1 3-2.6L9 15" />
+    </StrokeIcon>
+  );
+}
+
+/** Price tag — marks the "from ₹…" hint on variety cards. */
+export function TagIcon(props: IconProps) {
+  return (
+    <StrokeIcon {...props}>
+      <path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0l-7.2-7.2A2 2 0 0 1 2.8 12V4.8A2 2 0 0 1 4.8 2.8H12a2 2 0 0 1 1.4.6l7.2 7.2a2 2 0 0 1 0 2.8z" />
+      <circle cx="7.5" cy="7.5" r="1.2" />
+    </StrokeIcon>
+  );
+}
+
 export function WhatsAppIcon(props: IconProps) {
   return (
     <svg

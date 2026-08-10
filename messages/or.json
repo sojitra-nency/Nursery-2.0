@@ -63,7 +63,11 @@
     "searchPlaceholder": "ଗଛ ଖୋଜନ୍ତୁ…",
     "resultsCount": "{count} ଗଛ ଉପଲବ୍ଧ",
     "resultsCountOne": "1 ଗଛ ଉପଲବ୍ଧ",
-    "loadingPlants": "ଗଛ ଲୋଡ୍ ହେଉଛି"
+    "loadingPlants": "ଗଛ ଲୋଡ୍ ହେଉଛି",
+    "plantsSection": "ଗଛ",
+    "varietiesSection": "ପ୍ରକାର",
+    "resultsCountVariety": "{count} ପ୍ରକାର ଉପଲବ୍ଧ",
+    "resultsCountVarietyOne": "1 ପ୍ରକାର ଉପଲବ୍ଧ ଅଛି"
   },
   "plant": {
     "careGuide": "ଯତ୍ନ ମାର୍ଗଦର୍ଶିକା",
@@ -73,7 +77,6 @@
     "size": "ଆକାର",
     "season": "ଫୁଲ ଫୁଟିବା ଋତୁ",
     "whatsappCta": "WhatsApp ରେ ପଚାରନ୍ତୁ",
-    "relatedPlants": "ଆପଣଙ୍କୁ ଏହା ମଧ୍ୟ ଭଲ ଲାଗିପାରେ",
     "careTips": "ଯତ୍ନ ପରାମର୍ଶ",
     "bagSize": "ବ୍ୟାଗ୍ ଆକାର",
     "quantity": "ପରିମାଣ",
@@ -94,7 +97,19 @@
     "nextImage": "ପରବର୍ତ୍ତୀ ଛବି",
     "goToImage": "ଛବି {n} କୁ ଯାଆନ୍ତୁ",
     "imageCounter": "ଛବି {current} / {total}",
-    "gallery": "ଛବି ସଂଗ୍ରହ"
+    "gallery": "ଛବି ସଂଗ୍ରହ",
+    "varietiesTitle": "ଉପଲବ୍ଧ ପ୍ରକାର",
+    "varietiesEyebrow": "ଏକ ପ୍ରକାର ବାଛନ୍ତୁ",
+    "varietiesHint": "ଫଟୋ, ଆକାର ଓ ମୂଲ୍ୟ ଦେଖିବା ପାଇଁ ଯେକୌଣସି ପ୍ରକାର ଉପରେ ଟ୍ୟାପ୍ କରନ୍ତୁ",
+    "varietyCount": "{count} ପ୍ରକାର",
+    "varietyCountOne": "1 ପ୍ରକାର",
+    "viewVariety": "ବିବରଣୀ ଦେଖନ୍ତୁ",
+    "seeVarieties": "ସମସ୍ତ ପ୍ରକାର ଦେଖନ୍ତୁ",
+    "otherVarieties": "{plant}ର ଅନ୍ୟ ପ୍ରକାର ଦେଖନ୍ତୁ",
+    "exploreOtherPlants": "ଅନ୍ୟ ଗଛ ଦେଖନ୍ତୁ",
+    "browseAllPlants": "ସମସ୍ତ ଗଛ ଦେଖନ୍ତୁ",
+    "priceFrom": "{price} ଠାରୁ",
+    "varietyOf": "{plant}ର ପ୍ରକାର"
   },
   "categories": {
     "indoorPlants": "ଘର ଭିତର ଗଛ",

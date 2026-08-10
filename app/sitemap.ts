@@ -1,8 +1,10 @@
 import type { MetadataRoute } from "next";
 import { sanityFetch } from "@/sanity/lib/fetch";
-import { PLANT_SLUGS_QUERY } from "@/sanity/lib/queries";
+import { PLANT_VARIETY_PATHS_QUERY } from "@/sanity/lib/queries";
 import { locales } from "@/lib/i18n/config";
+import { varietySlugs } from "@/lib/plant/variety";
 import { SITE_DOMAIN as DOMAIN } from "@/lib/constants";
+import type { PlantVariety } from "@/lib/types/plant";
 
 function urls(path: string): MetadataRoute.Sitemap[number] {
   return {
@@ -14,7 +16,11 @@ function urls(path: string): MetadataRoute.Sitemap[number] {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const plantSlugs = await sanityFetch<Array<{ slug: string }>>(PLANT_SLUGS_QUERY, {}, ["plant"]);
+  const plants = await sanityFetch<Array<{ slug: string; varieties?: PlantVariety[] }>>(
+    PLANT_VARIETY_PATHS_QUERY,
+    {},
+    ["plant"]
+  );
 
   // `/` is the language chooser — the locale-neutral hub that links to all
   // thirteen locales, and the `x-default` target in every page's hreflang set.
@@ -27,9 +33,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     `/${locale}/visit`,
   ]);
 
-  const plantPaths = (plantSlugs ?? []).flatMap(({ slug }) =>
+  const plantPaths = (plants ?? []).flatMap(({ slug }) =>
     locales.map((l) => `/${l}/plants/${slug}`)
   );
 
-  return [rootPath, ...localePaths, ...plantPaths].map(urls);
+  // Variety pages only exist where there's an actual choice to make — a plant with
+  // one variety redirects to the plant page, so listing it here would advertise a
+  // redirect. Mirrors `hasVarietyPages` on the variety route.
+  const varietyPaths = (plants ?? []).flatMap(({ slug, varieties }) => {
+    const list = varieties ?? [];
+    if (list.length <= 1) return [];
+    return varietySlugs(list).flatMap((variety) =>
+      locales.map((l) => `/${l}/plants/${slug}/${variety}`)
+    );
+  });
+
+  return [rootPath, ...localePaths, ...plantPaths, ...varietyPaths].map(urls);
 }

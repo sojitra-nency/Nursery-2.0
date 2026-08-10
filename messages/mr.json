@@ -63,7 +63,11 @@
     "searchPlaceholder": "रोपे शोधा…",
     "resultsCount": "{count} रोपे उपलब्ध",
     "resultsCountOne": "1 रोप उपलब्ध",
-    "loadingPlants": "रोपे लोड होत आहेत"
+    "loadingPlants": "रोपे लोड होत आहेत",
+    "plantsSection": "रोपे",
+    "varietiesSection": "जाती",
+    "resultsCountVariety": "{count} जाती उपलब्ध",
+    "resultsCountVarietyOne": "1 जात उपलब्ध"
   },
   "plant": {
     "careGuide": "काळजी मार्गदर्शक",
@@ -73,7 +77,6 @@
     "size": "आकार",
     "season": "फुलण्याचा हंगाम",
     "whatsappCta": "WhatsApp वर विचारा",
-    "relatedPlants": "तुम्हाला हे देखील आवडेल",
     "careTips": "काळजी टिप्स",
     "bagSize": "बॅगचा आकार",
     "quantity": "प्रमाण",
@@ -94,7 +97,19 @@
     "nextImage": "पुढील चित्र",
     "goToImage": "चित्र {n} वर जा",
     "imageCounter": "चित्र {current} / {total}",
-    "gallery": "फोटो गॅलरी"
+    "gallery": "फोटो गॅलरी",
+    "varietiesTitle": "उपलब्ध जाती",
+    "varietiesEyebrow": "जात निवडा",
+    "varietiesHint": "फोटो, आकार आणि किंमत पाहण्यासाठी कोणत्याही जातीवर टॅप करा",
+    "varietyCount": "{count} जाती",
+    "varietyCountOne": "1 जात",
+    "viewVariety": "तपशील पहा",
+    "seeVarieties": "सर्व जाती पहा",
+    "otherVarieties": "{plant}च्या इतर जाती पहा",
+    "exploreOtherPlants": "इतर रोपे पहा",
+    "browseAllPlants": "सर्व रोपे पहा",
+    "priceFrom": "{price} पासून",
+    "varietyOf": "{plant}ची जात"
   },
   "categories": {
     "indoorPlants": "घरातील रोपे",

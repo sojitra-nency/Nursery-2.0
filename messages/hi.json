@@ -63,7 +63,11 @@
     "searchPlaceholder": "पौधे खोजें…",
     "resultsCount": "{count} पौधे उपलब्ध",
     "resultsCountOne": "1 पौधा उपलब्ध",
-    "loadingPlants": "पौधे लोड हो रहे हैं"
+    "loadingPlants": "पौधे लोड हो रहे हैं",
+    "plantsSection": "पौधे",
+    "varietiesSection": "किस्में",
+    "resultsCountVariety": "{count} किस्में उपलब्ध",
+    "resultsCountVarietyOne": "1 किस्म उपलब्ध"
   },
   "plant": {
     "careGuide": "देखभाल गाइड",
@@ -73,7 +77,6 @@
     "size": "आकार",
     "season": "फूलने का मौसम",
     "whatsappCta": "WhatsApp पर पूछें",
-    "relatedPlants": "आपको यह भी पसंद आ सकता है",
     "careTips": "देखभाल सुझाव",
     "bagSize": "बैग का आकार",
     "quantity": "मात्रा",
@@ -94,7 +97,19 @@
     "nextImage": "अगली छवि",
     "goToImage": "छवि {n} पर जाएं",
     "imageCounter": "छवि {current} / {total}",
-    "gallery": "फ़ोटो गैलरी"
+    "gallery": "फ़ोटो गैलरी",
+    "varietiesTitle": "उपलब्ध किस्में",
+    "varietiesEyebrow": "किस्म चुनें",
+    "varietiesHint": "किसी भी किस्म पर टैप करें और उसकी तस्वीरें, आकार और कीमत देखें",
+    "varietyCount": "{count} किस्में",
+    "varietyCountOne": "1 किस्म",
+    "viewVariety": "विवरण देखें",
+    "seeVarieties": "सभी किस्में देखें",
+    "otherVarieties": "{plant} की अन्य किस्में देखें",
+    "exploreOtherPlants": "अन्य पौधे देखें",
+    "browseAllPlants": "सभी पौधे देखें",
+    "priceFrom": "{price} से",
+    "varietyOf": "{plant} की किस्म"
   },
   "categories": {
     "indoorPlants": "इनडोर पौधे",

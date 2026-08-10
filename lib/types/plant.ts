@@ -66,3 +66,23 @@ export interface PlantCardData {
   image?: { asset: SanityImageSource } | null;
   availability?: string;
 }
+
+/** Per-variety fields projected by the catalog search query (`CATALOG_SEARCH_FIELDS`). */
+export interface VarietySearchRow {
+  _key: string;
+  name?: LocaleField;
+  availability?: string;
+  sizeRange?: string;
+  image?: { asset: SanityImageSource; alt?: LocaleField } | null;
+  bagSizes?: BagSizePricing[];
+}
+
+/**
+ * A catalog row fetched with a search term active: a plant card plus everything
+ * needed to surface its varieties as results in their own right.
+ */
+export interface PlantSearchRow extends PlantCardData {
+  scientificName?: string;
+  tags?: string[];
+  varieties?: VarietySearchRow[] | null;
+}

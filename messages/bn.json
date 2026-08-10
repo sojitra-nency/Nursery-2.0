@@ -63,7 +63,11 @@
     "searchPlaceholder": "গাছ খুঁজুন…",
     "resultsCount": "{count} টি গাছ পাওয়া যাচ্ছে",
     "resultsCountOne": "1 টি গাছ পাওয়া যাচ্ছে",
-    "loadingPlants": "গাছ লোড হচ্ছে"
+    "loadingPlants": "গাছ লোড হচ্ছে",
+    "plantsSection": "গাছ",
+    "varietiesSection": "জাত",
+    "resultsCountVariety": "{count}টি জাত উপলব্ধ",
+    "resultsCountVarietyOne": "1টি জাত উপলব্ধ"
   },
   "plant": {
     "careGuide": "পরিচর্যা নির্দেশিকা",
@@ -73,7 +77,6 @@
     "size": "আকার",
     "season": "ফুল ফোটার সময়",
     "whatsappCta": "WhatsApp-এ জিজ্ঞাসা করুন",
-    "relatedPlants": "এগুলিও পছন্দ হতে পারে",
     "careTips": "পরিচর্যার পরামর্শ",
     "bagSize": "ব্যাগের আকার",
     "quantity": "পরিমাণ",
@@ -94,7 +97,19 @@
     "nextImage": "পরের ছবি",
     "goToImage": "ছবি {n} এ যান",
     "imageCounter": "ছবি {current} / {total}",
-    "gallery": "ছবির গ্যালারি"
+    "gallery": "ছবির গ্যালারি",
+    "varietiesTitle": "উপলব্ধ জাত",
+    "varietiesEyebrow": "একটি জাত বেছে নিন",
+    "varietiesHint": "ছবি, মাপ ও দাম দেখতে যেকোনো জাতে ট্যাপ করুন",
+    "varietyCount": "{count}টি জাত",
+    "varietyCountOne": "1টি জাত",
+    "viewVariety": "বিস্তারিত দেখুন",
+    "seeVarieties": "সব জাত দেখুন",
+    "otherVarieties": "{plant}-এর অন্যান্য জাত দেখুন",
+    "exploreOtherPlants": "অন্যান্য গাছ দেখুন",
+    "browseAllPlants": "সব গাছ দেখুন",
+    "priceFrom": "{price} থেকে",
+    "varietyOf": "{plant}-এর জাত"
   },
   "categories": {
     "indoorPlants": "ঘরের ভিতরের গাছ",

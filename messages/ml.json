@@ -63,7 +63,11 @@
     "searchPlaceholder": "ചെടികൾ തിരയുക…",
     "resultsCount": "{count} ചെടികൾ ലഭ്യമാണ്",
     "resultsCountOne": "1 ചെടി ലഭ്യമാണ്",
-    "loadingPlants": "ചെടികൾ ലോഡ് ചെയ്യുന്നു"
+    "loadingPlants": "ചെടികൾ ലോഡ് ചെയ്യുന്നു",
+    "plantsSection": "ചെടികൾ",
+    "varietiesSection": "ഇനങ്ങൾ",
+    "resultsCountVariety": "{count} ഇനങ്ങൾ ലഭ്യമാണ്",
+    "resultsCountVarietyOne": "1 ഇനം ലഭ്യമാണ്"
   },
   "plant": {
     "careGuide": "പരിചരണ വഴികാട്ടി",
@@ -73,7 +77,6 @@
     "size": "വലുപ്പം",
     "season": "പൂക്കുന്ന കാലം",
     "whatsappCta": "WhatsApp-ൽ ചോദിക്കുക",
-    "relatedPlants": "ഇവയും ഇഷ്ടപ്പെടാം",
     "careTips": "പരിചരണ നുറുങ്ങുകൾ",
     "bagSize": "ബാഗ് വലുപ്പം",
     "quantity": "അളവ്",
@@ -94,7 +97,19 @@
     "nextImage": "അടുത്ത ചിത്രം",
     "goToImage": "ചിത്രം {n} ലേക്ക് പോകുക",
     "imageCounter": "ചിത്രം {current} / {total}",
-    "gallery": "ചിത്ര ശേഖരം"
+    "gallery": "ചിത്ര ശേഖരം",
+    "varietiesTitle": "ലഭ്യമായ ഇനങ്ങൾ",
+    "varietiesEyebrow": "ഒരു ഇനം തിരഞ്ഞെടുക്കുക",
+    "varietiesHint": "ചിത്രങ്ങൾ, വലുപ്പം, വില എന്നിവ കാണാൻ ഏതെങ്കിലും ഇനത്തിൽ ടാപ്പ് ചെയ്യുക",
+    "varietyCount": "{count} ഇനങ്ങൾ",
+    "varietyCountOne": "1 ഇനം",
+    "viewVariety": "വിശദാംശങ്ങൾ കാണുക",
+    "seeVarieties": "എല്ലാ ഇനങ്ങളും കാണുക",
+    "otherVarieties": "{plant} മറ്റ് ഇനങ്ങൾ കാണുക",
+    "exploreOtherPlants": "മറ്റ് ചെടികൾ കാണുക",
+    "browseAllPlants": "എല്ലാ ചെടികളും കാണുക",
+    "priceFrom": "{price} മുതൽ",
+    "varietyOf": "{plant} ഇനം"
   },
   "categories": {
     "indoorPlants": "അകത്തെ ചെടികൾ",
