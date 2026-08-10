@@ -1,8 +1,8 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-
-const STORAGE_KEY = "nursery-theme";
+import { THEME_STORAGE_KEY } from "@/lib/theme/clientScript";
+import { SunIcon, MoonIcon } from "@/components/ui/icons";
 
 /** Subscribe to `data-mode` changes on <html> + system preference changes. */
 function subscribe(onChange: () => void) {
@@ -15,7 +15,7 @@ function subscribe(onChange: () => void) {
   // Follow the OS while the visitor hasn't made an explicit choice.
   const mql = window.matchMedia("(prefers-color-scheme: dark)");
   const onSystem = () => {
-    if (!localStorage.getItem(STORAGE_KEY)) {
+    if (!localStorage.getItem(THEME_STORAGE_KEY)) {
       document.documentElement.dataset.mode = mql.matches ? "dark" : "light";
     }
     onChange();
@@ -33,8 +33,9 @@ const getServerSnapshot = () => false; // SSR renders the light-default (moon) i
 
 /**
  * Icon-only light/dark toggle. The effective mode is set on <html> before paint by
- * the blocking script in layout.tsx; this button reflects it (via useSyncExternalStore,
- * so there's no setState-in-effect and no hydration mismatch) and flips it on click.
+ * the blocking script in the layout; this button reflects it (via
+ * useSyncExternalStore, so there's no setState-in-effect and no hydration mismatch)
+ * and flips it on click.
  */
 export function ThemeToggle({ label }: { label: string }) {
   const isDark = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
@@ -43,7 +44,7 @@ export function ThemeToggle({ label }: { label: string }) {
     const next = document.documentElement.dataset.mode === "dark" ? "light" : "dark";
     document.documentElement.dataset.mode = next; // MutationObserver → re-render
     try {
-      localStorage.setItem(STORAGE_KEY, next);
+      localStorage.setItem(THEME_STORAGE_KEY, next);
     } catch {
       /* ignore (private mode / storage disabled) */
     }
@@ -55,41 +56,14 @@ export function ThemeToggle({ label }: { label: string }) {
       onClick={toggle}
       aria-label={label}
       aria-pressed={isDark}
-      className="link-focus inline-flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-muted transition-colors hover:bg-surface hover:text-foreground"
+      className="link-focus tap-target inline-flex cursor-pointer items-center justify-center rounded-full text-muted transition-colors hover:bg-surface hover:text-foreground"
     >
       {isDark ? (
         // Sun — click to go light
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          aria-hidden="true"
-        >
-          <circle cx="12" cy="12" r="4" />
-          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
-        </svg>
+        <SunIcon className="h-5 w-5" />
       ) : (
         // Moon — click to go dark
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          aria-hidden="true"
-        >
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-        </svg>
+        <MoonIcon className="h-5 w-5" />
       )}
     </button>
   );

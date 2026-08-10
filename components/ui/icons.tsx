@@ -143,6 +143,107 @@ export function ChevronRightIcon(props: IconProps) {
   );
 }
 
+export function GlobeIcon(props: IconProps) {
+  return (
+    <StrokeIcon {...props}>
+      <circle cx="12" cy="12" r="10" />
+      <path d="M2 12h20" />
+      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+    </StrokeIcon>
+  );
+}
+
+export function HomeIcon(props: IconProps) {
+  return (
+    <StrokeIcon {...props}>
+      <path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z" />
+    </StrokeIcon>
+  );
+}
+
+/** Catalog / grid-of-plants. */
+export function GridIcon(props: IconProps) {
+  return (
+    <StrokeIcon {...props}>
+      <rect x="3" y="3" width="7" height="7" rx="1.5" />
+      <rect x="14" y="3" width="7" height="7" rx="1.5" />
+      <rect x="3" y="14" width="7" height="7" rx="1.5" />
+      <rect x="14" y="14" width="7" height="7" rx="1.5" />
+    </StrokeIcon>
+  );
+}
+
+export function InfoIcon(props: IconProps) {
+  return (
+    <StrokeIcon {...props}>
+      <circle cx="12" cy="12" r="10" />
+      <path d="M12 16v-5" />
+      <path d="M12 8h.01" />
+    </StrokeIcon>
+  );
+}
+
+export function SunIcon(props: IconProps) {
+  return (
+    <StrokeIcon {...props}>
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+    </StrokeIcon>
+  );
+}
+
+export function MoonIcon(props: IconProps) {
+  return (
+    <StrokeIcon {...props}>
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+    </StrokeIcon>
+  );
+}
+
+/** Watering. */
+export function DropletIcon(props: IconProps) {
+  return (
+    <StrokeIcon {...props}>
+      <path d="M12 2.7 6.9 8a7.2 7.2 0 1 0 10.2 0z" />
+    </StrokeIcon>
+  );
+}
+
+/** Growth rate. */
+export function SproutIcon(props: IconProps) {
+  return (
+    <StrokeIcon {...props}>
+      <path d="M12 21V11" />
+      <path d="M12 11C12 7.7 9.3 5 6 5c0 3.3 2.7 6 6 6z" />
+      <path d="M12 11c0-2.8 2.2-5 5-5 0 2.8-2.2 5-5 5z" />
+    </StrokeIcon>
+  );
+}
+
+/** Size / dimensions. */
+export function RulerIcon(props: IconProps) {
+  return (
+    <StrokeIcon {...props}>
+      <path d="M3 15.5 15.5 3l5.5 5.5L8.5 21z" />
+      <path d="m7 12 2 2M10.5 8.5l2 2M14 5l2 2" />
+    </StrokeIcon>
+  );
+}
+
+/** Flowering season. */
+export function FlowerIcon(props: IconProps) {
+  return (
+    <StrokeIcon {...props}>
+      <circle cx="12" cy="9" r="2.5" />
+      <path d="M12 6.5c0-2 1-3.5 0-4.5-1 1 0 2.5 0 4.5z" />
+      <path d="M14.5 9c2 0 3.5-1 4.5 0-1 1-2.5 0-4.5 0z" />
+      <path d="M9.5 9c-2 0-3.5-1-4.5 0 1 1 2.5 0 4.5 0z" />
+      <path d="M12 11.5c0 2 1 3.5 0 4.5-1-1 0-2.5 0-4.5z" />
+      <path d="M12 16v6" />
+    </StrokeIcon>
+  );
+}
+
 /** WhatsApp brand glyph — filled, from Simple Icons. */
 export function WhatsAppIcon(props: IconProps) {
   return (

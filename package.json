@@ -20,7 +20,9 @@
     "prepare": "husky",
     "sanity": "sanity",
     "seed": "node scripts/seed.mjs",
-    "migrate-plants": "node scripts/migrate-plants.mjs"
+    "migrate-plants": "node scripts/migrate-plants.mjs",
+    "translate": "node scripts/translate-content.mjs",
+    "check-translations": "node scripts/check-translations.mjs"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [

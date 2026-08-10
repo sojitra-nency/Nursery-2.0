@@ -28,7 +28,14 @@ const client = createClient({
   useCdn: false,
 });
 
-const CARE_FIELDS = ["availability", "sunlight", "watering", "growthRate", "size", "floweringSeason"];
+const CARE_FIELDS = [
+  "availability",
+  "sunlight",
+  "watering",
+  "growthRate",
+  "size",
+  "floweringSeason",
+];
 const COMMERCE_FIELDS = ["priceMinor", "salePriceMinor", "stockQuantity"];
 
 async function run() {
@@ -36,7 +43,7 @@ async function run() {
 
   // Build a map of category/collection _id -> English title.
   const taxonomies = await client.fetch(
-    `*[_type in ["category", "collection"]]{ _id, "title": coalesce(title.en, title) }`,
+    `*[_type in ["category", "collection"]]{ _id, "title": coalesce(title.en, title) }`
   );
   const titleById = Object.fromEntries(taxonomies.map((t) => [t._id, t.title]));
 
@@ -46,7 +53,7 @@ async function run() {
       availability, sunlight, watering, growthRate, size, floweringSeason,
       priceMinor, salePriceMinor, stockQuantity,
       images
-    }`,
+    }`
   );
 
   let migrated = 0;
@@ -83,7 +90,7 @@ async function run() {
     Object.keys(variety).forEach((k) => variety[k] === undefined && delete variety[k]);
 
     console.log(
-      `• ${plant.name?.en ?? plant._id}  →  categories: [${categories.join(", ")}], 1 variety`,
+      `• ${plant.name?.en ?? plant._id}  →  categories: [${categories.join(", ")}], 1 variety`
     );
 
     if (COMMIT) {
@@ -97,9 +104,7 @@ async function run() {
   }
 
   // Delete orphaned taxonomy documents.
-  const orphans = await client.fetch(
-    `*[_type in ["category", "subcategory", "collection"]]._id`,
-  );
+  const orphans = await client.fetch(`*[_type in ["category", "subcategory", "collection"]]._id`);
   console.log(`\n${orphans.length} taxonomy documents to delete.`);
   if (COMMIT && orphans.length) {
     let tx = client.transaction();
@@ -109,7 +114,7 @@ async function run() {
 
   console.log(
     `\nDone. ${migrated} plant(s) ${COMMIT ? "migrated" : "would migrate"}, ` +
-      `${orphans.length} taxonomy doc(s) ${COMMIT ? "deleted" : "would delete"}.`,
+      `${orphans.length} taxonomy doc(s) ${COMMIT ? "deleted" : "would delete"}.`
   );
   if (!COMMIT) console.log("Re-run with --commit to apply.\n");
 }

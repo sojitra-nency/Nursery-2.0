@@ -1,5 +1,5 @@
 import { PlantCard, type PlantCardData } from "@/components/ui/PlantCard";
-import type { Dictionary } from "@/lib/i18n/dictionaries";
+import type { Dictionary } from "@/lib/i18n/dictionary-type";
 import type { Locale } from "@/lib/i18n/config";
 
 interface CatalogGridProps {

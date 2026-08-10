@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { MenuIcon, XIcon } from "@/components/ui/icons";
 import { isActiveHref, type NavItem } from "./NavLinks";
 
@@ -21,6 +21,7 @@ interface MobileMenuProps {
  */
 export function MobileMenu({ items, openLabel, closeLabel, children }: MobileMenuProps) {
   const [open, setOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
 
   // Close when the route changes (adjust-during-render idiom used repo-wide).
@@ -33,7 +34,11 @@ export function MobileMenu({ items, openLabel, closeLabel, children }: MobileMen
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key !== "Escape") return;
+      setOpen(false);
+      // Escape must hand focus back to the control that opened the panel,
+      // otherwise a keyboard user is dropped at the top of the document.
+      triggerRef.current?.focus();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -42,12 +47,13 @@ export function MobileMenu({ items, openLabel, closeLabel, children }: MobileMen
   return (
     <div className="md:hidden">
       <button
+        ref={triggerRef}
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
         aria-controls="mobile-nav"
         aria-label={open ? closeLabel : openLabel}
-        className="link-focus inline-flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-muted transition-colors hover:bg-surface hover:text-foreground"
+        className="link-focus tap-target inline-flex cursor-pointer items-center justify-center rounded-full text-muted transition-colors hover:bg-surface hover:text-foreground"
       >
         {open ? <XIcon className="h-5 w-5" /> : <MenuIcon className="h-5 w-5" />}
       </button>
@@ -65,11 +71,16 @@ export function MobileMenu({ items, openLabel, closeLabel, children }: MobileMen
                   key={item.href}
                   href={item.href}
                   aria-current={active ? "page" : undefined}
-                  className={`link-focus rounded-lg px-3 py-3 text-base font-medium transition-colors ${
+                  className={`link-focus flex items-center gap-3 rounded-lg px-3 py-3 text-base font-medium transition-colors ${
                     active ? "bg-accent/10 text-accent" : "text-foreground hover:bg-surface"
                   }`}
                 >
-                  {item.label}
+                  {item.icon && (
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-surface text-accent">
+                      {item.icon}
+                    </span>
+                  )}
+                  <span className="min-w-0">{item.label}</span>
                 </Link>
               );
             })}

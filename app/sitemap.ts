@@ -16,7 +16,11 @@ function urls(path: string): MetadataRoute.Sitemap[number] {
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const plantSlugs = await sanityFetch<Array<{ slug: string }>>(PLANT_SLUGS_QUERY, {}, ["plant"]);
 
-  const staticPaths = locales.flatMap((locale) => [
+  // `/` is the language chooser — the locale-neutral hub that links to all
+  // thirteen locales, and the `x-default` target in every page's hreflang set.
+  const rootPath = "/";
+
+  const localePaths = locales.flatMap((locale) => [
     `/${locale}`,
     `/${locale}/catalog`,
     `/${locale}/about`,
@@ -27,5 +31,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     locales.map((l) => `/${l}/plants/${slug}`)
   );
 
-  return [...staticPaths, ...plantPaths].map(urls);
+  return [rootPath, ...localePaths, ...plantPaths].map(urls);
 }

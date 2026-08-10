@@ -1,15 +1,25 @@
 import type { SiteSettings } from "@/lib/site";
-import type { Locale } from "@/lib/i18n/config";
+import { defaultLocale, type Locale } from "@/lib/i18n/config";
+import { getLocalized } from "@/lib/i18n/getLocalized";
 import { to24h } from "@/lib/hours";
 import { SITE_DOMAIN as DOMAIN, NURSERY_NAME } from "@/lib/constants";
 
+/** Schema.org requires English day names regardless of the page language. */
 const ALL_DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
-export function localBusinessJsonLd(settings: SiteSettings) {
-  const name = settings.name?.en ?? NURSERY_NAME;
+/**
+ * `LocalBusiness` / `GardenStore` structured data.
+ *
+ * The name, street address and city are resolved for the page's locale (they used
+ * to be pinned to `.en`, so a Tamil page advertised an English business name and
+ * address to search engines while showing the Tamil ones to the visitor — a
+ * mismatch that also loses local-search relevance in the language people search in).
+ */
+export function localBusinessJsonLd(settings: SiteSettings, locale: Locale = defaultLocale) {
+  const name = getLocalized(settings.name, locale) || NURSERY_NAME;
   const phone = settings.phone ? `+91${settings.phone}` : undefined;
-  const address = settings.address?.en;
-  const city = settings.city?.en ?? "";
+  const address = getLocalized(settings.address, locale);
+  const city = getLocalized(settings.city, locale);
   const opens = to24h(settings.openTime) || "08:00";
   const closes = to24h(settings.closeTime) || "20:00";
 
@@ -17,7 +27,7 @@ export function localBusinessJsonLd(settings: SiteSettings) {
     "@context": "https://schema.org",
     "@type": ["LocalBusiness", "GardenStore"],
     name,
-    url: DOMAIN,
+    url: `${DOMAIN}/${locale}`,
     ...(phone ? { telephone: phone } : {}),
     ...(address || city
       ? {

@@ -8,9 +8,11 @@ const nextConfig: NextConfig = {
     unoptimized: true,
     remotePatterns: [{ protocol: "https", hostname: "cdn.sanity.io" }],
   },
-  async redirects() {
-    return [{ source: "/", destination: "/en", permanent: false }];
-  },
+  // `/` is no longer a redirect to `/en`: it now serves the language chooser
+  // (app/(entry)/page.tsx). Returning visitors are sent to their saved locale by a
+  // blocking script in that route's layout — client-side because OpenNext on
+  // Cloudflare can't run Next 16's Node-only proxy, and because a crawler (which
+  // carries no stored preference) should see the real hub page instead.
 };
 
 export default nextConfig;

@@ -1,15 +1,13 @@
 import { test, expect } from "@playwright/test";
 
-test("redirects / to /en", async ({ page }) => {
+test("/ serves the language chooser", async ({ page }) => {
   await page.goto("/");
-  await expect(page).toHaveURL(/\/en/);
+  await expect(page.getByRole("heading", { name: "Choose your language" })).toBeVisible();
 });
 
-test("locale switcher navigates to Hindi", async ({ page }) => {
-  await page.goto("/en");
-  // On small screens the locale switcher lives inside the mobile menu.
-  const menuButton = page.getByRole("button", { name: "Open menu" });
-  if (await menuButton.isVisible()) await menuButton.click();
-  await page.getByText("हिन्दी").filter({ visible: true }).click();
+test("a locale page renders its nav in that language", async ({ page }) => {
+  await page.goto("/hi");
   await expect(page).toHaveURL(/\/hi/);
+  // "कैटलॉग" — proves the dictionary resolved, not just that the URL changed.
+  await expect(page.getByRole("link", { name: "कैटलॉग" }).first()).toBeVisible();
 });
