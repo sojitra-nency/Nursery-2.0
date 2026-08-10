@@ -20,7 +20,18 @@
     "skipToContent": "मुख्य सामग्री पर जाएं",
     "openMenu": "मेनू खोलें",
     "closeMenu": "मेनू बंद करें",
-    "language": "भाषा"
+    "language": "भाषा",
+    "close": "बंद करें",
+    "back": "पीछे",
+    "loading": "लोड हो रहा है…",
+    "showingInEnglish": "अंग्रेज़ी में"
+  },
+  "language": {
+    "title": "अपनी भाषा चुनें",
+    "hint": "आप इसे बाद में बदल सकते हैं",
+    "change": "भाषा बदलें",
+    "current": "वर्तमान भाषा",
+    "selectAria": "भाषा चुनें"
   },
   "home": {
     "heroTitleFallback": "हर घर के लिए स्वस्थ पौधे",
@@ -51,7 +62,8 @@
     "allAvailability": "सभी उपलब्धता",
     "searchPlaceholder": "पौधे खोजें…",
     "resultsCount": "{count} पौधे उपलब्ध",
-    "resultsCountOne": "1 पौधा उपलब्ध"
+    "resultsCountOne": "1 पौधा उपलब्ध",
+    "loadingPlants": "पौधे लोड हो रहे हैं"
   },
   "plant": {
     "careGuide": "देखभाल गाइड",
@@ -81,7 +93,27 @@
     "prevImage": "पिछली छवि",
     "nextImage": "अगली छवि",
     "goToImage": "छवि {n} पर जाएं",
-    "imageCounter": "छवि {current} / {total}"
+    "imageCounter": "छवि {current} / {total}",
+    "gallery": "फ़ोटो गैलरी"
+  },
+  "categories": {
+    "indoorPlants": "इनडोर पौधे",
+    "outdoorPlants": "आउटडोर पौधे",
+    "balconyPlants": "बालकनी के पौधे",
+    "terracePlants": "छत के पौधे",
+    "gardenPlants": "बगीचे के पौधे",
+    "greenhousePlants": "ग्रीनहाउस पौधे",
+    "aquaticPlants": "जलीय पौधे",
+    "pondPlants": "तालाब के पौधे",
+    "forestPlants": "वन पौधे",
+    "fruitPlants": "फल के पौधे",
+    "flowering": "फूलदार",
+    "nonFlowering": "बिना फूल वाले",
+    "succulents": "सकुलेंट",
+    "herbs": "जड़ी-बूटियां",
+    "climbers": "लता",
+    "medicinal": "औषधीय",
+    "airPurifying": "हवा शुद्ध करने वाले"
   },
   "contact": {
     "callUs": "हमें कॉल करें",
@@ -92,7 +124,10 @@
     "email": "ईमेल",
     "phone": "फोन",
     "address": "पता",
-    "followUs": "हमें फॉलो करें"
+    "followUs": "हमें फॉलो करें",
+    "mapTitle": "{name} का नक्शा",
+    "whatsappGreeting": "नमस्ते! मुझे {nursery} के पौधों के बारे में जानना है।",
+    "whatsappPlant": "नमस्ते! मुझे {nursery} से {plant} के बारे में जानना है।"
   },
   "seo": {
     "defaultDescription": "ग्रीनस्किल लैंडस्केप — घर, बगीचे और दफ्तर के लिए गुणवत्तापूर्ण पौधे। हमारे इनडोर, आउटडोर और दुर्लभ पौधों का संग्रह देखें।",
@@ -104,5 +139,13 @@
     "rights": "सर्वाधिकार सुरक्षित।",
     "quickLinks": "त्वरित लिंक",
     "contact": "संपर्क"
+  },
+  "errors": {
+    "title": "कुछ गलत हो गया",
+    "body": "एक अप्रत्याशित त्रुटि हुई। कृपया पुनः प्रयास करें।",
+    "retry": "पुनः प्रयास करें",
+    "notFoundTitle": "पेज नहीं मिला",
+    "notFoundBody": "आप जिस पेज को खोज रहे हैं वह मौजूद नहीं है या हटा दिया गया है।",
+    "backHome": "होम पर वापस जाएं"
   }
 }

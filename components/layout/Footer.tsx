@@ -13,7 +13,8 @@ import {
 import { LeafSprig } from "@/components/ui/botanicals";
 import type { SiteSettings } from "@/lib/site";
 import type { Locale } from "@/lib/i18n/config";
-import type { Dictionary } from "@/lib/i18n/dictionaries";
+import type { Dictionary } from "@/lib/i18n/dictionary-type";
+import { formatNumber } from "@/lib/i18n/format";
 
 interface FooterProps {
   nurseryName: string;
@@ -131,7 +132,8 @@ export function Footer({ nurseryName, locale, dict, settings }: FooterProps) {
 
       <div className="relative border-t border-border">
         <div className="container mx-auto px-4 py-5 text-center text-xs text-muted">
-          © {new Date().getFullYear()} {nurseryName}. {dict.footer.rights}
+          © {formatNumber(new Date().getFullYear(), typedLocale)} {nurseryName}.{" "}
+          {dict.footer.rights}
         </div>
       </div>
     </footer>

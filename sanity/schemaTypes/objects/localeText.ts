@@ -1,5 +1,6 @@
 import { defineType, defineField } from "sanity";
 import { TranslateInput } from "../../components/TranslateInput";
+import { localeFields } from "./localeFields";
 
 export const localeText = defineType({
   name: "localeText",
@@ -7,9 +8,5 @@ export const localeText = defineType({
   type: "object",
   components: { input: TranslateInput },
   fieldsets: [{ name: "translations", title: "Translations", options: { collapsible: true } }],
-  fields: [
-    defineField({ name: "en", title: "English", type: "text", validation: (r) => r.required() }),
-    defineField({ name: "hi", title: "Hindi", type: "text", fieldset: "translations" }),
-    defineField({ name: "gu", title: "Gujarati", type: "text", fieldset: "translations" }),
-  ],
+  fields: localeFields("text").map((field) => defineField(field)),
 });

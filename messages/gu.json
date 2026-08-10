@@ -20,7 +20,18 @@
     "skipToContent": "મુખ્ય સામગ્રી પર જાઓ",
     "openMenu": "મેનૂ ખોલો",
     "closeMenu": "મેનૂ બંધ કરો",
-    "language": "ભાષા"
+    "language": "ભાષા",
+    "close": "બંધ કરો",
+    "back": "પાછળ",
+    "loading": "લોડ થઈ રહ્યું છે…",
+    "showingInEnglish": "અંગ્રેજીમાં"
+  },
+  "language": {
+    "title": "તમારી ભાષા પસંદ કરો",
+    "hint": "તમે આ પછીથી બદલી શકો છો",
+    "change": "ભાષા બદલો",
+    "current": "હાલની ભાષા",
+    "selectAria": "ભાષા પસંદ કરો"
   },
   "home": {
     "heroTitleFallback": "દરેક ઘર માટે સ્વસ્થ છોડ",
@@ -51,7 +62,8 @@
     "allAvailability": "બધી ઉપલબ્ધતા",
     "searchPlaceholder": "છોડ શોધો…",
     "resultsCount": "{count} છોડ ઉપલબ્ધ",
-    "resultsCountOne": "1 છોડ ઉપલબ્ધ"
+    "resultsCountOne": "1 છોડ ઉપલબ્ધ",
+    "loadingPlants": "છોડ લોડ થઈ રહ્યા છે"
   },
   "plant": {
     "careGuide": "સંભાળ માર્ગદર્શિકા",
@@ -81,7 +93,27 @@
     "prevImage": "પાછલી છબી",
     "nextImage": "આગલી છબી",
     "goToImage": "છબી {n} પર જાઓ",
-    "imageCounter": "છબી {current} / {total}"
+    "imageCounter": "છબી {current} / {total}",
+    "gallery": "ફોટો ગેલેરી"
+  },
+  "categories": {
+    "indoorPlants": "ઘરની અંદરના છોડ",
+    "outdoorPlants": "બહારના છોડ",
+    "balconyPlants": "બાલ્કનીના છોડ",
+    "terracePlants": "ધાબાના છોડ",
+    "gardenPlants": "બગીચાના છોડ",
+    "greenhousePlants": "ગ્રીનહાઉસના છોડ",
+    "aquaticPlants": "જળચર છોડ",
+    "pondPlants": "તળાવના છોડ",
+    "forestPlants": "જંગલના છોડ",
+    "fruitPlants": "ફળના છોડ",
+    "flowering": "ફૂલ આપતા",
+    "nonFlowering": "ફૂલ વગરના",
+    "succulents": "સકુલન્ટ",
+    "herbs": "ઔષધિ-વનસ્પતિ",
+    "climbers": "વેલા",
+    "medicinal": "ઔષધીય",
+    "airPurifying": "હવા શુદ્ધ કરતા"
   },
   "contact": {
     "callUs": "ફોન કરો",
@@ -92,7 +124,10 @@
     "email": "ઈમેઈલ",
     "phone": "ફોન",
     "address": "સરનામું",
-    "followUs": "અમને ફોલો કરો"
+    "followUs": "અમને ફોલો કરો",
+    "mapTitle": "{name} નો નકશો",
+    "whatsappGreeting": "નમસ્તે! મારે {nursery} ના છોડ વિશે જાણવું છે.",
+    "whatsappPlant": "નમસ્તે! મારે {nursery} ના {plant} વિશે જાણવું છે."
   },
   "seo": {
     "defaultDescription": "ગ્રીનસ્કિલ લેન્ડસ્કેપ — ઘર, બગીચા અને ઓફિસ માટે ગુણવત્તાયુક્ત છોડ. અમારા ઇન્ડોર, આઉટડોર અને દુર્લભ છોડનો સંગ્રહ જુઓ.",
@@ -104,5 +139,13 @@
     "rights": "સર્વ હક્કો સુરક્ષિત.",
     "quickLinks": "ઝડપી લિંક્સ",
     "contact": "સંપર્ક"
+  },
+  "errors": {
+    "title": "કંઈક ખોટું થયું",
+    "body": "અનપેક્ષિત ભૂલ આવી. કૃપા કરીને ફરી પ્રયાસ કરો.",
+    "retry": "ફરી પ્રયાસ કરો",
+    "notFoundTitle": "પેજ મળ્યું નથી",
+    "notFoundBody": "તમે જે પેજ શોધી રહ્યા છો તે અસ્તિત્વમાં નથી અથવા ખસેડવામાં આવ્યું છે.",
+    "backHome": "હોમ પર પાછા જાઓ"
   }
 }

@@ -35,9 +35,12 @@ export function buildMetadata({
     description: pageDescription,
     alternates: {
       canonical,
-      languages: Object.fromEntries(
-        locales.map((l) => [l, `${DOMAIN}/${l}${slug ? `/${slug}` : ""}`])
-      ),
+      languages: {
+        // Points search engines at the language chooser when no hreflang matches
+        // the user — the whole reason `/` exists as a real page.
+        "x-default": `${DOMAIN}/`,
+        ...Object.fromEntries(locales.map((l) => [l, `${DOMAIN}/${l}${slug ? `/${slug}` : ""}`])),
+      },
     },
     openGraph: {
       title: pageTitle,

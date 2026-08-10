@@ -9,9 +9,16 @@ const shapeClass: Record<ChipShape, string> = {
   square: "rounded-md",
 };
 
+/**
+ * Chips are the catalog's primary filter control on mobile. `sm` was a ~28px box
+ * with 12px text — technically above the WCAG 2.5.8 24px floor, but small for a
+ * thumb and hard to read for the low-literacy audience this catalog serves. Both
+ * sizes now clear 36px with 14px text; icon-only controls elsewhere use the
+ * stricter 44px `.tap-target`.
+ */
 const sizeClass: Record<ChipSize, string> = {
-  sm: "px-3 py-1.5 text-xs",
-  md: "px-4 py-2 text-sm",
+  sm: "min-h-9 px-3.5 py-1.5 text-sm",
+  md: "min-h-11 px-4 py-2 text-sm",
 };
 
 function chipClass(active: boolean, shape: ChipShape, size: ChipSize, extra: string) {

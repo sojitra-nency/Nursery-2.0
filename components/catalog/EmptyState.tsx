@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/Button";
 import { LeafIcon } from "@/components/ui/icons";
-import type { Dictionary } from "@/lib/i18n/dictionaries";
+import type { Dictionary } from "@/lib/i18n/dictionary-type";
 
 interface EmptyStateProps {
   dict: Dictionary;

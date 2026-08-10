@@ -4,8 +4,10 @@ import { ArrowRightIcon, CheckIcon, LeafIcon, WhatsAppIcon } from "@/components/
 import { LeafSprig } from "@/components/ui/botanicals";
 import type { SiteSettings } from "@/lib/site";
 import type { Locale } from "@/lib/i18n/config";
-import { getLocalized } from "@/lib/i18n/getLocalized";
-import type { Dictionary } from "@/lib/i18n/dictionaries";
+import { getLocalized, resolveLocalized } from "@/lib/i18n/getLocalized";
+import { interpolate } from "@/lib/i18n/format";
+import { NURSERY_NAME, DEFAULT_PHONE } from "@/lib/constants";
+import type { Dictionary } from "@/lib/i18n/dictionary-type";
 
 interface HeroSectionProps {
   settings: SiteSettings;
@@ -21,10 +23,26 @@ function splitTagline(tagline: string): { lead: string; accent: string } {
 }
 
 export function HeroSection({ settings, locale, dict }: HeroSectionProps) {
-  const name = getLocalized(settings.name, locale) || "Greenskill Landscape";
-  const tagline = getLocalized(settings.tagline, locale) || dict.home.heroTitleFallback;
-  const whatsapp = settings.whatsapp || "9876543210";
-  const waText = encodeURIComponent("Hi, I'm interested in plants from Greenskill Landscape");
+  const name = getLocalized(settings.name, locale) || NURSERY_NAME;
+
+  // The headline is CMS content, and the CMS tagline is only authored in a few
+  // languages. `getLocalized` would hand back the English tagline for the rest —
+  // and because English is `required()` in the schema, that made the translated
+  // `heroTitleFallback` unreachable, leaving "Quality Plants for Every Home" sitting
+  // in English above otherwise fully-translated Tamil and Urdu pages.
+  //
+  // So: use the tagline only when it exists *in this locale*, and otherwise take the
+  // translated headline from the catalog. A translated generic beats an untranslated
+  // specific for a reader who can't read English at all. Once `npm run translate`
+  // fills the tagline, the real one takes over automatically.
+  const cmsTagline = resolveLocalized(settings.tagline, locale);
+  const tagline =
+    !cmsTagline.isFallback && cmsTagline.value ? cmsTagline.value : dict.home.heroTitleFallback;
+  const whatsapp = settings.whatsapp || DEFAULT_PHONE;
+  // The prefilled WhatsApp message is the visitor's own first words to the nursery.
+  // Sending an English sentence from a Tamil or Urdu page put words in their mouth
+  // they may not be able to read, let alone have chosen.
+  const waText = encodeURIComponent(interpolate(dict.contact.whatsappGreeting, { nursery: name }));
   const waLink = `https://wa.me/91${whatsapp}?text=${waText}`;
   const { lead, accent } = splitTagline(tagline);
   const trustItems = [dict.home.trustHealthy, dict.home.trustVariety, dict.home.trustAdvice];
@@ -60,10 +78,10 @@ export function HeroSection({ settings, locale, dict }: HeroSectionProps) {
         <Reveal
           as="h1"
           index={1}
-          className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold tracking-tight text-balance text-foreground leading-[1.05] mb-5"
+          className="font-display leading-display mb-5 text-4xl font-semibold tracking-tight text-balance text-foreground sm:text-5xl md:text-6xl lg:text-7xl"
         >
           {lead && <>{lead} </>}
-          <em className="italic text-accent">{accent}</em>
+          <em className="accent-word text-accent italic">{accent}</em>
         </Reveal>
         <Reveal as="p" index={2} className="text-muted text-lg md:text-xl text-balance mb-9">
           {dict.home.heroSubtitle}
@@ -71,7 +89,7 @@ export function HeroSection({ settings, locale, dict }: HeroSectionProps) {
         <Reveal index={3} className="flex flex-col sm:flex-row gap-3 justify-center">
           <Button href={`/${locale}/catalog`} size="lg">
             {dict.home.browseCatalog}
-            <ArrowRightIcon className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+            <ArrowRightIcon className="rtl-flip h-4 w-4 transition-transform duration-200 ltr:group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5" />
           </Button>
           <Button
             href={waLink}

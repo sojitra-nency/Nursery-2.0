@@ -6,7 +6,7 @@ import { LeafIcon } from "./icons";
 import { urlForImage } from "@/sanity/lib/image";
 import { getLocalized } from "@/lib/i18n/getLocalized";
 import { AVAILABILITY } from "@/sanity/lib/enums";
-import type { Dictionary } from "@/lib/i18n/dictionaries";
+import type { Dictionary } from "@/lib/i18n/dictionary-type";
 import type { Locale } from "@/lib/i18n/config";
 import type { PlantCardData } from "@/lib/types/plant";
 

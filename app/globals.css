@@ -24,9 +24,18 @@
   --color-on-whatsapp: #ffffff;
   --color-scrim: #0b0d10;
 
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-display: var(--font-fraunces);
+  /* Script hand-off: the locale layout sets `--font-script` on <html> to the Noto
+     face for the active writing system (see lib/fonts.ts). It leads both text
+     stacks so Indic/Arabic glyphs resolve first; Latin runs inside that text
+     (brand names, "WhatsApp", digits, ₹) fall through to Geist, keeping one Latin
+     voice across all 13 locales. Latin locales leave the default in place, where
+     the first entry is simply Geist again. */
+  --font-script: var(--font-geist-sans);
+  --font-sans: var(--font-script), var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  /* Fraunces is Latin-only, so headings in Indic scripts fall to the script face
+     rather than rendering in an unstyled OS fallback. */
+  --font-display: var(--font-fraunces), var(--font-script), ui-serif, serif;
 
   /* Elevation + motion primitives shared across components. */
   --shadow-soft: 0 1px 2px rgb(11 13 16 / 0.05), 0 2px 8px rgb(11 13 16 / 0.05);
@@ -45,6 +54,106 @@
 body {
   background-color: var(--color-background);
   color: var(--color-foreground);
+  font-family: var(--font-sans);
+  /* A translation can be far longer than its English source (Malayalam and Tamil
+     compounds routinely run 2–3× the Latin width) and CMS text can contain
+     unbroken strings. Break rather than push the layout sideways. */
+  overflow-wrap: break-word;
+}
+
+/* ── Script-aware typography ───────────────────────────────────────────────── */
+/* `data-script` is stamped on <html> by the locale layout.
+   Two Latin-tuned defaults actively damage Indic and Arabic text:
+   negative letter-spacing (which visually splits conjuncts and detaches Arabic
+   joins) and display leading below ~1.3 (which clips the matras and nukta marks
+   that sit above and below the baseline). Overriding Tailwind's own tracking
+   tokens means every existing `tracking-tight` utility keeps working and simply
+   resolves to zero for these scripts. */
+:root:not([data-script="latin"]) {
+  --tracking-tighter: 0em;
+  --tracking-tight: 0em;
+  --leading-display: 1.32;
+}
+
+/* Display leading, overridable per script (see above). Used instead of a hard
+   `leading-[1.05]`, which clipped Devanagari and Bengali headlines. */
+.leading-display {
+  line-height: var(--leading-display, 1.05);
+}
+
+/* The hero italicises its final word for emphasis. None of these scripts has a
+   true italic, so browsers synthesise one by shearing the glyphs — which mangles
+   Devanagari's headline bar and breaks Arabic joins. Keep the accent colour, drop
+   the slant. */
+:root:not([data-script="latin"]) .accent-word {
+  font-style: normal;
+  font-weight: 700;
+}
+
+/* ── Minimum touch target (WCAG 2.5.8 / 2.5.5) ─────────────────────────────── */
+/* 44px is the floor for icon-only controls. Applied via a class rather than
+   per-component sizes so it can't drift, and paired with a visual size that may
+   be smaller than the hit area. */
+.tap-target {
+  min-height: 2.75rem;
+  min-width: 2.75rem;
+}
+
+/* ── Language dialog ──────────────────────────────────────────────────────── */
+/* A bottom sheet on phones (thumb-reachable, respects the home-bar inset) and a
+   centred card from `sm` up. Styled here rather than with utilities because
+   `<dialog>` needs its closed state, backdrop and centring handled together. */
+.lang-dialog {
+  position: fixed;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  /* The UA stylesheet pins `dialog:modal` to `inset-block: 0` and centres it with
+     `margin: auto`; with margin zeroed that anchors the sheet to the *top*. Release
+     the block-start edge so it sits on the bottom, within thumb reach. */
+  inset-block-start: auto;
+  inset-block-end: 0;
+  inset-inline: 0;
+  width: 100%;
+  max-width: 100%;
+  max-height: 85dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-start-start-radius: 1.25rem;
+  border-start-end-radius: 1.25rem;
+  background: var(--color-background);
+  color: var(--color-foreground);
+  box-shadow: var(--shadow-lift);
+  padding-block-end: env(safe-area-inset-bottom);
+}
+.lang-dialog:not([open]) {
+  display: none;
+}
+.lang-dialog::backdrop {
+  background: color-mix(in srgb, var(--color-scrim) 55%, transparent);
+}
+@media (min-width: 40rem) {
+  .lang-dialog {
+    inset: 50% auto auto 50%;
+    translate: -50% -50%;
+    width: min(40rem, calc(100% - 2rem));
+    max-height: min(85dvh, 40rem);
+    border-radius: 1.25rem;
+    padding-block-end: 0;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .lang-dialog[open] {
+    animation: var(--animate-fade-up);
+  }
+}
+
+/* ── RTL helpers (Urdu) ────────────────────────────────────────────────────── */
+/* Directional glyphs — chevrons, arrows, "next/previous" — must mirror; symmetric
+   icons (search, phone, leaf) must not. Opt in explicitly. */
+[dir="rtl"] .rtl-flip {
+  transform: scaleX(-1);
 }
 
 /* ── Base niceties ────────────────────────────────────────────────────────── */
@@ -168,7 +277,8 @@ body {
 .skip-link {
   position: fixed;
   top: 0.75rem;
-  left: 0.75rem;
+  /* Logical property so the link sits top-right in Urdu, not off in the margin. */
+  inset-inline-start: 0.75rem;
   z-index: 60;
   padding: 0.625rem 1rem;
   border-radius: 0.5rem;

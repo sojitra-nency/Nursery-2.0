@@ -4,7 +4,8 @@ import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { Chip } from "@/components/ui/Chip";
 import { ChevronDownIcon, SearchIcon, XIcon } from "@/components/ui/icons";
-import type { Dictionary } from "@/lib/i18n/dictionaries";
+import { localizeCategory } from "@/lib/i18n/categories";
+import type { Dictionary } from "@/lib/i18n/dictionary-type";
 
 interface CatalogFiltersProps {
   categories: string[];
@@ -64,7 +65,7 @@ export function CatalogFilters({ categories, dict }: CatalogFiltersProps) {
         {dict.catalog.searchPlaceholder}
       </label>
       <div className="relative w-full md:max-w-sm">
-        <SearchIcon className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
+        <SearchIcon className="pointer-events-none absolute start-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
         <input
           id="catalog-search"
           type="search"
@@ -72,7 +73,7 @@ export function CatalogFilters({ categories, dict }: CatalogFiltersProps) {
           onChange={(e) => setTerm(e.target.value)}
           placeholder={dict.catalog.searchPlaceholder}
           aria-label={dict.catalog.searchPlaceholder}
-          className="h-10 w-full rounded-full border border-border bg-surface pl-10 pr-4 text-sm text-foreground placeholder:text-muted transition-colors hover:border-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          className="h-11 w-full rounded-full border border-border bg-surface ps-10 pe-4 text-sm text-foreground transition-colors placeholder:text-muted hover:border-accent/40 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
         />
       </div>
 
@@ -83,7 +84,9 @@ export function CatalogFilters({ categories, dict }: CatalogFiltersProps) {
         </Chip>
         {categories.map((cat) => (
           <Chip key={cat} active={category === cat} onClick={() => update("category", cat)}>
-            {cat}
+            {/* The stored value stays English (it's the query key); only the label
+                is translated. */}
+            {localizeCategory(cat, dict)}
           </Chip>
         ))}
 
@@ -91,20 +94,20 @@ export function CatalogFilters({ categories, dict }: CatalogFiltersProps) {
         <label htmlFor="catalog-sort" className="sr-only">
           {dict.catalog.sortBy}
         </label>
-        <div className="relative ml-auto">
+        <div className="relative ms-auto">
           <select
             id="catalog-sort"
             value={sort}
             onChange={(e) => update("sort", e.target.value)}
             aria-label={dict.catalog.sortBy}
-            className="h-8 cursor-pointer appearance-none rounded-full border border-border bg-surface pl-3 pr-8 text-xs font-medium text-foreground transition-colors hover:border-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            className="tap-target h-11 cursor-pointer appearance-none rounded-full border border-border bg-surface ps-4 pe-9 text-sm font-medium text-foreground transition-colors hover:border-accent/40 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
           >
             <option value="">{dict.catalog.sortBy}</option>
             <option value="name_asc">{dict.catalog.sortNameAsc}</option>
             <option value="name_desc">{dict.catalog.sortNameDesc}</option>
             <option value="newest">{dict.catalog.sortNewest}</option>
           </select>
-          <ChevronDownIcon className="pointer-events-none absolute right-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
+          <ChevronDownIcon className="pointer-events-none absolute end-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
         </div>
 
         {/* Clear */}
@@ -112,9 +115,9 @@ export function CatalogFilters({ categories, dict }: CatalogFiltersProps) {
           <button
             type="button"
             onClick={clearAll}
-            className="inline-flex h-8 cursor-pointer items-center gap-1 rounded-full border border-accent px-3 text-xs font-medium text-accent transition-colors hover:bg-accent/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            className="tap-target inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-accent px-4 text-sm font-medium text-accent transition-colors hover:bg-accent/10 focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none"
           >
-            <XIcon className="h-3.5 w-3.5" />
+            <XIcon className="h-4 w-4" />
             {dict.catalog.clearFilters}
           </button>
         )}

@@ -7,7 +7,9 @@ import { Chip } from "@/components/ui/Chip";
 import { ChevronLeftIcon, ChevronRightIcon } from "@/components/ui/icons";
 import { CareGuideTable } from "@/components/plant/CareGuideTable";
 import { AVAILABILITY } from "@/sanity/lib/enums";
-import type { Dictionary } from "@/lib/i18n/dictionaries";
+import type { Dictionary } from "@/lib/i18n/dictionary-type";
+import type { Locale } from "@/lib/i18n/config";
+import { interpolate, formatNumber, formatCurrency } from "@/lib/i18n/format";
 import type { BagSizePricing } from "@/lib/types/plant";
 
 export interface ShowcaseImage {
@@ -35,6 +37,9 @@ interface VarietyShowcaseProps {
   varieties: ShowcaseVariety[];
   fallbackName: string;
   dict: Dictionary;
+  locale: Locale;
+  /** ISO 4217 code from siteSettings; the symbol and its placement follow the locale. */
+  currency?: string;
 }
 
 function availabilityTone(value?: string) {
@@ -45,7 +50,7 @@ function availabilityTone(value?: string) {
 }
 
 const sliderControlClass =
-  "absolute top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-scrim/45 text-white flex items-center justify-center cursor-pointer backdrop-blur-sm transition-colors hover:bg-scrim/65 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white";
+  "tap-target absolute top-1/2 -translate-y-1/2 rounded-full bg-scrim/45 text-white flex items-center justify-center cursor-pointer backdrop-blur-sm transition-colors hover:bg-scrim/65 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white";
 
 /**
  * Looping image carousel for a single variety.
@@ -58,10 +63,12 @@ function CircularSlider({
   images,
   name,
   dict,
+  locale,
 }: {
   images: ShowcaseImage[];
   name: string;
   dict: Dictionary;
+  locale: Locale;
 }) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -95,14 +102,17 @@ function CircularSlider({
 
   const go = (delta: number) => setIndex((i) => (i + delta + images.length) % images.length);
   const current = images[index];
-  const counter = dict.plant.imageCounter
-    .replace("{current}", String(index + 1))
-    .replace("{total}", String(images.length));
+  const counter = interpolate(dict.plant.imageCounter, {
+    current: formatNumber(index + 1, locale),
+    total: formatNumber(images.length, locale),
+  });
 
   return (
     <div
       role="group"
-      aria-roledescription="carousel"
+      // Announced verbatim by screen readers, so it can't stay the English
+      // literal "carousel" on a Tamil or Urdu page.
+      aria-roledescription={dict.plant.gallery}
       aria-label={name}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
@@ -136,32 +146,32 @@ function CircularSlider({
             type="button"
             aria-label={dict.plant.prevImage}
             onClick={() => go(-1)}
-            className={`${sliderControlClass} left-2`}
+            className={`${sliderControlClass} start-2`}
           >
-            <ChevronLeftIcon className="h-5 w-5" />
+            <ChevronLeftIcon className="rtl-flip h-5 w-5" />
           </button>
           <button
             type="button"
             aria-label={dict.plant.nextImage}
             onClick={() => go(1)}
-            className={`${sliderControlClass} right-2`}
+            className={`${sliderControlClass} end-2`}
           >
-            <ChevronRightIcon className="h-5 w-5" />
+            <ChevronRightIcon className="rtl-flip h-5 w-5" />
           </button>
           {/* Soft scrim keeps the dots legible over bright imagery. */}
           <div
             aria-hidden="true"
             className="pointer-events-none absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-scrim/50 to-transparent"
           />
-          <div className="absolute bottom-1.5 inset-x-0 flex justify-center gap-1">
+          <div className="absolute inset-x-0 bottom-0 flex justify-center gap-1">
             {images.map((img, i) => (
               <button
                 key={img.key}
                 type="button"
-                aria-label={dict.plant.goToImage.replace("{n}", String(i + 1))}
+                aria-label={interpolate(dict.plant.goToImage, { n: formatNumber(i + 1, locale) })}
                 aria-current={i === index || undefined}
                 onClick={() => setIndex(i)}
-                className="group/dot flex h-7 cursor-pointer items-center px-0.5 focus-visible:outline-none"
+                className="group/dot flex h-11 cursor-pointer items-center px-1 focus-visible:outline-none"
               >
                 <span
                   className={`h-1.5 rounded-full transition-all duration-300 group-focus-visible/dot:ring-2 group-focus-visible/dot:ring-white ${
@@ -177,7 +187,13 @@ function CircularSlider({
   );
 }
 
-export function VarietyShowcase({ varieties, fallbackName, dict }: VarietyShowcaseProps) {
+export function VarietyShowcase({
+  varieties,
+  fallbackName,
+  dict,
+  locale,
+  currency = "INR",
+}: VarietyShowcaseProps) {
   const [activeKey, setActiveKey] = useState(varieties[0]?.key);
   const [activeBagSize, setActiveBagSize] = useState<string | null>(
     varieties[0]?.bagSizes?.[0]?.size ?? null
@@ -203,7 +219,12 @@ export function VarietyShowcase({ varieties, fallbackName, dict }: VarietyShowca
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
       <div className="space-y-4">
-        <CircularSlider images={active.images} name={active.name || fallbackName} dict={dict} />
+        <CircularSlider
+          images={active.images}
+          name={active.name || fallbackName}
+          dict={dict}
+          locale={locale}
+        />
 
         {/* Variety selector */}
         {varieties.length > 1 && (
@@ -263,20 +284,20 @@ export function VarietyShowcase({ varieties, fallbackName, dict }: VarietyShowca
               <table className="w-full text-sm border border-border rounded-lg overflow-hidden">
                 <thead className="bg-surface text-muted">
                   <tr>
-                    <th className="text-left px-3 py-2 font-medium">{dict.plant.quantity}</th>
-                    <th className="text-right px-3 py-2 font-medium">{dict.plant.pricePerPlant}</th>
+                    <th className="px-3 py-2 text-start font-medium">{dict.plant.quantity}</th>
+                    <th className="px-3 py-2 text-end font-medium">{dict.plant.pricePerPlant}</th>
                   </tr>
                 </thead>
                 <tbody>
                   {activePricing.tiers.map((tier, i) => {
                     const range = tier.maxQty
-                      ? `${tier.minQty.toLocaleString("en-IN")} – ${tier.maxQty.toLocaleString("en-IN")}`
-                      : `${tier.minQty.toLocaleString("en-IN")}+`;
+                      ? `${formatNumber(tier.minQty, locale)} – ${formatNumber(tier.maxQty, locale)}`
+                      : `${formatNumber(tier.minQty, locale)}+`;
                     return (
                       <tr key={i} className={i % 2 === 0 ? "bg-background" : "bg-surface"}>
                         <td className="px-3 py-2 text-muted">{range}</td>
-                        <td className="px-3 py-2 text-right font-semibold text-foreground">
-                          ₹{tier.price.toLocaleString("en-IN")}
+                        <td className="px-3 py-2 text-end font-semibold text-foreground">
+                          {formatCurrency(tier.price, locale, currency)}
                         </td>
                       </tr>
                     );

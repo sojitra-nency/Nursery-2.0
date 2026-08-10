@@ -20,7 +20,18 @@
     "skipToContent": "Skip to content",
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
-    "language": "Language"
+    "language": "Language",
+    "close": "Close",
+    "back": "Back",
+    "loading": "Loading…",
+    "showingInEnglish": "In English"
+  },
+  "language": {
+    "title": "Choose your language",
+    "hint": "You can change this later",
+    "change": "Change language",
+    "current": "Current language",
+    "selectAria": "Choose a language"
   },
   "home": {
     "heroTitleFallback": "Healthy Plants for Every Home",
@@ -51,7 +62,8 @@
     "allAvailability": "All Availability",
     "searchPlaceholder": "Search plants…",
     "resultsCount": "{count} plants available",
-    "resultsCountOne": "1 plant available"
+    "resultsCountOne": "1 plant available",
+    "loadingPlants": "Loading plants"
   },
   "plant": {
     "careGuide": "Care Guide",
@@ -81,7 +93,27 @@
     "prevImage": "Previous image",
     "nextImage": "Next image",
     "goToImage": "Go to image {n}",
-    "imageCounter": "Image {current} of {total}"
+    "imageCounter": "Image {current} of {total}",
+    "gallery": "Photo gallery"
+  },
+  "categories": {
+    "indoorPlants": "Indoor Plants",
+    "outdoorPlants": "Outdoor Plants",
+    "balconyPlants": "Balcony Plants",
+    "terracePlants": "Terrace Plants",
+    "gardenPlants": "Garden Plants",
+    "greenhousePlants": "Greenhouse Plants",
+    "aquaticPlants": "Aquatic Plants",
+    "pondPlants": "Pond Plants",
+    "forestPlants": "Forest Plants",
+    "fruitPlants": "Fruit Plants",
+    "flowering": "Flowering",
+    "nonFlowering": "Non-Flowering",
+    "succulents": "Succulents",
+    "herbs": "Herbs",
+    "climbers": "Climbers",
+    "medicinal": "Medicinal",
+    "airPurifying": "Air-Purifying"
   },
   "contact": {
     "callUs": "Call Us",
@@ -92,7 +124,10 @@
     "email": "Email",
     "phone": "Phone",
     "address": "Address",
-    "followUs": "Follow Us"
+    "followUs": "Follow Us",
+    "mapTitle": "Map showing {name}",
+    "whatsappGreeting": "Hello! I would like to know about plants from {nursery}.",
+    "whatsappPlant": "Hello! I would like to know about {plant} from {nursery}."
   },
   "seo": {
     "defaultDescription": "Greenskill Landscape — quality plants for homes, gardens and offices. Browse our collection of indoor, outdoor and rare plants.",
@@ -104,5 +139,13 @@
     "rights": "All rights reserved.",
     "quickLinks": "Quick Links",
     "contact": "Contact"
+  },
+  "errors": {
+    "title": "Something went wrong",
+    "body": "An unexpected error occurred. Please try again.",
+    "retry": "Try again",
+    "notFoundTitle": "Page not found",
+    "notFoundBody": "The page you're looking for doesn't exist or may have moved.",
+    "backHome": "Back to home"
   }
 }

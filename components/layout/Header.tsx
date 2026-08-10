@@ -1,32 +1,37 @@
 import Link from "next/link";
-import { LocaleSwitcher } from "./LocaleSwitcher";
 import { HeaderShell } from "./HeaderShell";
 import { ThemeToggle } from "./ThemeToggle";
 import { NavLinks, type NavItem } from "./NavLinks";
 import { MobileMenu } from "./MobileMenu";
-import { LeafIcon } from "@/components/ui/icons";
-import type { Dictionary } from "@/lib/i18n/dictionaries";
+import { LanguagePicker } from "@/components/i18n/LanguagePicker";
+import { LeafIcon, GridIcon, InfoIcon, MapPinIcon } from "@/components/ui/icons";
+import type { Dictionary } from "@/lib/i18n/dictionary-type";
+import type { Locale } from "@/lib/i18n/config";
 
 interface HeaderProps {
   nurseryName: string;
-  locale: string;
+  locale: Locale;
   dict: Dictionary;
   showThemeToggle?: boolean;
 }
 
 export function Header({ nurseryName, locale, dict, showThemeToggle = false }: HeaderProps) {
   const items: NavItem[] = [
-    { href: `/${locale}/catalog`, label: dict.nav.catalog },
-    { href: `/${locale}/about`, label: dict.nav.about },
-    { href: `/${locale}/visit`, label: dict.nav.visit },
+    {
+      href: `/${locale}/catalog`,
+      label: dict.nav.catalog,
+      icon: <GridIcon className="h-4 w-4" />,
+    },
+    { href: `/${locale}/about`, label: dict.nav.about, icon: <InfoIcon className="h-4 w-4" /> },
+    { href: `/${locale}/visit`, label: dict.nav.visit, icon: <MapPinIcon className="h-4 w-4" /> },
   ];
 
   return (
     <HeaderShell>
-      <div className="container mx-auto px-4 h-16 flex items-center justify-between gap-4">
+      <div className="container mx-auto flex h-16 items-center justify-between gap-3 px-4">
         <Link
           href={`/${locale}`}
-          className="inline-flex items-center gap-2.5 font-display font-semibold text-xl tracking-tight text-foreground rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          className="font-display inline-flex min-w-0 items-center gap-2.5 rounded-full text-xl font-semibold tracking-tight text-foreground focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none"
         >
           <span
             aria-hidden="true"
@@ -34,25 +39,39 @@ export function Header({ nurseryName, locale, dict, showThemeToggle = false }: H
           >
             <LeafIcon className="h-4 w-4" />
           </span>
-          {nurseryName}
+          {/* Localized nursery names run much longer than the English one; truncate
+              rather than let the brand shove the language control off-screen.
+              `dir="auto"` so a Latin brand name inside the RTL Urdu header clips at
+              its end instead of its beginning. */}
+          <span dir="auto" className="truncate">
+            {nurseryName}
+          </span>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-6">
+        <nav className="hidden items-center gap-6 md:flex">
           <NavLinks items={items} />
         </nav>
 
-        <div className="flex items-center gap-2">
-          <div className="hidden md:block">
-            <LocaleSwitcher locale={locale} label={dict.common.language} />
-          </div>
+        <div className="flex shrink-0 items-center gap-1">
+          {/* Visible at every breakpoint, never inside the hamburger: a visitor who
+              can't read the current language must be able to change it without
+              first decoding a menu icon. */}
+          <LanguagePicker
+            locale={locale}
+            labels={{
+              language: dict.common.language,
+              title: dict.language.title,
+              change: dict.language.change,
+              current: dict.language.current,
+              close: dict.common.close,
+            }}
+          />
           {showThemeToggle && <ThemeToggle label={dict.common.toggleTheme} />}
           <MobileMenu
             items={items}
             openLabel={dict.common.openMenu}
             closeLabel={dict.common.closeMenu}
-          >
-            <LocaleSwitcher locale={locale} label={dict.common.language} />
-          </MobileMenu>
+          />
         </div>
       </div>
     </HeaderShell>
