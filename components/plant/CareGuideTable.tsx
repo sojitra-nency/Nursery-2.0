@@ -8,6 +8,12 @@ interface CareGuideTableProps {
   size?: string;
   floweringSeason?: string;
   dict: Dictionary;
+  /**
+   * Where this sits in the page outline. The variety page puts the care guide
+   * directly under its `h1`, so it needs `2`; on the plant page a section heading
+   * comes first and `3` (the default) is correct.
+   */
+  headingLevel?: 2 | 3;
 }
 
 const SUNLIGHT_LABELS: Record<string, keyof Dictionary["plant"]> = {
@@ -62,7 +68,9 @@ export function CareGuideTable({
   size,
   floweringSeason,
   dict,
+  headingLevel = 3,
 }: CareGuideTableProps) {
+  const Heading = headingLevel === 2 ? "h2" : "h3";
   const rows: CareRow[] = [];
 
   if (sunlight) {
@@ -105,7 +113,7 @@ export function CareGuideTable({
   return (
     <div className="overflow-hidden rounded-xl border border-border">
       <div className="border-b border-border bg-surface px-4 py-3">
-        <h3 className="text-sm font-semibold text-foreground">{dict.plant.careGuide}</h3>
+        <Heading className="text-sm font-semibold text-foreground">{dict.plant.careGuide}</Heading>
       </div>
       <div className="divide-y divide-border">
         {rows.map((row) => (

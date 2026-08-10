@@ -63,7 +63,11 @@
     "searchPlaceholder": "ಸಸ್ಯಗಳನ್ನು ಹುಡುಕಿ…",
     "resultsCount": "{count} ಸಸ್ಯಗಳು ಲಭ್ಯ",
     "resultsCountOne": "1 ಸಸ್ಯ ಲಭ್ಯ",
-    "loadingPlants": "ಸಸ್ಯಗಳು ಲೋಡ್ ಆಗುತ್ತಿವೆ"
+    "loadingPlants": "ಸಸ್ಯಗಳು ಲೋಡ್ ಆಗುತ್ತಿವೆ",
+    "plantsSection": "ಸಸ್ಯಗಳು",
+    "varietiesSection": "ತಳಿಗಳು",
+    "resultsCountVariety": "{count} ತಳಿಗಳು ಲಭ್ಯ",
+    "resultsCountVarietyOne": "1 ತಳಿ ಲಭ್ಯ"
   },
   "plant": {
     "careGuide": "ಆರೈಕೆ ಮಾರ್ಗದರ್ಶಿ",
@@ -73,7 +77,6 @@
     "size": "ಗಾತ್ರ",
     "season": "ಹೂ ಬಿಡುವ ಕಾಲ",
     "whatsappCta": "WhatsApp ನಲ್ಲಿ ಕೇಳಿ",
-    "relatedPlants": "ಇವು ಸಹ ಇಷ್ಟವಾಗಬಹುದು",
     "careTips": "ಆರೈಕೆ ಸಲಹೆಗಳು",
     "bagSize": "ಬ್ಯಾಗ್ ಗಾತ್ರ",
     "quantity": "ಪ್ರಮಾಣ",
@@ -94,7 +97,19 @@
     "nextImage": "ಮುಂದಿನ ಚಿತ್ರ",
     "goToImage": "ಚಿತ್ರ {n} ಗೆ ಹೋಗಿ",
     "imageCounter": "ಚಿತ್ರ {current} / {total}",
-    "gallery": "ಚಿತ್ರ ಸಂಗ್ರಹ"
+    "gallery": "ಚಿತ್ರ ಸಂಗ್ರಹ",
+    "varietiesTitle": "ಲಭ್ಯವಿರುವ ತಳಿಗಳು",
+    "varietiesEyebrow": "ಒಂದು ತಳಿಯನ್ನು ಆರಿಸಿ",
+    "varietiesHint": "ಫೋಟೋ, ಗಾತ್ರ ಮತ್ತು ಬೆಲೆ ನೋಡಲು ಯಾವುದೇ ತಳಿಯನ್ನು ಟ್ಯಾಪ್ ಮಾಡಿ",
+    "varietyCount": "{count} ತಳಿಗಳು",
+    "varietyCountOne": "1 ತಳಿ",
+    "viewVariety": "ವಿವರಗಳನ್ನು ನೋಡಿ",
+    "seeVarieties": "ಎಲ್ಲಾ ತಳಿಗಳನ್ನು ನೋಡಿ",
+    "otherVarieties": "{plant} ಇತರ ತಳಿಗಳನ್ನು ನೋಡಿ",
+    "exploreOtherPlants": "ಇತರ ಸಸ್ಯಗಳನ್ನು ನೋಡಿ",
+    "browseAllPlants": "ಎಲ್ಲಾ ಸಸ್ಯಗಳನ್ನು ನೋಡಿ",
+    "priceFrom": "{price} ರಿಂದ",
+    "varietyOf": "{plant} ತಳಿ"
   },
   "categories": {
     "indoorPlants": "ಒಳಾಂಗಣ ಸಸ್ಯಗಳು",

@@ -63,7 +63,11 @@
     "searchPlaceholder": "গছ বিচাৰক…",
     "resultsCount": "{count} টা গছ উপলব্ধ",
     "resultsCountOne": "1 টা গছ উপলব্ধ",
-    "loadingPlants": "গছ ল'ড হৈ আছে"
+    "loadingPlants": "গছ ল'ড হৈ আছে",
+    "plantsSection": "গছ",
+    "varietiesSection": "প্ৰকাৰ",
+    "resultsCountVariety": "{count} প্ৰকাৰ উপলব্ধ",
+    "resultsCountVarietyOne": "1 প্ৰকাৰ উপলব্ধ আছে"
   },
   "plant": {
     "careGuide": "যতনৰ নিৰ্দেশিকা",
@@ -73,7 +77,6 @@
     "size": "আকাৰ",
     "season": "ফুল ফুলা কাল",
     "whatsappCta": "WhatsApp ত সোধক",
-    "relatedPlants": "আপোনাক এইবোৰো ভাল লাগিব পাৰে",
     "careTips": "যতনৰ পৰামৰ্শ",
     "bagSize": "বেগৰ আকাৰ",
     "quantity": "পৰিমাণ",
@@ -94,7 +97,19 @@
     "nextImage": "পিছৰ ছবি",
     "goToImage": "ছবি {n} লৈ যাওক",
     "imageCounter": "ছবি {current} / {total}",
-    "gallery": "ছবিৰ সংগ্ৰহ"
+    "gallery": "ছবিৰ সংগ্ৰহ",
+    "varietiesTitle": "উপলব্ধ প্ৰকাৰ",
+    "varietiesEyebrow": "এটা প্ৰকাৰ বাছনি কৰক",
+    "varietiesHint": "ফটো, আকাৰ আৰু দাম চাবলৈ যিকোনো প্ৰকাৰত টেপ কৰক",
+    "varietyCount": "{count} প্ৰকাৰ",
+    "varietyCountOne": "1 প্ৰকাৰ",
+    "viewVariety": "বিৱৰণ চাওক",
+    "seeVarieties": "সকলো প্ৰকাৰ চাওক",
+    "otherVarieties": "{plant}ৰ অন্য প্ৰকাৰ চাওক",
+    "exploreOtherPlants": "অন্য গছ চাওক",
+    "browseAllPlants": "সকলো গছ চাওক",
+    "priceFrom": "{price}ৰ পৰা",
+    "varietyOf": "{plant}ৰ প্ৰকাৰ"
   },
   "categories": {
     "indoorPlants": "ঘৰৰ ভিতৰৰ গছ",

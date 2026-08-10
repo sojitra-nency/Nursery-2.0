@@ -63,7 +63,11 @@
     "searchPlaceholder": "છોડ શોધો…",
     "resultsCount": "{count} છોડ ઉપલબ્ધ",
     "resultsCountOne": "1 છોડ ઉપલબ્ધ",
-    "loadingPlants": "છોડ લોડ થઈ રહ્યા છે"
+    "loadingPlants": "છોડ લોડ થઈ રહ્યા છે",
+    "plantsSection": "છોડ",
+    "varietiesSection": "જાતો",
+    "resultsCountVariety": "{count} જાતો ઉપલબ્ધ",
+    "resultsCountVarietyOne": "1 જાત ઉપલબ્ધ"
   },
   "plant": {
     "careGuide": "સંભાળ માર્ગદર્શિકા",
@@ -73,7 +77,6 @@
     "size": "કદ",
     "season": "ફૂલ આવવાની ઋતુ",
     "whatsappCta": "WhatsApp પર પૂછો",
-    "relatedPlants": "તમને આ પણ ગમશે",
     "careTips": "સંભાળ ટિપ્સ",
     "bagSize": "બેગનું કદ",
     "quantity": "જથ્થો",
@@ -94,7 +97,19 @@
     "nextImage": "આગલી છબી",
     "goToImage": "છબી {n} પર જાઓ",
     "imageCounter": "છબી {current} / {total}",
-    "gallery": "ફોટો ગેલેરી"
+    "gallery": "ફોટો ગેલેરી",
+    "varietiesTitle": "ઉપલબ્ધ જાતો",
+    "varietiesEyebrow": "જાત પસંદ કરો",
+    "varietiesHint": "ફોટા, માપ અને ભાવ જોવા માટે કોઈપણ જાત પર ટૅપ કરો",
+    "varietyCount": "{count} જાતો",
+    "varietyCountOne": "1 જાત",
+    "viewVariety": "વિગતો જુઓ",
+    "seeVarieties": "બધી જાતો જુઓ",
+    "otherVarieties": "{plant}ની બીજી જાતો જુઓ",
+    "exploreOtherPlants": "બીજા છોડ જુઓ",
+    "browseAllPlants": "બધા છોડ જુઓ",
+    "priceFrom": "{price}થી",
+    "varietyOf": "{plant}ની જાત"
   },
   "categories": {
     "indoorPlants": "ઘરની અંદરના છોડ",

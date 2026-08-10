@@ -63,7 +63,11 @@
     "searchPlaceholder": "ਬੂਟੇ ਲੱਭੋ…",
     "resultsCount": "{count} ਬੂਟੇ ਉਪਲਬਧ",
     "resultsCountOne": "1 ਬੂਟਾ ਉਪਲਬਧ",
-    "loadingPlants": "ਬੂਟੇ ਲੋਡ ਹੋ ਰਹੇ ਹਨ"
+    "loadingPlants": "ਬੂਟੇ ਲੋਡ ਹੋ ਰਹੇ ਹਨ",
+    "plantsSection": "ਪੌਦੇ",
+    "varietiesSection": "ਕਿਸਮਾਂ",
+    "resultsCountVariety": "{count} ਕਿਸਮਾਂ ਉਪਲਬਧ",
+    "resultsCountVarietyOne": "1 ਕਿਸਮ ਉਪਲਬਧ"
   },
   "plant": {
     "careGuide": "ਸੰਭਾਲ ਗਾਈਡ",
@@ -73,7 +77,6 @@
     "size": "ਆਕਾਰ",
     "season": "ਫੁੱਲ ਆਉਣ ਦਾ ਮੌਸਮ",
     "whatsappCta": "WhatsApp ਤੇ ਪੁੱਛੋ",
-    "relatedPlants": "ਤੁਹਾਨੂੰ ਇਹ ਵੀ ਪਸੰਦ ਆ ਸਕਦੇ ਹਨ",
     "careTips": "ਸੰਭਾਲ ਸੁਝਾਅ",
     "bagSize": "ਬੈਗ ਦਾ ਆਕਾਰ",
     "quantity": "ਗਿਣਤੀ",
@@ -94,7 +97,19 @@
     "nextImage": "ਅਗਲੀ ਤਸਵੀਰ",
     "goToImage": "ਤਸਵੀਰ {n} ਤੇ ਜਾਓ",
     "imageCounter": "ਤਸਵੀਰ {current} / {total}",
-    "gallery": "ਤਸਵੀਰ ਗੈਲਰੀ"
+    "gallery": "ਤਸਵੀਰ ਗੈਲਰੀ",
+    "varietiesTitle": "ਉਪਲਬਧ ਕਿਸਮਾਂ",
+    "varietiesEyebrow": "ਇੱਕ ਕਿਸਮ ਚੁਣੋ",
+    "varietiesHint": "ਫੋਟੋਆਂ, ਆਕਾਰ ਅਤੇ ਕੀਮਤਾਂ ਵੇਖਣ ਲਈ ਕਿਸੇ ਵੀ ਕਿਸਮ 'ਤੇ ਟੈਪ ਕਰੋ",
+    "varietyCount": "{count} ਕਿਸਮਾਂ",
+    "varietyCountOne": "1 ਕਿਸਮ",
+    "viewVariety": "ਵੇਰਵੇ ਵੇਖੋ",
+    "seeVarieties": "ਸਾਰੀਆਂ ਕਿਸਮਾਂ ਵੇਖੋ",
+    "otherVarieties": "{plant} ਦੀਆਂ ਹੋਰ ਕਿਸਮਾਂ ਵੇਖੋ",
+    "exploreOtherPlants": "ਹੋਰ ਪੌਦੇ ਵੇਖੋ",
+    "browseAllPlants": "ਸਾਰੇ ਪੌਦੇ ਵੇਖੋ",
+    "priceFrom": "{price} ਤੋਂ",
+    "varietyOf": "{plant} ਦੀ ਕਿਸਮ"
   },
   "categories": {
     "indoorPlants": "ਘਰ ਦੇ ਅੰਦਰ ਦੇ ਬੂਟੇ",

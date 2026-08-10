@@ -63,7 +63,11 @@
     "searchPlaceholder": "Search plants…",
     "resultsCount": "{count} plants available",
     "resultsCountOne": "1 plant available",
-    "loadingPlants": "Loading plants"
+    "loadingPlants": "Loading plants",
+    "plantsSection": "Plants",
+    "varietiesSection": "Varieties",
+    "resultsCountVariety": "{count} varieties available",
+    "resultsCountVarietyOne": "1 variety available"
   },
   "plant": {
     "careGuide": "Care Guide",
@@ -73,7 +77,6 @@
     "size": "Size",
     "season": "Flowering Season",
     "whatsappCta": "Ask on WhatsApp",
-    "relatedPlants": "You May Also Like",
     "careTips": "Care Tips",
     "bagSize": "Bag Size",
     "quantity": "Quantity",
@@ -94,7 +97,19 @@
     "nextImage": "Next image",
     "goToImage": "Go to image {n}",
     "imageCounter": "Image {current} of {total}",
-    "gallery": "Photo gallery"
+    "gallery": "Photo gallery",
+    "varietiesTitle": "Available Varieties",
+    "varietiesEyebrow": "Choose a variety",
+    "varietiesHint": "Tap any variety to see its photos, sizes and prices",
+    "varietyCount": "{count} varieties",
+    "varietyCountOne": "1 variety",
+    "viewVariety": "View details",
+    "seeVarieties": "See all varieties",
+    "otherVarieties": "Explore other {plant} varieties",
+    "exploreOtherPlants": "Explore other plants",
+    "browseAllPlants": "Browse all plants",
+    "priceFrom": "From {price}",
+    "varietyOf": "Variety of {plant}"
   },
   "categories": {
     "indoorPlants": "Indoor Plants",

@@ -63,7 +63,11 @@
     "searchPlaceholder": "మొక్కలను వెతకండి…",
     "resultsCount": "{count} మొక్కలు అందుబాటులో",
     "resultsCountOne": "1 మొక్క అందుబాటులో",
-    "loadingPlants": "మొక్కలు లోడ్ అవుతున్నాయి"
+    "loadingPlants": "మొక్కలు లోడ్ అవుతున్నాయి",
+    "plantsSection": "మొక్కలు",
+    "varietiesSection": "రకాలు",
+    "resultsCountVariety": "{count} రకాలు అందుబాటులో ఉన్నాయి",
+    "resultsCountVarietyOne": "1 రకం అందుబాటులో ఉంది"
   },
   "plant": {
     "careGuide": "సంరక్షణ మార్గదర్శి",
@@ -73,7 +77,6 @@
     "size": "పరిమాణం",
     "season": "పూలు పూసే కాలం",
     "whatsappCta": "WhatsApp లో అడగండి",
-    "relatedPlants": "ఇవి కూడా నచ్చవచ్చు",
     "careTips": "సంరక్షణ చిట్కాలు",
     "bagSize": "బ్యాగ్ పరిమాణం",
     "quantity": "పరిమాణం",
@@ -94,7 +97,19 @@
     "nextImage": "తదుపరి చిత్రం",
     "goToImage": "చిత్రం {n} కు వెళ్లండి",
     "imageCounter": "చిత్రం {current} / {total}",
-    "gallery": "ఫోటో గ్యాలరీ"
+    "gallery": "ఫోటో గ్యాలరీ",
+    "varietiesTitle": "అందుబాటులో ఉన్న రకాలు",
+    "varietiesEyebrow": "ఒక రకాన్ని ఎంచుకోండి",
+    "varietiesHint": "ఫోటోలు, పరిమాణాలు, ధరలు చూడటానికి ఏదైనా రకంపై నొక్కండి",
+    "varietyCount": "{count} రకాలు",
+    "varietyCountOne": "1 రకం",
+    "viewVariety": "వివరాలు చూడండి",
+    "seeVarieties": "అన్ని రకాలు చూడండి",
+    "otherVarieties": "{plant} ఇతర రకాలను చూడండి",
+    "exploreOtherPlants": "ఇతర మొక్కలను చూడండి",
+    "browseAllPlants": "అన్ని మొక్కలను చూడండి",
+    "priceFrom": "{price} నుండి",
+    "varietyOf": "{plant} రకం"
   },
   "categories": {
     "indoorPlants": "ఇంటి లోపలి మొక్కలు",

@@ -1,4 +1,5 @@
 import { groq } from "next-sanity";
+import { locales } from "@/lib/i18n/config";
 
 export const SETTINGS_QUERY = groq`
   *[_type == "siteSettings"][0]{
@@ -25,21 +26,71 @@ export const FEATURED_PLANTS_QUERY = groq`
   }
 `;
 
+/**
+ * `name.<locale> match $search` for every locale in the registry.
+ *
+ * Generated rather than hand-listed: search used to cover only `en`/`hi`/`gu`, so a
+ * Tamil or Malayalam visitor searching in their own script got nothing back from a
+ * site that otherwise ships in thirteen languages.
+ */
+const localizedNameMatch = (path: string) =>
+  locales.map((locale) => `${path}.${locale} match $search`).join("\n    || ");
+
+/** The plant itself matched: any localized name, the botanical name, or a tag. */
+const PLANT_TEXT_MATCH = `
+    ${localizedNameMatch("name")}
+    || scientificName match $search
+    || count(tags[@ match $search]) > 0
+`;
+
+/**
+ * One of the plant's varieties matched by name — this is what makes a search for
+ * "Kesar" or "Alphonso" find the Mango document that contains them.
+ */
+const VARIETY_TEXT_MATCH = `count(varieties[${localizedNameMatch("name")}]) > 0`;
+
 const CATALOG_FILTER = `
   _type == "plant"
-  && ($search == "" || name.en match $search || name.hi match $search || name.gu match $search)
+  && ($search == "" || ${PLANT_TEXT_MATCH} || ${VARIETY_TEXT_MATCH})
   && ($category == "" || $category in categories)
 `;
 const CATALOG_FIELDS = CARD_FIELDS;
 
-export const CATALOG_PLANTS_QUERY_NAME_ASC = groq`*[${CATALOG_FILTER}] | order(name.en asc) { ${CATALOG_FIELDS} }`;
-export const CATALOG_PLANTS_QUERY_NAME_DESC = groq`*[${CATALOG_FILTER}] | order(name.en desc) { ${CATALOG_FIELDS} }`;
-export const CATALOG_PLANTS_QUERY_NEWEST = groq`*[${CATALOG_FILTER}] | order(_createdAt desc) { ${CATALOG_FIELDS} }`;
+/**
+ * Search results carry each plant's full variety list so the page can render variety
+ * result cards and derive their slugs (slug collision handling needs every sibling —
+ * see `lib/plant/variety.ts`). Only the fields a variety card shows are projected.
+ *
+ * Kept separate from the browse projection so plain catalog browsing — the common
+ * case, and the one with no query at all — doesn't pay for data it never renders.
+ */
+const CATALOG_SEARCH_FIELDS = `
+  ${CARD_FIELDS},
+  scientificName, tags,
+  varieties[]{
+    _key, name, availability, sizeRange,
+    "image": images[0]{ asset, alt },
+    bagSizes[]{ tiers[]{ price } }
+  }
+`;
 
+const ORDER_CLAUSES: Record<string, string> = {
+  name_desc: "name.en desc",
+  newest: "_createdAt desc",
+};
+
+function orderClause(sort?: string) {
+  return ORDER_CLAUSES[sort ?? ""] ?? "name.en asc";
+}
+
+/** Card-only projection: the default browse grid. */
 export function catalogPlantsQuery(sort?: string) {
-  if (sort === "name_desc") return CATALOG_PLANTS_QUERY_NAME_DESC;
-  if (sort === "newest") return CATALOG_PLANTS_QUERY_NEWEST;
-  return CATALOG_PLANTS_QUERY_NAME_ASC;
+  return groq`*[${CATALOG_FILTER}] | order(${orderClause(sort)}) { ${CATALOG_FIELDS} }`;
+}
+
+/** Card + variety projection: used when the visitor has typed a search term. */
+export function catalogSearchQuery(sort?: string) {
+  return groq`*[${CATALOG_FILTER}] | order(${orderClause(sort)}) { ${CATALOG_SEARCH_FIELDS} }`;
 }
 
 // Distinct list of category strings actually used across plants (for filters / category pages).
@@ -69,6 +120,19 @@ export const PLANT_BY_SLUG_QUERY = groq`
 
 export const PLANT_SLUGS_QUERY = groq`
   *[_type == "plant" && defined(slug.current)]{ "slug": slug.current }
+`;
+
+/**
+ * Plant slug + every variety's identity, for `generateStaticParams` and the sitemap.
+ *
+ * The whole `name` object is projected (not just `name.en`) because slug derivation
+ * falls back through the other locales when English is missing.
+ */
+export const PLANT_VARIETY_PATHS_QUERY = groq`
+  *[_type == "plant" && defined(slug.current)]{
+    "slug": slug.current,
+    varieties[]{ _key, name }
+  }
 `;
 
 export const RELATED_PLANTS_QUERY = groq`

@@ -63,7 +63,11 @@
     "searchPlaceholder": "செடிகளைத் தேடுங்கள்…",
     "resultsCount": "{count} செடிகள் உள்ளன",
     "resultsCountOne": "1 செடி உள்ளது",
-    "loadingPlants": "செடிகள் ஏற்றப்படுகின்றன"
+    "loadingPlants": "செடிகள் ஏற்றப்படுகின்றன",
+    "plantsSection": "செடிகள்",
+    "varietiesSection": "வகைகள்",
+    "resultsCountVariety": "{count} வகைகள் கிடைக்கின்றன",
+    "resultsCountVarietyOne": "1 வகை கிடைக்கிறது"
   },
   "plant": {
     "careGuide": "பராமரிப்பு வழிகாட்டி",
@@ -73,7 +77,6 @@
     "size": "அளவு",
     "season": "பூக்கும் பருவம்",
     "whatsappCta": "WhatsApp இல் கேளுங்கள்",
-    "relatedPlants": "இவையும் பிடிக்கலாம்",
     "careTips": "பராமரிப்பு குறிப்புகள்",
     "bagSize": "பேக் அளவு",
     "quantity": "எண்ணிக்கை",
@@ -94,7 +97,19 @@
     "nextImage": "அடுத்த படம்",
     "goToImage": "படம் {n} க்குச் செல்",
     "imageCounter": "படம் {current} / {total}",
-    "gallery": "படத் தொகுப்பு"
+    "gallery": "படத் தொகுப்பு",
+    "varietiesTitle": "கிடைக்கும் வகைகள்",
+    "varietiesEyebrow": "ஒரு வகையைத் தேர்ந்தெடுங்கள்",
+    "varietiesHint": "படங்கள், அளவுகள், விலைகளைப் பார்க்க எந்த வகையையும் தட்டவும்",
+    "varietyCount": "{count} வகைகள்",
+    "varietyCountOne": "1 வகை",
+    "viewVariety": "விவரங்களைப் பார்க்க",
+    "seeVarieties": "அனைத்து வகைகளையும் பார்க்க",
+    "otherVarieties": "{plant} மற்ற வகைகளைப் பாருங்கள்",
+    "exploreOtherPlants": "மற்ற செடிகளைப் பாருங்கள்",
+    "browseAllPlants": "அனைத்து செடிகளையும் பாருங்கள்",
+    "priceFrom": "{price} முதல்",
+    "varietyOf": "{plant} வகை"
   },
   "categories": {
     "indoorPlants": "உட்புற செடிகள்",

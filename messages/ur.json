@@ -63,7 +63,11 @@
     "searchPlaceholder": "پودے تلاش کریں…",
     "resultsCount": "{count} پودے دستیاب",
     "resultsCountOne": "1 پودا دستیاب",
-    "loadingPlants": "پودے لوڈ ہو رہے ہیں"
+    "loadingPlants": "پودے لوڈ ہو رہے ہیں",
+    "plantsSection": "پودے",
+    "varietiesSection": "اقسام",
+    "resultsCountVariety": "{count} اقسام دستیاب",
+    "resultsCountVarietyOne": "1 قسم دستیاب"
   },
   "plant": {
     "careGuide": "دیکھ بھال گائیڈ",
@@ -73,7 +77,6 @@
     "size": "سائز",
     "season": "پھول آنے کا موسم",
     "whatsappCta": "WhatsApp پر پوچھیں",
-    "relatedPlants": "آپ کو یہ بھی پسند آ سکتے ہیں",
     "careTips": "دیکھ بھال کے مشورے",
     "bagSize": "بیگ کا سائز",
     "quantity": "مقدار",
@@ -94,7 +97,19 @@
     "nextImage": "اگلی تصویر",
     "goToImage": "تصویر {n} پر جائیں",
     "imageCounter": "تصویر {current} / {total}",
-    "gallery": "تصویری گیلری"
+    "gallery": "تصویری گیلری",
+    "varietiesTitle": "دستیاب اقسام",
+    "varietiesEyebrow": "ایک قسم منتخب کریں",
+    "varietiesHint": "تصاویر، سائز اور قیمتیں دیکھنے کے لیے کسی بھی قسم پر ٹیپ کریں",
+    "varietyCount": "{count} اقسام",
+    "varietyCountOne": "1 قسم",
+    "viewVariety": "تفصیلات دیکھیں",
+    "seeVarieties": "تمام اقسام دیکھیں",
+    "otherVarieties": "{plant} کی دیگر اقسام دیکھیں",
+    "exploreOtherPlants": "دیگر پودے دیکھیں",
+    "browseAllPlants": "تمام پودے دیکھیں",
+    "priceFrom": "{price} سے",
+    "varietyOf": "{plant} کی قسم"
   },
   "categories": {
     "indoorPlants": "گھر کے اندر کے پودے",

@@ -7,19 +7,25 @@ import { PLANT_BY_SLUG_QUERY, PLANT_SLUGS_QUERY, RELATED_PLANTS_QUERY } from "@/
 import { urlForImage } from "@/sanity/lib/image";
 import { getLocalized } from "@/lib/i18n/getLocalized";
 import { localizeCategory } from "@/lib/i18n/categories";
-import { interpolate } from "@/lib/i18n/format";
+import { interpolate, pluralize } from "@/lib/i18n/format";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getSettings } from "@/lib/site";
-import { hasLocale, locales, type Locale } from "@/lib/i18n/config";
+import { hasLocale, locales } from "@/lib/i18n/config";
 import { buildMetadata } from "@/lib/seo/metadata";
 import { productJsonLd, breadcrumbJsonLd } from "@/lib/seo/jsonld";
 import { SITE_DOMAIN, NURSERY_NAME, DEFAULT_PHONE } from "@/lib/constants";
-import { VarietyShowcase, type ShowcaseVariety } from "@/components/plant/VarietyShowcase";
-import { PlantCard, type PlantCardData } from "@/components/ui/PlantCard";
-import { SectionHeading } from "@/components/ui/SectionHeading";
+import { varietySlugs } from "@/lib/plant/variety";
+import { prepareGalleryImages, preparePlantHeroImages } from "@/lib/plant/gallery";
+import { VarietyGallery } from "@/components/plant/VarietyGallery";
+import { VarietyDetailPanel } from "@/components/plant/VarietyDetailPanel";
+import { VarietiesSection, VARIETIES_SECTION_ID } from "@/components/plant/VarietiesSection";
+import type { VarietyGridItem } from "@/components/plant/VarietyCardGrid";
+import { ExplorePlantsSection } from "@/components/plant/ExplorePlantsSection";
+import type { PlantCardData } from "@/components/ui/PlantCard";
 import { Badge } from "@/components/ui/Badge";
-import { ChevronRightIcon, LeafIcon, WhatsAppIcon } from "@/components/ui/icons";
-import type { PlantData, PlantImage } from "@/lib/types/plant";
+import { Button } from "@/components/ui/Button";
+import { ChevronRightIcon, GridIcon, LeafIcon, WhatsAppIcon } from "@/components/ui/icons";
+import type { PlantData } from "@/lib/types/plant";
 
 const breadcrumbLinkClass = "link-focus transition-colors hover:text-foreground";
 
@@ -59,16 +65,6 @@ export async function generateMetadata({
   return buildMetadata({ title: name, description, imageUrl, slug: `plants/${slug}`, locale });
 }
 
-function prepareImages(images: PlantImage[] | undefined, locale: Locale, fallbackAlt: string) {
-  return (images ?? [])
-    .filter((img) => img?.asset)
-    .map((img) => ({
-      key: img._key,
-      url: urlForImage(img.asset).width(880).height(660).fit("crop").url(),
-      alt: getLocalized(img.alt, locale) || fallbackAlt,
-    }));
-}
-
 export default async function PlantPage({
   params,
 }: {
@@ -101,31 +97,37 @@ export default async function PlantPage({
   const primaryCategory = categories[0];
   const primaryCategoryLabel = primaryCategory ? localizeCategory(primaryCategory, dict) : "";
 
-  // Build the showcase varieties. If the plant has none, fall back to a single
-  // "default" variety built from the plant-level images + description.
-  const varieties: ShowcaseVariety[] = (plant.varieties ?? []).length
-    ? (plant.varieties ?? []).map((v) => ({
-        key: v._key,
-        name: getLocalized(v.name, locale),
-        description: getLocalized(v.description, locale),
-        sizeRange: v.sizeRange,
-        bagSizes: v.bagSizes,
-        availability: v.availability,
-        sunlight: v.sunlight,
-        watering: v.watering,
-        growthRate: v.growthRate,
-        maxHeight: v.maxHeight,
-        bloomSeason: v.bloomSeason,
-        images: prepareImages(v.images, locale, name),
+  const varieties = plant.varieties ?? [];
+  /**
+   * With two or more varieties this page becomes a chooser: the hero previews the
+   * range and the varieties grid is the call to action, each card opening a real
+   * product page. With one (or none) there is nothing to choose, so the plant page
+   * keeps showing that variety's care guide and pricing inline — otherwise a
+   * single-variety plant would hide its own details behind a pointless extra click.
+   */
+  const isChooser = varieties.length > 1;
+  const slugs = varietySlugs(varieties);
+
+  const heroImages = isChooser
+    ? preparePlantHeroImages(plant.images, varieties, locale, name)
+    : prepareGalleryImages(varieties[0]?.images ?? plant.images, locale, name);
+
+  const varietyItems: VarietyGridItem[] = isChooser
+    ? varieties.map((variety, i) => ({
+        variety: { ...variety, image: variety.images?.[0] },
+        varietySlug: slugs[i],
+        plantSlug: slug,
+        fallbackName: name,
       }))
-    : [
-        {
-          key: "default",
-          name: "",
-          description,
-          images: prepareImages(plant.images, locale, name),
-        },
-      ];
+    : [];
+
+  const soleVariety = !isChooser ? varieties[0] : undefined;
+
+  const varietyCountLabel = pluralize(
+    varieties.length,
+    { one: dict.plant.varietyCountOne, other: dict.plant.varietyCount },
+    locale
+  );
 
   const related =
     categories.length > 0
@@ -210,11 +212,17 @@ export default async function PlantPage({
 
       {/* Title */}
       <div className="mb-6">
-        <h1 className="font-display text-3xl md:text-4xl font-semibold tracking-tight text-balance text-foreground">
+        <h1 className="font-display text-3xl font-semibold tracking-tight text-balance text-foreground md:text-4xl">
           {name}
         </h1>
-        {plant.scientificName && <p className="text-muted italic mt-1">{plant.scientificName}</p>}
-        <div className="flex gap-2 mt-3 flex-wrap">
+        {plant.scientificName && <p className="mt-1 text-muted italic">{plant.scientificName}</p>}
+        <div className="mt-3 flex flex-wrap gap-2">
+          {isChooser && (
+            <Badge tone="accent">
+              <GridIcon className="h-3.5 w-3.5" />
+              {varietyCountLabel}
+            </Badge>
+          )}
           {plant.fragrant && (
             <Badge tone="accent">
               <span aria-hidden="true">🌸</span> {dict.plant.fragrant}
@@ -228,53 +236,84 @@ export default async function PlantPage({
         </div>
       </div>
 
-      {/* Description (plant-level) */}
-      {description && plant.varieties?.length ? (
-        <p className="text-muted leading-relaxed max-w-3xl mb-8">{description}</p>
-      ) : null}
+      {/* Hero: gallery + either the variety chooser prompt or the sole variety's detail */}
+      <div className="grid grid-cols-1 gap-10 md:grid-cols-2">
+        <VarietyGallery images={heroImages} name={name} dict={dict} locale={locale} priority />
 
-      {/* Varieties + per-variety gallery & care */}
-      <VarietyShowcase
-        varieties={varieties}
-        fallbackName={name}
-        dict={dict}
+        <div className="space-y-5">
+          {description && <p className="leading-relaxed text-muted">{description}</p>}
+
+          {isChooser ? (
+            // The jump link is the bridge between "keep the hero" and "don't let the
+            // varieties get skipped": on a phone the grid starts below the fold, so
+            // the hero has to say out loud that there is a choice waiting.
+            <div className="rounded-2xl border border-accent/25 bg-accent/5 p-4">
+              <p className="flex items-center gap-2 font-semibold text-foreground">
+                <GridIcon className="h-5 w-5 shrink-0 text-accent" />
+                {dict.plant.varietiesEyebrow}
+              </p>
+              <p className="mt-1 text-sm text-muted">{dict.plant.varietiesHint}</p>
+              <Button href={`#${VARIETIES_SECTION_ID}`} className="mt-3 w-full sm:w-auto">
+                {dict.plant.seeVarieties}
+                <ChevronRightIcon className="rtl-flip h-4 w-4" />
+              </Button>
+            </div>
+          ) : (
+            soleVariety && (
+              <VarietyDetailPanel
+                variety={{
+                  key: soleVariety._key,
+                  name: getLocalized(soleVariety.name, locale) || name,
+                  description: getLocalized(soleVariety.description, locale),
+                  sizeRange: soleVariety.sizeRange,
+                  bagSizes: soleVariety.bagSizes,
+                  availability: soleVariety.availability,
+                  sunlight: soleVariety.sunlight,
+                  watering: soleVariety.watering,
+                  growthRate: soleVariety.growthRate,
+                  maxHeight: soleVariety.maxHeight,
+                  bloomSeason: soleVariety.bloomSeason,
+                }}
+                dict={dict}
+                locale={locale}
+                currency={settings.currency}
+              />
+            )
+          )}
+
+          <a
+            href={waLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex w-full items-center justify-center gap-2 rounded-full bg-whatsapp py-3 font-semibold text-on-whatsapp shadow-soft transition-[background-color,box-shadow,transform] duration-200 hover:bg-whatsapp-dark hover:shadow-lift focus-visible:ring-2 focus-visible:ring-whatsapp focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none active:scale-[0.99]"
+          >
+            <WhatsAppIcon className="h-5 w-5" />
+            {dict.plant.whatsappCta}
+          </a>
+        </div>
+      </div>
+
+      {/* All varieties, as tappable cards — the primary action on this page. */}
+      <VarietiesSection
+        items={varietyItems}
         locale={locale}
+        dict={dict}
         currency={settings.currency}
       />
 
-      {/* Care tips + WhatsApp CTA */}
-      <div className="max-w-xl mt-8 space-y-5">
-        {careTips && (
-          <div className="rounded-xl border border-border bg-surface p-4">
-            <h2 className="flex items-center gap-2 font-semibold text-foreground text-sm mb-1.5">
-              <LeafIcon className="h-4 w-4 text-accent" />
-              {dict.plant.careTips}
-            </h2>
-            <p className="text-muted text-sm leading-relaxed">{careTips}</p>
-          </div>
-        )}
-        <a
-          href={waLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center justify-center gap-2 w-full py-3 bg-whatsapp text-on-whatsapp font-semibold rounded-full shadow-soft transition-[background-color,box-shadow,transform] duration-200 hover:bg-whatsapp-dark hover:shadow-lift active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-whatsapp focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-        >
-          <WhatsAppIcon className="h-5 w-5" />
-          {dict.plant.whatsappCta}
-        </a>
-      </div>
-
-      {/* Related plants */}
-      {related && related.length > 0 && (
-        <section className="mt-16">
-          <SectionHeading title={dict.plant.relatedPlants} />
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-            {related.map((p) => (
-              <PlantCard key={p.slug.current} plant={p} locale={locale} dict={dict} />
-            ))}
-          </div>
-        </section>
+      {/* Care tips */}
+      {careTips && (
+        <div className="mt-8 max-w-xl rounded-xl border border-border bg-surface p-4">
+          <h2 className="mb-1.5 flex items-center gap-2 text-sm font-semibold text-foreground">
+            <LeafIcon className="h-4 w-4 text-accent" />
+            {dict.plant.careTips}
+          </h2>
+          <p className="text-sm leading-relaxed text-muted">{careTips}</p>
+        </div>
       )}
+
+      {/* Explore other plants */}
+      <ExplorePlantsSection plants={related ?? []} locale={locale} dict={dict} />
     </div>
   );
 }
